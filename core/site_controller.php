@@ -1,13 +1,11 @@
 <?php
-class Core {
+class Site_controller {
+	
 	private static $instance = null;
 	public $load = null;
 
-	private function __construct() {
+	protected function __construct() {
 		$this->load = Load::getInstance();
-		$this->load->controller('controller');
-		new controller();
-	
 	}
 
 	public static function getInstance() {
@@ -16,6 +14,7 @@ class Core {
 		}
 		return self::$instance;
 	}
+	
 
 }
 ?>
