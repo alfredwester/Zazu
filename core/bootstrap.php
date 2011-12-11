@@ -3,8 +3,13 @@
 	Do some bootstrapping, such as
 	including rquired files
 --------------------------------------*/
-require_once('core.php');
+
+function __autoload($class_name) {
+	require_once(strtolower($class_name.'.php'));
+}
+
+require_once('zazu.php');
 require_once('load.php');
-require_once('site_controller.php');
+
 
 ?>

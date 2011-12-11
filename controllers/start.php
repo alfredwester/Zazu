@@ -1,10 +1,9 @@
 <?php
-class Controller extends Site_controller {
+class Start extends Controller {
 	public $model;
 
 	function __construct() {
-		parent::__construct();	
-		$this->load->model('model');
+		$this->load_model('model');
 		$this->model = new Model();
 		
 		//do the right things depending on what page you're on
@@ -12,9 +11,8 @@ class Controller extends Site_controller {
 	} 
 
 	function home() {
-		
 		$data = $this->model->user_info();
-		$this->load->view('someview', $data);
+		$this->load_view('someview', $data);
 	}
 }
 ?>

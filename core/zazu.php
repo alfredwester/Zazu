@@ -1,13 +1,15 @@
 <?php
-class Core {
+class Zazu {
 	private static $instance = null;
 	public $load = null;
 
 	private function __construct() {
 		$this->load = Load::getInstance();
-		$this->load->controller('controller');
-		new controller();
-	
+	}
+
+	public function frontController($controller = 'start') {
+		$this->load->controller($controller);
+		new $controller();
 	}
 
 	public static function getInstance() {

@@ -6,6 +6,7 @@ ini_set('display_errors', 1);
 //bootstrap
 require_once('core/bootstrap.php');
 
-Core::getInstance();
+$z = Zazu::getInstance();
 
+$z->frontController();
 ?>
