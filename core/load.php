@@ -18,7 +18,7 @@ class Load {
 			require_once($path);
 		}
 		else {
-			die('Controller '.$controller.' not found in '.$path);
+			throw new Exception('Controller '.$controller.' not found in '.dirname($path));
 		}
 
 	}

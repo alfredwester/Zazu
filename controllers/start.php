@@ -1,5 +1,5 @@
 <?php
-class Start extends Controller {
+class Start extends Controller implements IController{
 	public $model;
 
 	function __construct() {
@@ -7,10 +7,10 @@ class Start extends Controller {
 		$this->model = new Model();
 		
 		//do the right things depending on what page you're on
-		$this->home();
+
 	} 
 
-	function home() {
+	function index() {
 		$data = $this->model->user_info();
 		$this->load_view('someview', $data);
 	}

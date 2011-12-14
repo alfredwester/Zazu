@@ -10,7 +10,7 @@ class Controller {
 			require_once($path);
 		}
 		else {
-			die('View '.$view.' not found in '.$path);
+			throw new Exception('View \''.$view.'\' not found in '.dirname($path));
 		}
 	}
 
@@ -21,7 +21,7 @@ class Controller {
 			require_once($path);
 		}
 		else {
-			die('Model '.$model.' not found in '.$path);
+			throw new Exception('Model \''.$model.'\' not found in '.dirname($path));
 		}
 	
 	}
