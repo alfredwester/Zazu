@@ -8,15 +8,25 @@ class Zazu {
 	
 	private function __construct() {
 		$this->load = Load::getInstance();
-		$this->db_handler = Db_handler::getInstance();
 		$this->debug_info = array();
-
+		try {
+			$this->db_handler = Db_handler::getInstance();
+		}
+		catch(Exception $e) {
+			$this->debug_info['Errors'][] = $e;
+			die($e->getMessage());
+		}
+		$result = $this->db_handler->select_query('SELECT * FROM '.DB_PREFIX.'config');
+		while($obj = $result->fetch_object()) {
+			$this->config[$obj->setting] = $obj->value;
+		}
+		$this->debug_info['config'] = $this->config;	
 	}
 
 	public function frontController() {
 		
-		$controller_name = null;
-		$function_name = null;
+		$controller_name = $this->config['default_controller'];
+		$function_name = $this->config['default_function'];
 		$function_args = null;
 
 		$url = substr($_SERVER['REQUEST_URI'], strlen(rtrim(dirname($_SERVER['SCRIPT_NAME']), '/')));
@@ -40,17 +50,13 @@ class Zazu {
 		try {
 			$this->load->controller($controller_name);
 			$controller = new $controller_name();
-			if(isset($function_name)) {
-				if(method_exists($controller, $function_name)) {
-					call_user_func_array(array($controller, $function_name), $function_args);
-				}
-				else {
-					$this->not_found();
-				}
+			
+			if(method_exists($controller, $function_name)) {
+				call_user_func_array(array($controller, $function_name), $function_args);
 			}
 			else {
-				call_user_func(array($controller, 'index'));
-			}
+				$this->not_found();
+			}	
 		}
 		catch(Exception $e) {
 			$this->debug_info['Errors'][] = $e;
@@ -77,6 +83,7 @@ class Zazu {
 		
 		header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
 		echo "404 Not Found";
+		$this->print_debug();
 		exit;
 	}
 }
