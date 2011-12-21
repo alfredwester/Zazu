@@ -5,13 +5,10 @@ class Start extends Controller implements IController{
 	function __construct() {
 		$this->load_model('model');
 		$this->model = new Model();
-		
-		//do the right things depending on what page you're on
-
 	} 
 
 	function index() {
-		$data = $this->model->user_info();
+		$data = $this->model->content();
 		$this->load_view('someview', $data);
 	}
 }
