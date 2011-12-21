@@ -2,7 +2,7 @@
 class Db_handler {
 	
 	private static $instance = null;
-	private $mysqli = null;
+	public $mysqli = null;
 	
 	private function __construct() {
 		@$this->mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE);
