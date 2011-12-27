@@ -1,4 +1,5 @@
 <?php
+
 //models are used to get and return things from the database
 
 class Model {
@@ -35,3 +36,4 @@ class Model {
 		return $header;				
 	}
 }
+?>

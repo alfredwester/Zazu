@@ -7,6 +7,7 @@ class Zazu {
 	public $config = null;
 	
 	private function __construct() {
+		session_start();
 		$this->load = Load::getInstance();
 		$this->debug_info = array();
 		try {
@@ -49,7 +50,7 @@ class Zazu {
 		
 		try {
 			$this->load->controller($controller_name);
-			$controller = new $controller_name();
+			$controller = new $controller_name($this->config);
 			
 			if(method_exists($controller, $function_name)) {
 				call_user_func_array(array($controller, $function_name), $function_args);
@@ -76,7 +77,6 @@ class Zazu {
 	public function print_debug() {
 		echo "<pre>";
 		print_r($this->debug_info);
-		print_r($_SERVER);
 		echo "</pre>";
 	}
 	public function not_found() {
