@@ -1,5 +1,5 @@
 <?php
-class CmsController extends Controller implements IController{
+class CmsController extends Controller implements IController {
 	public $model;
 	private $config;
 	
@@ -9,12 +9,36 @@ class CmsController extends Controller implements IController{
 		$this->config = $config;
 	}
 
-	function index() {
-		$this->model->get_menu();
-		$data = $this->model->get_header();
-		$data = array_merge($data, $this->config);
-		$data = array_merge($data, $this->model->get_menu());
-		$this->load_theme($this->config['theme'], $data);
+	function index($post_url = null) {
+		$post_id = 0;
+		$type = 'start';
+		$data = $this->config;
+		$data += $this->model->get_menu();
+		
+		if($post_url != null) {
+			$post_id = $this->model->get_post_id($post_url);
+			if($post_id == 0) {
+				$this->redirect(404);
+			}
+		}	
+		if($post_id > 0 && $post_id == $this->config['start_content']) {	
+			$this->redirect(301, '/');
+		}
+		elseif($post_id > 0) {
+			$data = array_merge($data, $this->model->get_post($post_id));
+			$type = 'post';
+		}
+		elseif(is_numeric($this->config['start_content']) && $this->config['start_content'] > 0) {
+			$data = array_merge($data, $this->model->get_post($this->config['start_content']));
+		}
+		elseif(strncasecmp($this->config['start_content'], 'latest', 6) == 0) {
+			$data = array_merge($data, $this->model->get_latest_posts(substr($this->config['start_content'], 6)));	
+		}
+		else {
+			$data = array_merge($data, $this->model->get_posts()); 
+		}
+		$data += $this->model->get_regions();
+		$this->load_theme($this->config['theme'], $data, $type);
 	}
 }
 ?>

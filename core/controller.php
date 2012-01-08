@@ -1,5 +1,5 @@
 <?php
-class Controller {
+class Controller extends Helper{
 
 	function __construct($config) {
 		echo "Controller:";
@@ -24,7 +24,7 @@ class Controller {
 			throw new Exception('View \''.$view.'\' not found in '.dirname($path));
 		}
 	}
-	public function load_theme($theme, $data) {
+	public function load_theme($theme, $data, $type = 'start') {
 		$path = 'theme/'.$theme.'/';
 		if(!is_dir($path)) {
 			die("The directory ".$path." does not exist.");
@@ -34,9 +34,14 @@ class Controller {
 		}
 		ob_start();
 		include($path.'header.php');
-		$header = ob_get_contents();
+		include($path.$type.'.php');
+		include($path.'footer.php');
+		$theme = ob_get_contents();
 		ob_end_clean();
-		echo $header;
+		echo $theme;
+		echo "<pre>";
+		print_r($data);
+		echo "</pre>";
 	}
 
 	public function load_model($model) {

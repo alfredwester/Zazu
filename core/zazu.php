@@ -1,5 +1,5 @@
 <?php
-class Zazu {
+class Zazu extends Helper {
 	private static $instance = null;
 	public $load = null;
 	private $db_handler = null;
@@ -28,26 +28,69 @@ class Zazu {
 		
 		$controller_name = $this->config['default_controller'];
 		$function_name = $this->config['default_function'];
-		$function_args = null;
+		$function_args = array();
+		$controller_path = 'controllers/';
 
 		$url = substr($_SERVER['REQUEST_URI'], strlen(rtrim(dirname($_SERVER['SCRIPT_NAME']), '/')));
 		$this->debug_info['request_url'] = $url;
 
 		$tmp_array = explode('/', trim($url, '/'));
 		$this->debug_info['splitted_url'] = $tmp_array;
+		$redirect = false;
 
-		if(!empty($tmp_array[0])) {
-			$controller_name = $tmp_array[0];
-		}
 		if(!empty($tmp_array[1])) {
-			$function_name = $tmp_array[1];
+            $function_name = $tmp_array[1];
+        	$function_args = array_slice($tmp_array, 2);
+			if($function_name == $this->config['default_function']) {
+				$redirect = true;
+				$args = '/';
+				foreach($function_args as $arg) {
+					$args = $args.$arg.'/';
+				}
+				$redirect_url = $args;
+			}
 		}
-		$function_args = array_slice($tmp_array, 2);
+		if(!empty($tmp_array[0]) && file_exists($controller_path.$tmp_array[0].'.php')) {
+			$controller_name = $tmp_array[0];
+			$this->load->controller($controller_name);
+			if($controller_name == $this->config['default_controller']) {
+				$redirect = true;
+				$args = '/';
+				foreach($function_args as $arg) {
+					$args = $args.$arg.'/';
+				}
+				if($function_name == $this->config['default_function']) {
+					$redirect_url = $args;
+				}
+				else {
+					$redirect_url = $function_name.$args;
+				}
+			}
+		}
+		elseif (!empty($tmp_array[0])) {
+			$this->load->controller($controller_name);
+			if(method_exists($controller_name, $tmp_array[0])) {
+				$function_name = $tmp_array[0];
+				$function_args = array_slice($tmp_array, 1);
+				 if($function_name == $this->config['default_function']) {
+					$redirect = true;
+					$args = '/';
+					foreach($function_args as $arg) {
+						$args = $args.$arg.'/';
+					}
+					$redirect_url = $args;
+				}
+			}
+			else {
+				$function_args = $tmp_array;
+			}
+		}
 		
-		$this->debug_info['requested_controller'] = $controller_name;
-		$this->debug_info['requested_function'] = $function_name;
-		$this->debug_info['function_arguments'] = $function_args;
-		
+		if($redirect)
+		{
+			$this->redirect(301, $redirect_url);
+		}
+				
 		try {
 			$this->load->controller($controller_name);
 			$controller = new $controller_name($this->config);
@@ -56,15 +99,14 @@ class Zazu {
 				call_user_func_array(array($controller, $function_name), $function_args);
 			}
 			else {
-				$this->not_found();
+				$this->redirect(404);
 			}	
 		}
 		catch(Exception $e) {
 			$this->debug_info['Errors'][] = $e;
-			$this->not_found();
+			$this->redirect(404);
 		}
-
-		$this->print_debug();
+		//$this->print_debug();
 	}
 
 	public static function getInstance() {
@@ -79,12 +121,26 @@ class Zazu {
 		print_r($this->debug_info);
 		echo "</pre>";
 	}
-	public function not_found() {
+/*	public function not_found() {
 		
 		header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
-		echo "404 Not Found";
+		echo "404 Not Found Old function";
 		$this->print_debug();
 		exit;
 	}
+	public function redirect($status, $url = null) {
+		
+		switch($status) {
+			case 404:
+				header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
+				echo "404 Not Found";
+				exit;
+			case 301:
+				header($_SERVER['SERVER_PROTOCOL'].' 301 Moved Permanently');
+				header('location: '.$url);
+				exit; 
+			break;
+		}
+	}*/
 }
 ?>
