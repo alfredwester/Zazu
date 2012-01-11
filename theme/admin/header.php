@@ -3,13 +3,13 @@
 		<title>Administration --Zazu cms--</title>
 		<meta name="description" content="This is the administration interface for Zazu cms" />
 		<meta name="keyword" content="Admin, cms, mvc, zazu, administation" />
-		<link rel="stylesheet" href="/include/blueprint/screen.css" type="text/css" media="screen, projection">
-		<link rel="stylesheet" href="/include/blueprint/print.css" type="text/css" media="print">
+		<link rel="stylesheet" href="<?php echo BASE_PATH;?>/include/blueprint/screen.css" type="text/css" media="screen, projection">
+		<link rel="stylesheet" href="<?php echo BASE_PATH;?>/include/blueprint/print.css" type="text/css" media="print">
 		<!--[if lt IE 8]>
-		<link rel="stylesheet" href="/include/blueprint/ie.css" type="text/css" media="screen, projection">
+		<link rel="stylesheet" href="<?php echo BASE_PATH;?>/include/blueprint/ie.css" type="text/css" media="screen, projection">
 		<![endif]-->
-		<link rel="stylesheet" href="/theme/default/css/zazu.css" type="text/css" media="all">
-		<link rel="stylesheet" href="/theme/default/css/buttons.css" type="text/css" media="screen, projection">
+		<link rel="stylesheet" href="<?php echo BASE_PATH;?>/theme/default/css/zazu.css" type="text/css" media="all">
+		<link rel="stylesheet" href="<?php echo BASE_PATH;?>/theme/default/css/buttons.css" type="text/css" media="screen, projection">
 		<?=$head;?>
 	</head>
 	<body>
@@ -21,7 +21,7 @@
 				<?php
 				foreach($admin_menu as $link) {
 				?>
-					<a href="<?=$link['menu_url'];?>" title="<?=$link['menu_title'];?>"><?=$link['menu_text'];?></a>
+					<a href="<?php echo BASE_PATH.$link['menu_url'];?>" title="<?=$link['menu_title'];?>"><?=$link['menu_text'];?></a>
 				<?php
 				}
 				?>

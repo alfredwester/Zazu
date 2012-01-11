@@ -11,4 +11,6 @@ define('DB_PREFIX', 'zazu_');
 
 define('DB_DATABASE', 'zazu');
 
+define('BASE_PATH', '');
+
 ?>

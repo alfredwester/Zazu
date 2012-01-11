@@ -3,13 +3,13 @@
 		<title><?=$title?></title>
 		<meta name="description" content="<?=$meta_content?>">
 		<meta name="keyword" content="<?=$meta_keyword?>">
-		<link rel="stylesheet" href="/include/blueprint/screen.css" type="text/css" media="screen, projection">
-		<link rel="stylesheet" href="/include/blueprint/print.css" type="text/css" media="print">
+		<link rel="stylesheet" href="<?php echo BASE_PATH;?>/include/blueprint/screen.css" type="text/css" media="screen, projection">
+		<link rel="stylesheet" href="<?php echo BASE_PATH;?>/include/blueprint/print.css" type="text/css" media="print">
 		<!--[if lt IE 8]>
-		<link rel="stylesheet" href="/include/blueprint/ie.css" type="text/css" media="screen, projection">
+		<link rel="stylesheet" href="<?php echo BASE_PATH;?>/include/blueprint/ie.css" type="text/css" media="screen, projection">
 		<![endif]-->
-		<link rel="stylesheet" href="/theme/default/css/buttons.css" type="text/css" media="screen, projection">
-		<link rel="stylesheet" href="/theme/default/css/zazu.css" type="text/css" media="all">
+		<link rel="stylesheet" href="<?php echo BASE_PATH;?>/theme/default/css/buttons.css" type="text/css" media="screen, projection">
+		<link rel="stylesheet" href="<?php echo BASE_PATH;?>/theme/default/css/zazu.css" type="text/css" media="all">
 		<?=$head?>
 	</head>
 	<body>
