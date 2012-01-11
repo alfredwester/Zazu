@@ -21,7 +21,16 @@ class Db_handler {
 		}
 		return self::$instance;
 	}
-
+	public function multi_query($query) {
+		$result[] = $this->mysqli->multi_query($query);
+		while ($this->mysqli->more_results()) {
+			$result[] = $this->mysqli->next_result();
+		}
+		return $result;
+	}
+	public function get_latest_error() {
+		return $this->mysqli->error;
+	}
 	public function query($query) {
 		$result = $this->mysqli->query($query) or die ($this->mysqli->error);
 		return $result;

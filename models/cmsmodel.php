@@ -8,19 +8,6 @@ class CmsModel {
 	function __construct() {
 		$this->db_handler = Db_handler::GetInstance();
 	}
-	/*
-	public function get_content($url = null) {
-		$content = array();
-		$this->db_handler->db_escape_chars($url);
-		$result = $this->db_handler->query('SELECT content, headline, footer from '.DB_PREFIX.'post WHERE url = \''.$url.'\'');
-		$obj =  $result->fetch_object();
-
-		$content['content'] = $obj->content;
-		$content['headline'] = $obj->headline;
-		$content['footer'] = $obj->footer;
-
-		return $content;
-	}*/
 	public function get_menu($group = 1) {
 		$menu = array();
 		$this->db_handler->db_escape_chars($group);

@@ -4,7 +4,7 @@
 	including required files
 --------------------------------------*/
 if(!file_exists('config.php')) {
-	die('No config.php file was found. Copy or rename the sample file and replace it with correct information');
+	die('No config.php file was found. Copy or rename the sample file and replace it with correct information, then you may need to run setup.php');
 }
 
 require_once('config.php');
