@@ -8,6 +8,7 @@ class CmsModel {
 	function __construct() {
 		$this->db_handler = Db_handler::GetInstance();
 	}
+	/*
 	public function get_content($url = null) {
 		$content = array();
 		$this->db_handler->db_escape_chars($url);
@@ -19,7 +20,7 @@ class CmsModel {
 		$content['footer'] = $obj->footer;
 
 		return $content;
-	}
+	}*/
 	public function get_menu($group = 1) {
 		$menu = array();
 		$this->db_handler->db_escape_chars($group);
@@ -76,16 +77,16 @@ class CmsModel {
 	public function get_post($post_id) {
 		$post = array();
 		$this->db_handler->db_escape_chars($post_id);
-		$query = 'SELECT title, date, meta_content, meta_keyword, content, url FROM '.DB_PREFIX.'post WHERE idPost = '.$post_id.';';
+		$query = 'SELECT post_title, post_date, post_meta_content, post_meta_keyword, post_content, post_url FROM '.DB_PREFIX.'post WHERE post_id = '.$post_id.';';
 		$result = $this->db_handler->query($query);
 		$obj = $result->fetch_object();
-		$post['post_title'] = $obj->title;
-		$post['meta_content'] = $obj->meta_content;
-		$post['post_meta_content'] = $obj->meta_content;
-		$post['meta_keyword'] = $obj->meta_keyword;
-		$post['post_meta_keyword'] = $obj->meta_keyword;
-		$post['post_content'] = $obj->content;
-		$post['post_url'] = $obj->url;
+		$post['post_title'] = $obj->post_title;
+		$post['meta_content'] = $obj->post_meta_content;
+		$post['post_meta_content'] = $obj->post_meta_content;
+		$post['meta_keyword'] = $obj->post_meta_keyword;
+		$post['post_meta_keyword'] = $obj->post_meta_keyword;
+		$post['post_content'] = $obj->post_content;
+		$post['post_url'] = $obj->post_url;
 		return $post;
 	}
 	public function get_region($region_id) {
@@ -101,27 +102,27 @@ class CmsModel {
 	public function get_latest_posts($nr_of_posts = 10) {
 		$posts = array();
 		$this->db_handler->db_escape_chars($nr_of_posts);
-		$query = 'SELECT title, date, content, url FROM '.DB_PREFIX.'post LIMIT '.$nr_of_posts.';';
+		$query = 'SELECT post_title, post_date, post_content, post_url FROM '.DB_PREFIX.'post LIMIT '.$nr_of_posts.';';
 		$result = $this->db_handler->query($query);
 		$count = 0;
 		while($obj = $result->fetch_object()) {
-			$posts['posts'][$count]['post_title'] = $obj->title;
-			$posts['posts'][$count]['post_content'] = $obj->content;
-			$posts['posts'][$count]['post_url'] = $obj->url;
+			$posts['posts'][$count]['post_title'] = $obj->post_title;
+			$posts['posts'][$count]['post_content'] = $obj->post_content;
+			$posts['posts'][$count]['post_url'] = $obj->post_url;
 			$count++;
 		}
 		return $posts;
 	}
 	public function get_posts() {
 		$posts = array();
-		$query = 'SELECT idPost, title, date, content, url FROM '.DB_PREFIX.'post;';
+		$query = 'SELECT post_id, post_title, post_date, post_content, post_url FROM '.DB_PREFIX.'post;';
 		$result = $this->db_handler->query($query);
 		$count = 0;
 		while($obj = $result->fetch_object()) {
-			$posts['posts'][$count]['post_title'] = $obj->title;
-			$posts['posts'][$count]['post_content'] = $obj->content;
-			$posts['posts'][$count]['post_url'] = $obj->url;
-			$posts['posts'][$count]['post_id'] = $obj->idPost;
+			$posts['posts'][$count]['post_title'] = $obj->post_title;
+			$posts['posts'][$count]['post_content'] = $obj->post_content;
+			$posts['posts'][$count]['post_url'] = $obj->post_url;
+			$posts['posts'][$count]['post_id'] = $obj->post_id;
 			$count++;
 		}
 		return $posts;
@@ -129,10 +130,10 @@ class CmsModel {
 	public function get_post_id($post_url) {
 		$id = 0;
 		$this->db_handler->mysqli->real_escape_string($post_url);
-		$query = 'SELECT idPost FROM '.DB_PREFIX.'post WHERE url = \''.$post_url.'\';';
+		$query = 'SELECT post_id FROM '.DB_PREFIX.'post WHERE post_url = \''.$post_url.'\';';
 		$result = $this->db_handler->query($query);
 		if($obj = $result->fetch_object()) {
-			$id = $obj ->idPost;
+			$id = $obj ->post_id;
 		}
 		return $id;
 	}

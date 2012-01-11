@@ -7,8 +7,12 @@ class Admin extends Controller implements IController {
 	private $post_array;
 	private $region_array;
 	private $link_array;
+	private $user_array;
 	
 	public function __construct($config) {
+		if(!isset($_SESSION['user_id'])) {
+			$this->redirect(0, '/login/');
+		}
 		$this->load_model('cmsmodel');
 		$this->load_model('adminmodel');
 		$this->cms_model = new Cmsmodel();
@@ -16,11 +20,14 @@ class Admin extends Controller implements IController {
 		$this->post_array = $this->admin_model->get_post_array();
 		$this->region_array = $this->admin_model->get_region_array();
 		$this->link_array = $this->admin_model->get_link_array();
+		$this->user_array = $this->admin_model->get_user_array();
 		$this->config = $config;
 		$this->menu = array(array('menu_title' => 'Posts', 'menu_text' => 'Posts', 'menu_url' => '/admin/'),
 							array('menu_title' => 'Regions', 'menu_text' => 'Regions', 'menu_url' => '/admin/regions/'), 
 							array('menu_title' => 'Menus', 'menu_text' => 'Menus', 'menu_url' => '/admin/links/'),
-							array('menu_title' => 'Settings', 'menu_text' => 'Settings', 'menu_url' => '/admin/settings/'));
+							array('menu_title' => 'Users', 'menu_text' => 'Users', 'menu_url' => '/admin/users/'),
+							array('menu_title' => 'Settings', 'menu_text' => 'Settings', 'menu_url' => '/admin/settings/'),
+							array('menu_title' => 'Log out', 'menu_text' => 'Log out', 'menu_url' => '/admin/logout/'));
 	}
 	private function get_header() {
 		$data = $this->config;
@@ -36,10 +43,19 @@ class Admin extends Controller implements IController {
 		}
 		return $data;
 	}
+	public function logout() {
+		unset($_SESSION['user_id']);
+		$this->redirect(0, '/login/');
+	}
 	public function index() {
 		$data = $this->get_header();
 		$data = array_merge($data, $this->cms_model->get_posts());
 		$this->load_theme($this->config['admin_theme'], $data);
+	}
+	public function users() {
+		$data = $this->get_header();
+		$data = array_merge($data, $this->admin_model->get_users());
+		$this->load_theme($this->config['admin_theme'], $data, 'users');
 	}
 	public function regions() {
 		$data = $this->get_header();
@@ -91,7 +107,12 @@ class Admin extends Controller implements IController {
 		}
 		$function = 'get_'.$type;
 		if(is_numeric($id) && $id >0) {
-			$data = array_merge($data, $this->cms_model->$function($id));
+			if($type != 'user') {
+				$data = array_merge($data, $this->cms_model->$function($id));
+			}
+			else {
+				$data = array_merge($data, $this->admin_model->$function($id));
+			}
 			$data[$type.'_id'] = $id;
 			$data['action'] = 'edit';
 		}

@@ -21,9 +21,8 @@ class Zazu extends Helper {
 		while($obj = $result->fetch_object()) {
 			$this->config[$obj->setting] = $obj->value;
 		}
-		$this->debug_info['config'] = $this->config;	
+		$this->debug_info['config'] = $this->config;
 	}
-
 	public function frontController() {
 		
 		$controller_name = $this->config['default_controller'];
@@ -39,8 +38,8 @@ class Zazu extends Helper {
 		$redirect = false;
 
 		if(!empty($tmp_array[1])) {
-            $function_name = $tmp_array[1];
-        	$function_args = array_slice($tmp_array, 2);
+			$function_name = $tmp_array[1];
+			$function_args = array_slice($tmp_array, 2);
 			if($function_name == $this->config['default_function']) {
 				$redirect = true;
 				$args = '/';

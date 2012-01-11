@@ -2,13 +2,12 @@
 class CmsController extends Controller implements IController {
 	public $model;
 	private $config;
-	
+
 	function __construct($config) {
 		$this->load_model('cmsmodel');
 		$this->model = new CmsModel();
 		$this->config = $config;
 	}
-
 	function index($post_url = null) {
 		$post_id = 0;
 		$type = 'start';
@@ -21,7 +20,7 @@ class CmsController extends Controller implements IController {
 				$this->redirect(404);
 			}
 		}	
-		if($post_id > 0 && $post_id == $this->config['start_content']) {	
+		if($post_id > 0 && $post_id == $this->config['start_content']) {
 			$this->redirect(301, '/');
 		}
 		elseif($post_id > 0) {
@@ -32,7 +31,7 @@ class CmsController extends Controller implements IController {
 			$data = array_merge($data, $this->model->get_post($this->config['start_content']));
 		}
 		elseif(strncasecmp($this->config['start_content'], 'latest', 6) == 0) {
-			$data = array_merge($data, $this->model->get_latest_posts(substr($this->config['start_content'], 6)));	
+			$data = array_merge($data, $this->model->get_latest_posts(substr($this->config['start_content'], 6)));
 		}
 		else {
 			$data = array_merge($data, $this->model->get_posts()); 
