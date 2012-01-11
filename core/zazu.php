@@ -15,9 +15,9 @@ class Zazu extends Helper {
 		}
 		catch(Exception $e) {
 			$this->debug_info['Errors'][] = $e;
-			die($e->getMessage());
+			$this->redirect(500, null, $e->getMessage());
 		}
-		$result = $this->db_handler->select_query('SELECT * FROM '.DB_PREFIX.'config');
+		$result = $this->db_handler->query('SELECT * FROM '.DB_PREFIX.'config');
 		while($obj = $result->fetch_object()) {
 			$this->config[$obj->setting] = $obj->value;
 		}
@@ -104,9 +104,8 @@ class Zazu extends Helper {
 		}
 		catch(Exception $e) {
 			$this->debug_info['Errors'][] = $e;
-			$this->redirect(404);
+			$this->redirect(500, null, $e->getmessage());
 		}
-		//$this->print_debug();
 	}
 
 	public static function getInstance() {
@@ -121,26 +120,5 @@ class Zazu extends Helper {
 		print_r($this->debug_info);
 		echo "</pre>";
 	}
-/*	public function not_found() {
-		
-		header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
-		echo "404 Not Found Old function";
-		$this->print_debug();
-		exit;
-	}
-	public function redirect($status, $url = null) {
-		
-		switch($status) {
-			case 404:
-				header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
-				echo "404 Not Found";
-				exit;
-			case 301:
-				header($_SERVER['SERVER_PROTOCOL'].' 301 Moved Permanently');
-				header('location: '.$url);
-				exit; 
-			break;
-		}
-	}*/
 }
 ?>

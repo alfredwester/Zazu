@@ -22,10 +22,21 @@ class Db_handler {
 		return self::$instance;
 	}
 
-	public function select_query($query) {
+	public function query($query) {
 		$result = $this->mysqli->query($query) or die ($this->mysqli->error);
 		return $result;
 	}
-
-
+	public function db_escape_chars($data) {
+		$temp = $data;
+		
+		if(is_array($temp)) {
+			foreach($temp as $key => $val) {
+				$temp[$key] = $this->mysqli->real_escape_string($val);
+			}
+		}
+		else {
+			$temp = $this->mysqli->real_escape_string($temp);
+		}
+		return $temp;
+	}
 }

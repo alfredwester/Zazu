@@ -1,11 +1,11 @@
 			<div class="span-7 colborder">
-				<p><?=$reg_top1;?></p>
+				<p><?=$regions['top1']['region_text'];?></p>
 			</div>
 			<div class="span-7 colborder">
-				<p><?=$reg_top2;?></p>
+				<p><?=$regions['top2']['region_text'];?></p>
 			</div>
 			<div class="span-7 last">
-				<p><?=$reg_top3;?></p>
+				<p><?=$regions['top3']['region_text'];?></p>
 			</div>
 			<hr>
 			<article class="span-17 prepend-1 colborder">

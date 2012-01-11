@@ -3,62 +3,106 @@
 //models are used to get and return things from the database
 
 class CmsModel {
-    private $db_handler = null;
-    function __construct() {
-        $this->db_handler = Db_handler::GetInstance();
-    }
+	private $db_handler;
 	
-    public function get_content($url = null) {
-        $content = array();
-        $this->db_handler->mysqli->real_escape_string($url);
-        $result = $this->db_handler->select_query('SELECT content, headline, footer from '.DB_PREFIX.'post WHERE url = \''.$url.'\'');
-        $obj =  $result->fetch_object();
+	function __construct() {
+		$this->db_handler = Db_handler::GetInstance();
+	}
+	public function get_content($url = null) {
+		$content = array();
+		$this->db_handler->db_escape_chars($url);
+		$result = $this->db_handler->query('SELECT content, headline, footer from '.DB_PREFIX.'post WHERE url = \''.$url.'\'');
+		$obj =  $result->fetch_object();
 
-        $content['content'] = $obj->content;
-        $content['headline'] = $obj->headline;
-        $content['footer'] = $obj->footer;
+		$content['content'] = $obj->content;
+		$content['headline'] = $obj->headline;
+		$content['footer'] = $obj->footer;
 
-        return $content;
-
-    }
+		return $content;
+	}
 	public function get_menu($group = 1) {
 		$menu = array();
-		$query = 'SELECT title, text, url, menu_group AS \'group\' from '.DB_PREFIX.'navigation WHERE menu_group = '.$group.' ORDER BY menu_order';
-		$result = $this->db_handler->select_query($query);
+		$this->db_handler->db_escape_chars($group);
+		$query = 'SELECT link_title, link_text, link_url, link_group from '.DB_PREFIX.'navigation WHERE link_group = '.$group.' ORDER BY link_order';
+		$result = $this->db_handler->query($query);
 		$count = 0;
 		while($obj = $result->fetch_object()) {
-			$menu['menu_'.$obj->group][$count]['title'] = $obj->title;
-			$menu['menu_'.$obj->group][$count]['text'] = $obj->text;
-			$menu['menu_'.$obj->group][$count]['url'] = $obj->url;
+			$menu['menu_'.$obj->link_group][$count]['link_title'] = $obj->link_title;
+			$menu['menu_'.$obj->link_group][$count]['link_text'] = $obj->link_text;
+			$menu['menu_'.$obj->link_group][$count]['link_url'] = $obj->link_url;
 			$count++;
 		}
-		return $menu;	
+		return $menu;
+	}
+	public function get_link($link_id) {
+		$link = array();
+		$this->db_handler->db_escape_chars($link_id);
+		$query = 'SELECT link_title, link_text, link_url, link_group, link_order from '.DB_PREFIX.'navigation WHERE link_id = '.$link_id.';';
+		$result = $this->db_handler->query($query);
+		$obj = $result->fetch_object();
+		$link['link_title'] = $obj->link_title;
+		$link['link_text'] = $obj->link_text;
+		$link['link_url'] = $obj->link_url;
+		$link['link_group'] = $obj->link_group;
+		$link['link_order'] = $obj->link_order;
+		return $link;
+	}
+	public function get_menus() {
+		$menu = array();
+		$query = 'SELECT link_id, link_title, link_text, link_url, link_group, link_order from '.DB_PREFIX.'navigation';
+		$result = $this->db_handler->query($query);
+		$count = 0;
+		while($obj = $result->fetch_object()) {
+			$menu['links'][$count]['link_title'] = $obj->link_title;
+			$menu['links'][$count]['link_text'] = $obj->link_text;
+			$menu['links'][$count]['link_url'] = $obj->link_url;
+			$menu['links'][$count]['link_id'] = $obj->link_id;
+			$menu['links'][$count]['link_group'] = $obj->link_group;
+			$menu['links'][$count]['link_order'] = $obj->link_order;
+			$count++;
+		}
+		return $menu;
 	}
 	public function get_regions() {
 		$regions = array();
-		$result = $this->db_handler->select_query('SELECT * FROM '.DB_PREFIX.'regions');
+		$result = $this->db_handler->query('SELECT * FROM '.DB_PREFIX.'region');
+
 		while($obj = $result->fetch_object()) {
-			$regions[REGION_PREFIX.$obj->region_name] = $obj->region_text;
+			$regions['regions'][$obj->region_name]['region_text'] = $obj->region_text;
+			$regions['regions'][$obj->region_name]['region_id'] = $obj->region_id;
 		}
 		return $regions;
 	}
 	public function get_post($post_id) {
 		$post = array();
+		$this->db_handler->db_escape_chars($post_id);
 		$query = 'SELECT title, date, meta_content, meta_keyword, content, url FROM '.DB_PREFIX.'post WHERE idPost = '.$post_id.';';
-		$result = $this->db_handler->select_query($query);
+		$result = $this->db_handler->query($query);
 		$obj = $result->fetch_object();
 		$post['post_title'] = $obj->title;
 		$post['meta_content'] = $obj->meta_content;
+		$post['post_meta_content'] = $obj->meta_content;
 		$post['meta_keyword'] = $obj->meta_keyword;
+		$post['post_meta_keyword'] = $obj->meta_keyword;
 		$post['post_content'] = $obj->content;
 		$post['post_url'] = $obj->url;
-		
 		return $post;
+	}
+	public function get_region($region_id) {
+		$region = array();
+		$this->db_handler->db_escape_chars($region_id);
+		$query = 'SELECT region_name, region_text FROM '.DB_PREFIX.'region WHERE region_id = \''.$region_id.'\';';
+		$result = $this->db_handler->query($query);
+		$obj = $result->fetch_object();
+		$region['region_name'] = $obj->region_name;
+		$region['region_text'] = $obj->region_text;
+		return $region;
 	}
 	public function get_latest_posts($nr_of_posts = 10) {
 		$posts = array();
+		$this->db_handler->db_escape_chars($nr_of_posts);
 		$query = 'SELECT title, date, content, url FROM '.DB_PREFIX.'post LIMIT '.$nr_of_posts.';';
-		$result = $this->db_handler->select_query($query);
+		$result = $this->db_handler->query($query);
 		$count = 0;
 		while($obj = $result->fetch_object()) {
 			$posts['posts'][$count]['post_title'] = $obj->title;
@@ -70,27 +114,27 @@ class CmsModel {
 	}
 	public function get_posts() {
 		$posts = array();
-        $query = 'SELECT title, date, content, url FROM '.DB_PREFIX.'post;';
-        $result = $this->db_handler->select_query($query);
-        $count = 0;
-        while($obj = $result->fetch_object()) {
-            $posts['posts'][$count]['post_title'] = $obj->title;
-            $posts['posts'][$count]['post_content'] = $obj->content;
-            $posts['posts'][$count]['post_url'] = $obj->url;
-            $count++;
-        }
-        return $posts;	
+		$query = 'SELECT idPost, title, date, content, url FROM '.DB_PREFIX.'post;';
+		$result = $this->db_handler->query($query);
+		$count = 0;
+		while($obj = $result->fetch_object()) {
+			$posts['posts'][$count]['post_title'] = $obj->title;
+			$posts['posts'][$count]['post_content'] = $obj->content;
+			$posts['posts'][$count]['post_url'] = $obj->url;
+			$posts['posts'][$count]['post_id'] = $obj->idPost;
+			$count++;
+		}
+		return $posts;
 	}
 	public function get_post_id($post_url) {
 		$id = 0;
 		$this->db_handler->mysqli->real_escape_string($post_url);
 		$query = 'SELECT idPost FROM '.DB_PREFIX.'post WHERE url = \''.$post_url.'\';';
-		$result = $this->db_handler->select_query($query);
+		$result = $this->db_handler->query($query);
 		if($obj = $result->fetch_object()) {
 			$id = $obj ->idPost;
 		}
 		return $id;
 	}
-
 }
 ?>

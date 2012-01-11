@@ -21,7 +21,7 @@
                 <?php
 				foreach($menu_1 as $link) {
 				?>
-					<a href="<?=$link['url'];?>" title="<?=$link['title'];?>"><?=$link['text'];?></a>
+					<a href="<?=$link['link_url'];?>" title="<?=$link['link_title'];?>"><?=$link['link_text'];?></a>
 				<?php	
 				}
 				?>

@@ -2,18 +2,13 @@
 class Controller extends Helper{
 
 	function __construct($config) {
-		echo "Controller:";
-		var_dump($config);
 	}
-
-
 	public function load_view($view, $data = null) {
 		$path = 'views/'.$view.'.php';
 		if(is_array($data)) {
 			extract($data);
 		}
 		if(file_exists($path)) {
-
 			ob_start(); // start buffer
 			include ($path);
 			$view = ob_get_contents(); // assign buffer contents to variable
@@ -39,11 +34,10 @@ class Controller extends Helper{
 		$theme = ob_get_contents();
 		ob_end_clean();
 		echo $theme;
-		echo "<pre>";
-		print_r($data);
-		echo "</pre>";
+		/*echo "<pre>";
+		print_r($data); 
+		echo "</pre>";*/
 	}
-
 	public function load_model($model) {
 		
 		$path = 'models/'.$model.'.php';
@@ -53,7 +47,6 @@ class Controller extends Helper{
 		else {
 			throw new Exception('Model \''.$model.'\' not found in '.dirname($path));
 		}
-	
 	}
 }
 ?>

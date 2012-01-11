@@ -1,6 +1,6 @@
 			<hr>
             <footer class="span-24 footer">
-                <pre><?=$reg_footer?></pre>
+                <pre><?=$regions['footer']['region_text'];?></pre>
             </footer>
         </div>
     </body>
