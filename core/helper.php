@@ -23,7 +23,7 @@ class Helper {
 	}
 	public function get_standard_tinymce_head() {
 		$tinymce = <<<EOD
-		<script type="text/javascript" src="http://zazu.se/include/tinymce/jscripts/tiny_mce/tiny_mce.js" ></script >
+		<script type="text/javascript" src="/include/tinymce/jscripts/tiny_mce/tiny_mce.js" ></script >
 		<script type="text/javascript">
 	tinyMCE.init({
 		// General options
