@@ -27,3 +27,15 @@
 				?>
 			</nav>
 			<hr>
+			<?php
+				if(isset($success)) {
+					echo "<div class=\"span-8 push-8 success\">".$success."</div>";
+				}
+				if(isset($errors)) {
+					echo "<div class=\"span-8 push-8 error\">";
+					foreach($errors as $val) {
+						echo $val."<br>";
+					}
+					echo "</div>";
+				}
+			?>
