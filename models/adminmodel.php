@@ -172,6 +172,12 @@ class Adminmodel {
 		$success = $this->db_handler->query($query);
 		return $success;
 	}
+	public function delete_user($id) {
+		$this->db_handler->db_escape_chars($id);
+		$query = "DELETE FROM ".DB_PREFIX."user WHERE user_id =".$id.";";
+		$success = $this->db_handler->query($query);
+		return $success;
+	}
 	public function get_users() {
 		$users = array();
 		$result = $this->db_handler->query('SELECT * FROM '.DB_PREFIX.'user');
