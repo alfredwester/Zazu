@@ -10,6 +10,7 @@
 		<![endif]-->
 		<link rel="stylesheet" href="/theme/default/css/buttons.css" type="text/css" media="screen, projection">
 		<link rel="stylesheet" href="/theme/default/css/zazu.css" type="text/css" media="all">
+		<?=$head?>
 	</head>
 	<body>
 		<div class="container showgrid">
