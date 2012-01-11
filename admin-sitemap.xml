@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+<url>
+  <loc>http://zazu.se/admin/</loc>
+</url>
+<url>
+  <loc>http://zazu.se/admin/regions/</loc>
+</url>
+<url>
+  <loc>http://zazu.se/admin/links/</loc>
+</url>
+<url>
+  <loc>http://zazu.se/admin/users/</loc>
+</url>
+<url>
+  <loc>http://zazu.se/admin/settings/</loc>
+</url>
+<url>
+  <loc>http://zazu.se/admin/login/</loc>
+</url>
+<url>
+  <loc>http://zazu.se/admin/new_edit/post/</loc>
+</url>
+<url>
+  <loc>http://zazu.se/admin/new_edit/region/</loc>
+</url>
+<url>
+  <loc>http://zazu.se/admin/new_edit/link/</loc>
+</url>
+<url>
+  <loc>http://zazu.se/admin/new_edit/user/</loc>
+</url>
+<url>
+  <loc>http://zazu.se/admin/new_edit/user/1</loc>
+</url>
+<url>
+  <loc>http://zazu.se/admin/delete/user/1</loc>
+</url>
+</urlset>
