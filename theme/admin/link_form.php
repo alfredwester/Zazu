@@ -1,6 +1,6 @@
 			<article class="span-24">
 				<div class="span-20">
-					<form action="/admin/<?=$action;?>/link/<?=$link_id;?>" method="post">
+					<form action="<?php echo BASE_PATH;?>/admin/<?=$action;?>/link/<?=$link_id;?>" method="post">
 						<label for="link_text">Link text</label><br>
 						<input type="text" class="title" id="link_text" value="<?=$link_text;?>" name="link_text"/><br>
 						<label for="link_title">Link title</label><br>
@@ -14,7 +14,7 @@
 						<hr class="space"/>
 						<div class="buttons">
 							<button type="submit" class="positive" >Save</button>
-							<button type="button" class="negative" onclick="window.location='/admin/links/'">Cancel</button>
+							<button type="button" class="negative" onclick="window.location='<?php echo BASE_PATH;?>/admin/links/'">Cancel</button>
 						</div>
 					</form>
 				</div>

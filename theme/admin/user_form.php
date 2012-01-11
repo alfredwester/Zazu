@@ -1,6 +1,6 @@
 			<article class="span-24">
 				<div class="span-20">
-					<form action="/admin/<?=$action;?>/user/<?=$user_id;?>" method="post">
+					<form action="<?php echo BASE_PATH;?>/admin/<?=$action;?>/user/<?=$user_id;?>" method="post">
 						<label for="user_username">Username</label><br>
 						<input type="text" class="title" id="user_username" value="<?=$user_username;?>" name="user_username"/><br>
 						<label for="user_realname">Real name</label><br>
@@ -12,7 +12,7 @@
 						<hr class="space"/>
 						<div class="buttons">
 							<button type="submit" class="positive" >Save</button>
-							<button type="button" class="negative" onclick="window.location='/admin/users/'">Cancel</button>
+							<button type="button" class="negative" onclick="window.location='<?php echo BASE_PATH;?>/admin/users/'">Cancel</button>
 						</div>
 					</form>
 				</div>

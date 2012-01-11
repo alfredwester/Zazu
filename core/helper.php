@@ -16,14 +16,15 @@ class Helper {
 				echo $message;
 				exit;
 			case 0:
-				header('location: '.$url);
+				header('location: '.BASE_PATH.$url);
 				exit;
             break;
         }
 	}
 	public function get_standard_tinymce_head() {
+		$base = BASE_PATH;
 		$tinymce = <<<EOD
-		<script type="text/javascript" src="/include/tinymce/jscripts/tiny_mce/tiny_mce.js" ></script >
+		<script type="text/javascript" src="{$base}/include/tinymce/jscripts/tiny_mce/tiny_mce.js" ></script >
 		<script type="text/javascript">
 	tinyMCE.init({
 		// General options

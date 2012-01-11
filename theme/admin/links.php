@@ -1,5 +1,5 @@
 			<nav class="span-24 buttons">
-				<a href="/admin/new_edit/link/" title="New link">New link</a>
+				<a href="<?php echo BASE_PATH;?>/admin/new_edit/link/" title="New link">New link</a>
 			</nav>
 			<hr class="space">
 			<article class="span-24">
@@ -22,8 +22,8 @@
 					foreach($links as $link) {
 						extract($link);
 						echo "<tr><td>";
-						echo " <a href=\"/admin/new_edit/link/".$link_id."\"><img src=\"/theme/admin/images/icons/pencil.png\"></a>";
-						echo " <a href=\"/admin/delete/link/".$link_id."\" onclick=\"return confirm('Do you really want to delete this menu link?')\"><img src=\"/theme/admin/images/icons/delete.png\"></a></td>";
+						echo " <a href=\"".BASE_PATH."/admin/new_edit/link/".$link_id."\"><img src=\"".BASE_PATH."/theme/admin/images/icons/pencil.png\"></a>";
+						echo " <a href=\"".BASE_PATH."/admin/delete/link/".$link_id."\" onclick=\"return confirm('Do you really want to delete this menu link?')\"><img src=\"".BASE_PATH."/theme/admin/images/icons/delete.png\"></a></td>";
 						echo "<td><strong>".$link_text."</strong></td>";
 						echo "<td>".$link_title."</td>";
 						echo "<td>".$link_url."</td>";

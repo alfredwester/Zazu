@@ -1,5 +1,5 @@
 			<nav class="span-24 buttons">
-				<a href="/admin/new_edit/user/" title="New user">New user</a>
+				<a href="<?php echo BASE_PATH;?>/admin/new_edit/user/" title="New user">New user</a>
 			</nav>
 			<hr class="space">
 			<article class="span-24">
@@ -19,8 +19,8 @@
 					<?php
 					foreach($users as $user) {
 						echo "<tr><td>";
-						echo " <a href=\"/admin/new_edit/user/".$user['user_id']."\"><img src=\"/theme/admin/images/icons/pencil.png\"></a>";
-						echo " <a href=\"/admin/delete/user/".$user['user_id']."\" onclick=\"return confirm('Do you really want to delete this region?')\"><img src=\"/theme/admin/images/icons/delete.png\"></a></td>";
+						echo " <a href=\"".BASE_PATH."/admin/new_edit/user/".$user['user_id']."\"><img src=\"".BASE_PATH."/theme/admin/images/icons/pencil.png\"></a>";
+						echo " <a href=\"".BASE_PATH."/admin/delete/user/".$user['user_id']."\" onclick=\"return confirm('Do you really want to delete this region?')\"><img src=\"".BASE_PATH."/theme/admin/images/icons/delete.png\"></a></td>";
 						echo "<td><strong>".$user['user_username']."</strong></td>";
 						echo "<td>".$user['user_realname']."</td>";
 						echo "<td>".$user['user_email']."</td>";

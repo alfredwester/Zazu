@@ -1,6 +1,6 @@
 			<article class="span-24">
 				<div class="span-20">
-					<form action="/login/login" method="post">
+					<form action="<?php echo BASE_PATH;?>/login/login" method="post">
 						<label for="username">Username</label><br>
 						<input type="text" class="title" id="username" name="username"/><br>
 						<label for="password">Password</label><br>
