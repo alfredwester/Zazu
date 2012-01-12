@@ -72,8 +72,8 @@ EOD;
 		return $tinymce;
 	}
 	public function get_colorbox_head() {
-		$colorbox = <<<EOD
 		$base = BASE_PATH;
+		$colorbox = <<<EOD
 		<link rel="stylesheet" href="{$base}/include/colorbox/example1/colorbox.css" />
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 		<script src="{$base}/include/colorbox/colorbox/jquery.colorbox.js"></script>
