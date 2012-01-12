@@ -1,5 +1,6 @@
 <html>
 	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
 		<title>Administration --Zazu cms--</title>
 		<meta name="description" content="This is the administration interface for Zazu cms" />
 		<meta name="keyword" content="Admin, cms, mvc, zazu, administation" />
