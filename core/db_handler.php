@@ -9,7 +9,7 @@ class Db_handler {
 		if($this->mysqli->connect_error) {
 			throw new Exception('Connection Error: '.$this->mysqli->connect_error);
 		}
-		$this->mysqli->set_charset('utf-8');
+		$this->mysqli->set_charset('utf8');
 	}
 	public function __destruct() {
 		$this->mysqli->close();
