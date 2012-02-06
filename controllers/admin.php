@@ -116,6 +116,9 @@ class Admin extends Controller implements IController {
 			$data[$type.'_id'] = $id;
 			$data['action'] = 'edit';
 		}
+		if($type == 'user') {
+				$data = array_merge($data, $this->admin_model->get_roles());
+		}
 		if(isset($_SESSION[$type])) {
 			$data = array_merge($data, $_SESSION[$type]);
 			unset($_SESSION[$type]);
