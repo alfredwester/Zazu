@@ -64,7 +64,7 @@ class CmsModel {
 	public function get_post($post_id) {
 		$post = array();
 		$this->db_handler->db_escape_chars($post_id);
-		$query = 'SELECT post_title, post_date, post_meta_content, post_meta_keyword, post_content, post_url FROM '.DB_PREFIX.'post WHERE post_id = '.$post_id.';';
+		$query = 'SELECT p.post_title, p.post_date, p.post_meta_content, p.post_meta_keyword, p.post_content, p.post_url, u.user_id, u.user_realname FROM '.DB_PREFIX.'post AS p INNER JOIN '.DB_PREFIX.'user AS u ON p.post_author = u.user_id WHERE p.post_id = '.$post_id.';';
 		$result = $this->db_handler->query($query);
 		$obj = $result->fetch_object();
 		$post['post_title'] = $obj->post_title;
@@ -74,11 +74,13 @@ class CmsModel {
 		$post['post_meta_keyword'] = $obj->post_meta_keyword;
 		$post['post_content'] = $obj->post_content;
 		$post['post_url'] = $obj->post_url;
+		$post['post_author_id'] = $obj->user_id;
+		$post['post_author_name'] = $obj->user_realname;
 		return $post;
 	}
 	public function get_region($region_id) {
 		$region = array();
-		$this->db_handler->db_escape_chars($region_id);
+		$region_id = $this->db_handler->db_escape_chars($region_id);
 		$query = 'SELECT region_name, region_text FROM '.DB_PREFIX.'region WHERE region_id = \''.$region_id.'\';';
 		$result = $this->db_handler->query($query);
 		$obj = $result->fetch_object();
@@ -86,23 +88,14 @@ class CmsModel {
 		$region['region_text'] = $obj->region_text;
 		return $region;
 	}
-	public function get_latest_posts($nr_of_posts = 10) {
+	public function get_posts($nr_of_posts = 0) {
 		$posts = array();
-		$this->db_handler->db_escape_chars($nr_of_posts);
-		$query = 'SELECT post_title, post_date, post_content, post_url FROM '.DB_PREFIX.'post LIMIT '.$nr_of_posts.';';
-		$result = $this->db_handler->query($query);
-		$count = 0;
-		while($obj = $result->fetch_object()) {
-			$posts['posts'][$count]['post_title'] = $obj->post_title;
-			$posts['posts'][$count]['post_content'] = $obj->post_content;
-			$posts['posts'][$count]['post_url'] = $obj->post_url;
-			$count++;
+		$nr_of_posts = $this->db_handler->db_escape_chars($nr_of_posts);
+		$limit = '';
+		if($nr_of_posts > 0) {
+			$limit = ' LIMIT '.$nr_of_posts;
 		}
-		return $posts;
-	}
-	public function get_posts() {
-		$posts = array();
-		$query = 'SELECT post_id, post_title, post_date, post_content, post_url FROM '.DB_PREFIX.'post;';
+		$query = 'SELECT p.post_id, p.post_title, p.post_date, p.post_content, p.post_url, u.user_id, u.user_realname FROM '.DB_PREFIX.'post AS p INNER JOIN '.DB_PREFIX.'user AS u ON p.post_author = u.user_id'.$limit.';';
 		$result = $this->db_handler->query($query);
 		$count = 0;
 		while($obj = $result->fetch_object()) {
@@ -110,6 +103,8 @@ class CmsModel {
 			$posts['posts'][$count]['post_content'] = $obj->post_content;
 			$posts['posts'][$count]['post_url'] = $obj->post_url;
 			$posts['posts'][$count]['post_id'] = $obj->post_id;
+			$posts['posts'][$count]['post_author_id'] = $obj->user_id;
+			$posts['posts'][$count]['post_author_name'] = $obj->user_realname;
 			$count++;
 		}
 		return $posts;

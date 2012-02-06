@@ -5,6 +5,9 @@ class Adminmodel {
 	private $region_array;
 	private $link_array;
 	private $password_salt;
+	private $author_menu;
+	private $editor_menu;
+	private $admin_menu;
 
 	public function __construct() {
 		$this->db_handler = Db_handler::GetInstance();
@@ -34,6 +37,24 @@ class Adminmodel {
 									'user_role'
 									);
 		$this->password_salt = '##zazu mvc framework## is the best salt ever!!';
+		$this->author_menu = array(array('menu_title' => 'Posts', 'menu_text' => 'Posts', 'menu_url' => '/admin/'),
+							array('menu_title' => 'Menus', 'menu_text' => 'Menus', 'menu_url' => '/admin/links/'),
+							array('menu_title' => 'Settings', 'menu_text' => 'Settings', 'menu_url' => '/admin/user_settings/'),
+							array('menu_title' => 'Log out', 'menu_text' => 'Log out', 'menu_url' => '/admin/logout/')
+							);
+		$this->editor_menu = array(array('menu_title' => 'Posts', 'menu_text' => 'Posts', 'menu_url' => '/admin/'),
+							array('menu_title' => 'Regions', 'menu_text' => 'Regions', 'menu_url' => '/admin/regions/'), 
+							array('menu_title' => 'Menus', 'menu_text' => 'Menus', 'menu_url' => '/admin/links/'),
+							array('menu_title' => 'Settings', 'menu_text' => 'Settings', 'menu_url' => '/admin/user_settings/'),
+							array('menu_title' => 'Log out', 'menu_text' => 'Log out', 'menu_url' => '/admin/logout/')
+							);
+		$this->admin_menu = array(array('menu_title' => 'Posts', 'menu_text' => 'Posts', 'menu_url' => '/admin/'),
+							array('menu_title' => 'Regions', 'menu_text' => 'Regions', 'menu_url' => '/admin/regions/'), 
+							array('menu_title' => 'Menus', 'menu_text' => 'Menus', 'menu_url' => '/admin/links/'),
+							array('menu_title' => 'Users', 'menu_text' => 'Users', 'menu_url' => '/admin/users/'),
+							array('menu_title' => 'Site settings', 'menu_text' => 'Site settings', 'menu_url' => '/admin/settings/'),
+							array('menu_title' => 'Log out', 'menu_text' => 'Log out', 'menu_url' => '/admin/logout/')
+							);
 	}
 	private function get_md5_pass($password) {
 		$password = md5(md5($this->password_salt).$password.$this->password_salt);
@@ -45,7 +66,7 @@ class Adminmodel {
 		if(is_array($insert) && !empty($insert)) {
 			$insert = $this->db_handler->db_escape_chars($insert);
 			extract($insert);
-			$query = "INSERT INTO ".DB_PREFIX."post( post_date, post_title, post_meta_content, post_meta_keyword, post_content, post_url) VALUES(NOW(), '".$post_title."', '".$post_meta_content."', '".$post_meta_keyword."', '".$post_content."', '".$post_url."');";
+			$query = "INSERT INTO ".DB_PREFIX."post( post_date, post_title, post_meta_content, post_meta_keyword, post_content, post_url, post_author) VALUES(NOW(), '".$post_title."', '".$post_meta_content."', '".$post_meta_keyword."', '".$post_content."', '".$post_url."', ".$_SESSION['user_id'].");";
 			$success = $this->db_handler->query($query);
 		}
 		return $success;
@@ -233,6 +254,18 @@ class Adminmodel {
 			$user['user_role'] = $obj->user_role;
 		}
 		return $user;
+	}
+	public function get_menu() {
+		$menu = array();
+		switch($_SESSION['user_role']) {
+			case 1: $menu = $this->admin_menu;
+			break;
+			case 2: $menu = $this->editor_menu;
+			break;
+			case 3: $menu = $this->author_menu;
+			break;
+		}
+		return $menu;
 	}
 	public function get_post_array() {
 		return $this->post_array;

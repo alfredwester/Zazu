@@ -35,7 +35,9 @@ class Controller extends Helper{
 		ob_end_clean();
 		echo $theme;
 		echo "<pre>";
-		print_r($data); 
+		print_r($data);
+		echo "<b>Sessions:</b><br >";
+		print_r($_SESSION);
 		echo "</pre>";
 	}
 	public function load_model($model) {

@@ -24,7 +24,7 @@ class Login extends Controller implements IController {
 	}
 	public function login() {
 		$user = $this->admin_model->check_login($_POST['username'], $_POST['password']);
-		if($user > 0) {
+		if(count($user) > 0) {
 			$_SESSION['user_id'] = $user['user_id'];
 			$_SESSION['user_role'] = $user['user_role'];
 			$this->redirect(0, '/admin/');

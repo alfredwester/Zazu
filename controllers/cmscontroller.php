@@ -44,7 +44,7 @@ class CmsController extends Controller implements IController {
 			$data = array_merge($data, $this->model->get_post($this->config['start_content']));
 		}
 		elseif(strncasecmp($this->config['start_content'], 'latest', 6) == 0) {
-			$data = array_merge($data, $this->model->get_latest_posts(substr($this->config['start_content'], 6)));
+			$data = array_merge($data, $this->model->get_posts(substr($this->config['start_content'], 6)));
 		}
 		else {
 			$data = array_merge($data, $this->model->get_posts()); 

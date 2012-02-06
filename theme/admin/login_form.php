@@ -4,7 +4,7 @@
 						<label for="username">Username</label><br>
 						<input type="text" class="title" id="username" name="username"/><br>
 						<label for="password">Password</label><br>
-						<input type="text" class="title" id="password" name="password"/><br>
+						<input type="password" class="title" id="password" name="password"/><br>
 						<hr class="space"/>
 						<div class="buttons">
 							<button type="submit" >Login</button>
