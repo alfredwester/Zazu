@@ -91,7 +91,7 @@ class Adminmodel {
 			$link_url = strip_tags($link_url);
 			$link_url = str_ireplace(' ', '_',$link_url);
 			$link_url = strtolower($link_url);
-			$query = "INSERT INTO ".DB_PREFIX."navigation( link_title, link_text, link_url, link_group, link_order ) VALUES('".$link_title."', '".$link_text."', '".$link_url."', '".$link_group."', '".$link_order."');";
+			$query = "INSERT INTO ".DB_PREFIX."link( link_title, link_text, link_url, link_group, link_order, link_author ) VALUES('".$link_title."', '".$link_text."', '".$link_url."', '".$link_group."', '".$link_order."', ".$_SESSION['user_id'].");";
 			$success = $this->db_handler->query($query);
 		}
 		return $success;
@@ -143,7 +143,7 @@ class Adminmodel {
 			$link_url = strip_tags($link_url);
 			$link_url = str_ireplace(' ', '_',$link_url);
 			$link_url = strtolower($link_url);
-			$query = "UPDATE ".DB_PREFIX."navigation SET link_title = '".$link_title."', link_text = '".$link_text."', link_url = '".$link_url."', link_group = ".$link_group.", link_order = '".$link_order."' WHERE link_id = ".$id.";";
+			$query = "UPDATE ".DB_PREFIX."link SET link_title = '".$link_title."', link_text = '".$link_text."', link_url = '".$link_url."', link_group = ".$link_group.", link_order = '".$link_order."' WHERE link_id = ".$id.";";
 			$success = $this->db_handler->query($query);
 		}
 		return $success;
@@ -190,7 +190,7 @@ class Adminmodel {
 	}
 	public function delete_link($id) {
 		$this->db_handler->db_escape_chars($id);
-		$query = "DELETE FROM ".DB_PREFIX."navigation WHERE link_id =".$id.";";
+		$query = "DELETE FROM ".DB_PREFIX."link WHERE link_id =".$id.";";
 		$success = $this->db_handler->query($query);
 		return $success;
 	}
@@ -265,7 +265,8 @@ class Adminmodel {
 			case 3: $menu = $this->author_menu;
 			break;
 		}
-		return $menu;
+		//Change back to $menu
+		return $this->admin_menu;
 	}
 	public function get_post_array() {
 		return $this->post_array;

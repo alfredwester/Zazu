@@ -1,5 +1,9 @@
 			<nav class="span-24 buttons">
-				<a href="<?php echo BASE_PATH;?>/admin/new_edit/post/" title="New post">New Post</a>
+				<?php
+				if($this->permission_handler->has_permission('create', 'post', null)) {
+					echo "<a href=\"".BASE_PATH."/admin/new_edit/post/\" title=\"New post\">New Post</a>";
+				}
+				?>
 			</nav>
 			<hr class="space">
 			<article class="span-24">
@@ -17,14 +21,20 @@
 						</tr>
 					</thead>
 					<?php
+					
 					foreach($posts as $post) {
 						extract($post);
+						$auth = false;
 						echo "<tr><td>";
-						if($post_author_id == $_SESSION['user_id'] || $_SESSION['user_role'] != 3) {
+						if($this->permission_handler->has_permission('update', 'post', $post_id)) {
 							echo " <a href=\"".BASE_PATH."/admin/new_edit/post/".$post_id."\"><img src=\"".BASE_PATH."/theme/admin/images/icons/pencil.png\"></a>";
-							echo " <a href=\"".BASE_PATH."/admin/delete/post/".$post_id."\" onclick=\"return confirm('Do you really want to delete this post?')\"><img src=\"".BASE_PATH."/theme/admin/images/icons/delete.png\"></a>";
+							$auth = true;
 						}
-						else {
+						if($this->permission_handler->has_permission('delete', 'post', $post_id)) {
+							echo " <a href=\"".BASE_PATH."/admin/delete/post/".$post_id."\" onclick=\"return confirm('Do you really want to delete this post?')\"><img src=\"".BASE_PATH."/theme/admin/images/icons/delete.png\"></a>";
+							$auth = true;
+						}
+						if(!$auth) {
 							echo "<img src=\"".BASE_PATH."/theme/admin/images/icons/lock.png\" title=\"You have no permissions to manage this post\">";
 						}
 						echo "</td><td>".$post_author_name;

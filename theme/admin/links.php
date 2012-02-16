@@ -21,9 +21,19 @@
 					<?php
 					foreach($links as $link) {
 						extract($link);
+						$auth = false;
 						echo "<tr><td>";
-						echo " <a href=\"".BASE_PATH."/admin/new_edit/link/".$link_id."\"><img src=\"".BASE_PATH."/theme/admin/images/icons/pencil.png\"></a>";
-						echo " <a href=\"".BASE_PATH."/admin/delete/link/".$link_id."\" onclick=\"return confirm('Do you really want to delete this menu link?')\"><img src=\"".BASE_PATH."/theme/admin/images/icons/delete.png\"></a></td>";
+						if($this->permission_handler->has_permission('update', 'link', $link_id)) {
+							echo " <a href=\"".BASE_PATH."/admin/new_edit/link/".$link_id."\"  title=\"Edit this link\"><img src=\"".BASE_PATH."/theme/admin/images/icons/pencil.png\"></a>";
+							$auth = true;
+						}
+						if($this->permission_handler->has_permission('delete', 'link', $link_id)) {
+							echo " <a href=\"".BASE_PATH."/admin/delete/link/".$link_id."\" title=\"Delete this link\" onclick=\"return confirm('Do you really want to delete this menu link?')\"><img src=\"".BASE_PATH."/theme/admin/images/icons/delete.png\"></a></td>";
+							$auth = true;
+						}
+						if(!$auth) {
+							echo "<img src=\"".BASE_PATH."/theme/admin/images/icons/lock.png\" title=\"You have no permissions to manage this link\">";
+						}
 						echo "<td><strong>".$link_text."</strong></td>";
 						echo "<td>".$link_title."</td>";
 						echo "<td>".$link_url."</td>";

@@ -11,7 +11,7 @@ class CmsModel {
 	public function get_menu($group = 1) {
 		$menu = array();
 		$this->db_handler->db_escape_chars($group);
-		$query = 'SELECT link_title, link_text, link_url, link_group from '.DB_PREFIX.'navigation WHERE link_group = '.$group.' ORDER BY link_order';
+		$query = 'SELECT link_title, link_text, link_url, link_group from '.DB_PREFIX.'link WHERE link_group = '.$group.' ORDER BY link_order';
 		$result = $this->db_handler->query($query);
 		$count = 0;
 		while($obj = $result->fetch_object()) {
@@ -25,7 +25,7 @@ class CmsModel {
 	public function get_link($link_id) {
 		$link = array();
 		$this->db_handler->db_escape_chars($link_id);
-		$query = 'SELECT link_title, link_text, link_url, link_group, link_order from '.DB_PREFIX.'navigation WHERE link_id = '.$link_id.';';
+		$query = 'SELECT link_title, link_text, link_url, link_group, link_order from '.DB_PREFIX.'link WHERE link_id = '.$link_id.';';
 		$result = $this->db_handler->query($query);
 		$obj = $result->fetch_object();
 		$link['link_title'] = $obj->link_title;
@@ -37,7 +37,7 @@ class CmsModel {
 	}
 	public function get_menus() {
 		$menu = array();
-		$query = 'SELECT link_id, link_title, link_text, link_url, link_group, link_order from '.DB_PREFIX.'navigation';
+		$query = 'SELECT link_id, link_title, link_text, link_url, link_group, link_order from '.DB_PREFIX.'link';
 		$result = $this->db_handler->query($query);
 		$count = 0;
 		while($obj = $result->fetch_object()) {

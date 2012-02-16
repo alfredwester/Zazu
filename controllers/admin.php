@@ -8,6 +8,7 @@ class Admin extends Controller implements IController {
 	private $region_array;
 	private $link_array;
 	private $user_array;
+	public $permission_handler;
 	
 	public function __construct($config) {
 		if(!isset($_SESSION['user_id'])) {
@@ -23,6 +24,7 @@ class Admin extends Controller implements IController {
 		$this->user_array = $this->admin_model->get_user_array();
 		$this->config = $config;
 		$this->menu = $this->admin_model->get_menu();
+		$this->permission_handler = new Permission_handler();
 	}
 	private function get_header() {
 		$data = $this->config;
@@ -46,87 +48,65 @@ class Admin extends Controller implements IController {
 		$data = $this->get_header();
 		$data = array_merge($data, $this->cms_model->get_posts());
 		$this->load_theme($this->config['admin_theme'], $data);
+		echo "<pre><b>Permissions: </b><br />";
+		$this->permission_handler->print_permissions();
+		echo "</pre>";
 	}
 	public function users() {
+		if(!$this->permission_handler->has_permission('view', 'user', null)) {
+			$_SESSION['errors'][] = "You don't have permissions to manage users";
+			$this->redirect(0, '/admin/');
+		}
 		$data = $this->get_header();
 		$data = array_merge($data, $this->admin_model->get_users());
 		$this->load_theme($this->config['admin_theme'], $data, 'users');
 	}
 	public function regions() {
-		$data = $this->get_header();
-		if($_SESSION['user_role'] != 3) {
-			$data = array_merge($data, $this->cms_model->get_regions());
-			$this->load_theme($this->config['admin_theme'], $data, 'regions');
-		}
-		else {
+		if(!$this->permission_handler->has_permission('view', 'region', null)) {
 			$_SESSION['errors'][] = "You don't have permissions to manage regions";
 			$this->redirect(0, '/admin/');
 		}
+		$data = $this->get_header();
+		$data = array_merge($data, $this->cms_model->get_regions());
+		$this->load_theme($this->config['admin_theme'], $data, 'regions');
 	}
 	public function links() {
+		if(!$this->permission_handler->has_permission('view', 'link', null)) {
+			$_SESSION['errors'][] = "You don't have permissions to manage links";
+			$this->redirect(0, '/admin/');
+		}
 		$data = $this->get_header();
 		$data = array_merge($data, $this->cms_model->get_menus());
 		$this->load_theme($this->config['admin_theme'], $data, 'links');
 	}
 	public function settings() {
-		$data = $this->get_header();
-		if($_SESSION['user_role'] != 1) {
-			$_SESSION['errors'][] = "You don't have permissions to manage Site Settings";
+		if(!$this->permission_handler->has_permission('view', 'settings', null)) {
+			$_SESSION['errors'][] = "You don't have permissions to view site settings";
 			$this->redirect(0, '/admin/');
 		}
-		else {
-			$data['config'] = $this->config;
-			if(isset($_SESSION['settings'])) {
-				$data['config'] = array_merge($data['config'], $_SESSION['settings']);
-				unset($_SESSION['settings']);
-			}
-			$this->load_theme($this->config['admin_theme'], $data, 'settings_form');
+		$data = $this->get_header();
+		$data['config'] = $this->config;
+		if(isset($_SESSION['settings'])) {
+			$data['config'] = array_merge($data['config'], $_SESSION['settings']);
+			unset($_SESSION['settings']);
 		}
+		$this->load_theme($this->config['admin_theme'], $data, 'settings_form');
 	}
-	public function delete($type, $id)
-	{
+	public function delete($type, $id) {
+		if($type == 'post') {
+			$redirect = '';
+		}
+		else {
+			$redirect = $type.'s';
+		}
 		if(is_numeric($id) && $id >0){
+			if(!$this->permission_handler->has_permission('delete', $type, $id)) {
+				$_SESSION['errors'][] = "You don't have permissions to delete this ".$type;
+				$this->redirect(0, '/admin/'.$redirect);
+			}
 			$function = 'delete_'.$type;
-			if($type == 'post') {
-				$found_post = $this->cms_model->get_post($id);
-				if($found_post['post_author_id'] == $_SESSION['user_id'] ||  $_SESSION['user_role'] !=3) {
-					if($this->admin_model->$function($id)) {
-						$_SESSION['success'] = ucfirst($type)." successfully deleted";
-					}
-					else {
-						$_SESSION['errors'][] = ucfirst($type)." was not deleted, unknown database error";
-					}
-				}
-				else {
-					$_SESSION['errors'][] = "You dont have permissions to delete the selected post";
-					$this->redirect(0, '/admin/');
-				}
-			}
-			elseif($type == 'region') {
-				if($_SESSION['user_role'] !=1) {
-					$_SESSION['errors'][] = "You dont have permissions to delete the selected region";
-					$this->redirect(0, '/admin/regions/');
-				}
-				elseif($this->admin_model->$function($id)) {
-					$_SESSION['success'] = ucfirst($type)." successfully deleted";
-				}
-				else {
-					$_SESSION['errors'][] = ucfirst($type)." was not deleted, unknown database error";
-				}
-			}
-			elseif($type == 'link') {
-				if($_SESSION['user_role'] !=3) {
-					if($this->admin_model->$function($id)) {
-						$_SESSION['success'] = ucfirst($type)." successfully deleted";
-					}
-					else {
-						$_SESSION['errors'][] = ucfirst($type)." was not deleted, unknown database error";
-					}
-				}
-				else {
-					$_SESSION['errors'][] = "You dont have permissions to delete the selected link";
-					$this->redirect(0, '/admin/');
-				}
+			if($this->admin_model->$function($id)) {
+				$_SESSION['success'] = ucfirst($type)." successfully deleted";
 			}
 			else {
 				$_SESSION['errors'][] = ucfirst($type)." was not deleted, unknown database error";
@@ -135,15 +115,15 @@ class Admin extends Controller implements IController {
 		else {
 			$_SESSION['errors'][] = ucfirst($type)." id invalid";
 		}
-		if($type == 'post') {
-			$type = '';
-		}
-		else {
-			$type = $type.'s';
-		}
-		$this->redirect(0, '/admin/'.$type);
+		$this->redirect(0, '/admin/'.$redirect);
 	}
 	public function new_edit($type, $id = null) {
+		if($type == 'post') {
+			$redirect = '';
+		}
+		else {
+			$redirect = $type.'s';
+		}
 		$data['action'] = 'add';
 		$data[$type.'_id'] = '';
 		$arry_name = $type.'_array';
@@ -152,17 +132,11 @@ class Admin extends Controller implements IController {
 		}
 		$function = 'get_'.$type;
 		if(is_numeric($id) && $id >0) {
-			$found_post = $this->cms_model->$function($id);
-			if($type == 'post') {
-				if($found_post['post_author_id'] == $_SESSION['user_id'] ||  $_SESSION['user_role'] !=3) {
-					$data = array_merge($data, $found_post);
-				}
-				else {
-					$_SESSION['errors'][] = "You dont have permissions to edit the selected post";
-					$this->redirect(0, '/admin/');
-				}
+			if(!$this->permission_handler->has_permission('update', $type, $id)) {
+				$_SESSION['errors'][] = "You don't have permissions to edit this ".$type;
+				$this->redirect(0, '/admin/'.$redirect);
 			}
-			elseif($type != 'user') {
+			if($type != 'user') {
 				$data = array_merge($data, $this->cms_model->$function($id));
 			}
 			else {
@@ -170,6 +144,12 @@ class Admin extends Controller implements IController {
 			}
 			$data[$type.'_id'] = $id;
 			$data['action'] = 'edit';
+		}
+		else {
+			if(!$this->permission_handler->has_permission('create', $type, null)) {
+				$_SESSION['errors'][] = "You don't have permissions to create ".$type;
+				$this->redirect(0, '/admin/'.$redirect);
+			}
 		}
 		if($type == 'user') {
 				$data = array_merge($data, $this->admin_model->get_roles());
@@ -190,19 +170,23 @@ class Admin extends Controller implements IController {
 		return $data_empty;
 	}
 	public function add($type) {
+		if($type == 'post') {
+			$redirect = '';
+		}
+		else {
+			$redirect = $type.'s';
+		}
+		if(!$this->permission_handler->has_permission('create', $type, null)) {
+			$_SESSION['errors'][] = "You don't have permissions to create ".$type;
+			$this->redirect(0, '/admin/'.$redirect);
+		}
 		$array_name = $type.'_array';
 		$errors = $this->check_empty($this->$array_name, $_POST);
 		if(empty($errors)) {
 			$function = 'insert_'.$type;
 			if($this->admin_model->$function($_POST)) {
 				$_SESSION['success'] = "New ".$type." sucessfully created";
-				if($type == 'post') {
-					$type = '';
-				}
-				else {
-					$type = $type.'s';
-				}
-				$this->redirect(0, '/admin/'.$type);
+				$this->redirect(0, '/admin/'.$redirect);
 			}
 			else {
 				$_SESSION['errors'][] = ucfirst($type)." was not created, unknown database error";
@@ -215,6 +199,10 @@ class Admin extends Controller implements IController {
 		$this->redirect(0, '/admin/new_edit/'.$type.'/');
 	}
 	public function edit($type, $id) {
+		if(!$this->permission_handler->has_permission('update', $type, null)) {
+			$_SESSION['errors'][] = "You don't have permissions to create ".$type;
+			$this->redirect(0, '/admin/new_edit/'.$type.'/'.$id);
+		}
 		$array_name = $type.'_array';
 		$errors = $this->check_empty($this->$array_name, $_POST);
 		if(empty($errors)) {
@@ -233,6 +221,10 @@ class Admin extends Controller implements IController {
 		$this->redirect(0, '/admin/new_edit/'.$type.'/'.$id);
 	}
 	public function save_settings() {
+		if(!$this->permission_handler->has_permission('update', 'settings', null)) {
+			$_SESSION['errors'][] = "You don't have permissions to update site settings ";
+			$this->redirect(0, '/admin/settings/');
+		}
 		$errors = $this->check_empty(array_keys($this->config), $_POST);
 		if(empty($errors)) {
 			if($this->admin_model->save_settings($_POST)) {
