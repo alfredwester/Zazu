@@ -265,8 +265,7 @@ class Adminmodel {
 			case 3: $menu = $this->author_menu;
 			break;
 		}
-		//Change back to $menu
-		return $this->admin_menu;
+		return $menu;
 	}
 	public function get_post_array() {
 		return $this->post_array;
