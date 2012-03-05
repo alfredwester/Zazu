@@ -8,6 +8,7 @@ class Adminmodel {
 	private $author_menu;
 	private $editor_menu;
 	private $admin_menu;
+	private $new_password_salt;
 
 	public function __construct() {
 		$this->db_handler = Db_handler::GetInstance();
@@ -37,6 +38,7 @@ class Adminmodel {
 									'user_role'
 									);
 		$this->password_salt = '##zazu mvc framework## is the best salt ever!!';
+		$this->new_password_salt = '##zazu mvc framework## temp link'.date('y-m-d');
 		$this->author_menu = array(array('menu_title' => 'Posts', 'menu_text' => 'Posts', 'menu_url' => '/admin/'),
 							array('menu_title' => 'Menus', 'menu_text' => 'Menus', 'menu_url' => '/admin/links/'),
 							array('menu_title' => 'Settings', 'menu_text' => 'Settings', 'menu_url' => '/admin/user_settings/'),
@@ -59,6 +61,31 @@ class Adminmodel {
 	private function get_md5_pass($password) {
 		$password = md5(md5($this->password_salt).$password.$this->password_salt);
 		return $password;
+	}
+	public function get_md5_link($email) {
+		$url = md5(md5($this->new_password_salt).$email.$this->new_password_salt);
+		return $url;
+	}
+	public function change_password($email, $password) {
+		$success = false;
+		$password = $this->db_handler->db_escape_chars($password);
+		$email = $this->db_handler->db_escape_chars($email);
+		$query = "UPDATE ".DB_PREFIX."user SET user_password = '".$this->get_md5_pass($password)."' WHERE user_email = '".$email."';";
+		$this->db_handler->query($query);
+		if($this->db_handler->get_affected_rows() > 0 ) {
+			$success = true;
+		}
+		return $success;
+	}
+	public function user_exists($email) {
+		$email = $this->db_handler->db_escape_chars($email);
+		$success = false;
+		$query = 'SELECT user_id FROM '.DB_PREFIX.'user WHERE user_email = \''.$email.'\';';
+		$result = $this->db_handler->query($query);
+		if( $this->db_handler->get_affected_rows() > 0) {
+			$success = true;
+		}
+		return $success;
 	}
 	public function insert_post($post_data) {
 		$insert = $post_data;
@@ -243,11 +270,17 @@ class Adminmodel {
 		}
 		return $roles;
 	}
+	public function get_current_role() {
+		$query = "SELECT user_role FROM ".DB_PREFIX."user WHERE user_id = ".$_SESSION['user_id'].";";
+		$result = $this->db_handler->query($query);
+		$obj = $result->fetch_object();
+		return $obj->user_role;
+	}
 	public function check_login($username, $password) {
 		$user = array();
-		$this->db_handler->db_escape_chars($username);
+		$username = $this->db_handler->db_escape_chars($username);
 		$password = $this->get_md5_pass($password);
-		$query = "SELECT user_id, user_role FROM ".DB_PREFIX.'user WHERE user_username = \''.$username.'\' AND user_password = \''.$password.'\';';
+		$query = 'SELECT user_id, user_role FROM '.DB_PREFIX.'user WHERE user_username = \''.$username.'\' AND user_password = \''.$password.'\';';
 		$result = $this->db_handler->query($query);
 		if($obj = $result->fetch_object()) {
 			$user['user_id'] = $obj->user_id;
@@ -257,7 +290,7 @@ class Adminmodel {
 	}
 	public function get_menu() {
 		$menu = array();
-		switch($_SESSION['user_role']) {
+		switch($this->get_current_role()) {
 			case 1: $menu = $this->admin_menu;
 			break;
 			case 2: $menu = $this->editor_menu;

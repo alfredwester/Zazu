@@ -31,6 +31,9 @@ class Db_handler {
 	public function get_latest_error() {
 		return $this->mysqli->error;
 	}
+	public function get_affected_rows() {
+		return $this->mysqli->affected_rows;
+	}
 	public function query($query) {
 		$result = $this->mysqli->query($query) or die ($this->mysqli->error);
 		return $result;

@@ -160,15 +160,7 @@ class Admin extends Controller implements IController {
 		}
 		$this->create_form($type.'_form', $data);
 	}
-	private function check_empty($key_array, $data) {
-		$data_empty = array();
-		foreach($key_array as $val) {
-			if(!isset($data[$val]) || !is_numeric($data[$val]) && (empty($data[$val]) || $data[$val] == "")) {
-				$data_empty[] = str_replace('_', ' ', ucfirst($val)).' was empty';
-			}
-		}
-		return $data_empty;
-	}
+	
 	public function add($type) {
 		if($type == 'post') {
 			$redirect = '';
@@ -185,7 +177,7 @@ class Admin extends Controller implements IController {
 		if(empty($errors)) {
 			$function = 'insert_'.$type;
 			if($this->admin_model->$function($_POST)) {
-				$_SESSION['success'] = "New ".$type." sucessfully created";
+				$_SESSION['success'] = "New ".$type." successlly created";
 				$this->redirect(0, '/admin/'.$redirect);
 			}
 			else {
@@ -208,7 +200,7 @@ class Admin extends Controller implements IController {
 		if(empty($errors)) {
 			$function = 'update_'.$type;
 			if($this->admin_model->$function($_POST, $id)) {
-				$_SESSION['success'] = ucfirst($type)." sucessfully updated";
+				$_SESSION['success'] = ucfirst($type)." successfully updated";
 			}
 			else {
 				$_SESSION['errors'][] = ucfirst($type)." was not updated, unknown database error";
@@ -228,7 +220,7 @@ class Admin extends Controller implements IController {
 		$errors = $this->check_empty(array_keys($this->config), $_POST);
 		if(empty($errors)) {
 			if($this->admin_model->save_settings($_POST)) {
-				$_SESSION['success'] = "Settings sucessfully saved";
+				$_SESSION['success'] = "Settings successfully saved";
 			}
 			else {
 				$_SESSION['errors'][] = "Settings was not saved, unknown database error";

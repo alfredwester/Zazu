@@ -3,13 +3,13 @@ class Helper {
 	public function redirect($status, $url = null, $message = null) {
 		switch($status) {
 			case 404:
-                header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
-                echo "404 Not Found";
-                exit;
-            case 301:
-                header($_SERVER['SERVER_PROTOCOL'].' 301 Moved Permanently');
-                header('location: '.$url);
-                exit;
+				header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
+				echo "404 Not Found";
+				exit;
+			case 301:
+				header($_SERVER['SERVER_PROTOCOL'].' 301 Moved Permanently');
+				header('location: '.$url);
+				exit;
 			case 500:
 				header($_SERVER['SERVER_PROTOCOL'].' 500 Internal Server Error');
 				echo "500 Internal Server Error <br>";
@@ -18,9 +18,20 @@ class Helper {
 			case 0:
 				header('location: '.BASE_PATH.$url);
 				exit;
-            break;
-        }
+			break;
+		}
 	}
+	
+	protected function check_empty($key_array, $data) {
+		$data_empty = array();
+		foreach($key_array as $val) {
+			if(!isset($data[$val]) || !is_numeric($data[$val]) && (empty($data[$val]) || $data[$val] == "")) {
+				$data_empty[] = str_replace('_', ' ', ucfirst($val)).' was empty';
+			}
+		}
+		return $data_empty;
+	}
+	
 	public function get_standard_tinymce_head() {
 		$base = BASE_PATH;
 		$tinymce = <<<EOD

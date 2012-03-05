@@ -2,9 +2,9 @@
 				<div class="span-20">
 					<form action="<?php echo BASE_PATH;?>/admin/<?=$action;?>/region/<?=$region_id;?>" method="post">
 						<label for="region_name">Region name</label><br>
-						<input type="text" class="title" id="region_name" value="<?=$region_name;?>" name="region_name"/><br>
+						<input type="text" class="title" id="region_name" autofocus required value="<?=$region_name;?>" name="region_name"/><br>
 						<div class="span-20">
-							<textarea name="region_text" class="span-20" id="region_text" >
+							<textarea name="region_text" required class="span-20" id="region_text" >
 								<?php echo htmlentities($region_text, ENT_QUOTES, 'UTF-8');?>
 							</textarea>
 						</div>

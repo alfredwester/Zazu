@@ -3,7 +3,7 @@
 					<form action="<?php echo BASE_PATH;?>/admin/save_settings/" method="post">
 						<?php
 						foreach($config as $key => $val) {
-							echo "<label for=\"".$key."\">".ucfirst(str_ireplace('_', ' ', $key))."</label><br><input type=\"text\" class=\"text\" id=\"".$key."\" value=\"".$val."\" name=\"".$key."\"/><br>";
+							echo "<label for=\"".$key."\">".ucfirst(str_ireplace('_', ' ', $key))."</label><br><input type=\"text\" required class=\"text\" id=\"".$key."\" value=\"".$val."\" name=\"".$key."\"/><br>";
 						}
 						?>
 						<hr class="space"/>
