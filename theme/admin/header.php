@@ -32,6 +32,12 @@
 				if(isset($success)) {
 					echo "<div class=\"span-8 push-8 success\">".$success."</div>";
 				}
+				if(isset($notice)) {
+					echo "<div class=\"span-8 push-8 notice\">".$notice."</div>";
+				}
+				if(isset($info)) {
+					echo "<div class=\"span-8 push-8 info\">".$info."</div>";
+				}
 				if(isset($errors)) {
 					echo "<div class=\"span-8 push-8 error\">";
 					foreach($errors as $val) {

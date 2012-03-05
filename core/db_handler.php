@@ -34,9 +34,17 @@ class Db_handler {
 	public function get_affected_rows() {
 		return $this->mysqli->affected_rows;
 	}
-	public function query($query) {
+	public function select_query($query) {
 		$result = $this->mysqli->query($query) or die ($this->mysqli->error);
 		return $result;
+	}
+	public function query($query) {
+		$success = false;
+		$result = $this->mysqli->query($query) or die ($this->mysqli->error);
+		if($result && $this->get_affected_rows() > 0) {
+			$success = true;
+		}
+		return $success;
 	}
 	public function db_escape_chars($data) {
 		$temp = $data;

@@ -17,7 +17,7 @@ class Zazu extends Helper {
 			$this->debug_info['Errors'][] = $e;
 			$this->redirect(500, null, $e->getMessage());
 		}
-		$result = $this->db_handler->query('SELECT * FROM '.DB_PREFIX.'config');
+		$result = $this->db_handler->select_query('SELECT * FROM '.DB_PREFIX.'config');
 		while($obj = $result->fetch_object()) {
 			$this->config[$obj->setting] = $obj->value;
 		}

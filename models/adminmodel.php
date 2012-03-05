@@ -4,6 +4,7 @@ class Adminmodel {
 	private $post_array;
 	private $region_array;
 	private $link_array;
+	private $types;
 	private $password_salt;
 	private $author_menu;
 	private $editor_menu;
@@ -37,6 +38,7 @@ class Adminmodel {
 									'user_realname',
 									'user_role'
 									);
+		$this->types = array('post', 'region', 'link', 'user');
 		$this->password_salt = '##zazu mvc framework## is the best salt ever!!';
 		$this->new_password_salt = '##zazu mvc framework## temp link'.date('y-m-d');
 		$this->author_menu = array(array('menu_title' => 'Posts', 'menu_text' => 'Posts', 'menu_url' => '/admin/'),
@@ -81,7 +83,7 @@ class Adminmodel {
 		$email = $this->db_handler->db_escape_chars($email);
 		$success = false;
 		$query = 'SELECT user_id FROM '.DB_PREFIX.'user WHERE user_email = \''.$email.'\';';
-		$result = $this->db_handler->query($query);
+		$result = $this->db_handler->select_query($query);
 		if( $this->db_handler->get_affected_rows() > 0) {
 			$success = true;
 		}
@@ -186,7 +188,7 @@ class Adminmodel {
 			if($user['user_password'] != $user_password) {
 				$user_password = $this->get_md5_pass($user_data['user_password']);
 			}
-			$query = "UPDATE ".DB_PREFIX."user SET user_username = '".$user_username."', user_password = '".$user_password."', user_email = '".$user_username."', user_realname = '".$user_realname."', user_role = ".$user_role." WHERE user_id = ".$id.";";
+			$query = "UPDATE ".DB_PREFIX."user SET user_username = '".$user_username."', user_password = '".$user_password."', user_email = '".$user_email."', user_realname = '".$user_realname."', user_role = ".$user_role." WHERE user_id = ".$id.";";
 			$success = $this->db_handler->query($query);
 		}
 		return $success;
@@ -229,7 +231,7 @@ class Adminmodel {
 	}
 	public function get_users() {
 		$users = array();
-		$result = $this->db_handler->query('SELECT * FROM '.DB_PREFIX.'user');
+		$result = $this->db_handler->select_query('SELECT * FROM '.DB_PREFIX.'user');
 		$count = 0;
 		while($obj = $result->fetch_object()) {
 			$users['users'][$count]['user_id'] = $obj->user_id;
@@ -244,23 +246,24 @@ class Adminmodel {
 	public function get_user($user_id) {
 		$user = array();
 		$this->db_handler->db_escape_chars($user_id);
-		$result = $this->db_handler->query('SELECT * FROM '.DB_PREFIX.'user AS u INNER JOIN '.DB_PREFIX.'role AS r ON u.user_role = r.role_id WHERE u.user_id ='.$user_id.';');
-		$obj = $result->fetch_object();
-		$user['user_id'] = $obj->user_id;
-		$user['user_role'] = $obj->user_role;
-		$user['user_username'] = $obj->user_username;
-		$user['user_password'] = $obj->user_password;
-		$user['user_email'] = $obj->user_email;
-		$user['user_realname'] = $obj->user_realname;
-		$user['role_name'] = $obj->role_name;
-		$user['role_id'] = $obj->role_id;
-		$user += $this->get_roles();
+		$result = $this->db_handler->select_query('SELECT * FROM '.DB_PREFIX.'user AS u INNER JOIN '.DB_PREFIX.'role AS r ON u.user_role = r.role_id WHERE u.user_id ='.$user_id.';');
+		if($obj = $result->fetch_object()) {
+			$user['user_id'] = $obj->user_id;
+			$user['user_role'] = $obj->user_role;
+			$user['user_username'] = $obj->user_username;
+			$user['user_password'] = $obj->user_password;
+			$user['user_email'] = $obj->user_email;
+			$user['user_realname'] = $obj->user_realname;
+			$user['role_name'] = $obj->role_name;
+			$user['role_id'] = $obj->role_id;
+			$user += $this->get_roles();
+		}
 		return $user;
 	}
 	public function get_roles() {
 		$roles = array();
 		$query = 'SELECT * FROM '.DB_PREFIX.'role;';
-		$result = $this->db_handler->query($query);
+		$result = $this->db_handler->select_query($query);
 		$count = 0; 
 		while($obj = $result->fetch_object()) {
 			$roles['roles'][$count]['role_id'] = $obj->role_id;
@@ -272,7 +275,7 @@ class Adminmodel {
 	}
 	public function get_current_role() {
 		$query = "SELECT user_role FROM ".DB_PREFIX."user WHERE user_id = ".$_SESSION['user_id'].";";
-		$result = $this->db_handler->query($query);
+		$result = $this->db_handler->select_query($query);
 		$obj = $result->fetch_object();
 		return $obj->user_role;
 	}
@@ -281,7 +284,7 @@ class Adminmodel {
 		$username = $this->db_handler->db_escape_chars($username);
 		$password = $this->get_md5_pass($password);
 		$query = 'SELECT user_id, user_role FROM '.DB_PREFIX.'user WHERE user_username = \''.$username.'\' AND user_password = \''.$password.'\';';
-		$result = $this->db_handler->query($query);
+		$result = $this->db_handler->select_query($query);
 		if($obj = $result->fetch_object()) {
 			$user['user_id'] = $obj->user_id;
 			$user['user_role'] = $obj->user_role;
@@ -311,5 +314,8 @@ class Adminmodel {
 	}
 	public function get_user_array() {
 		return $this->user_array;
+	}
+	public function get_types() {
+		return $this->types;
 	}
 }

@@ -12,7 +12,7 @@ class CmsModel {
 		$menu = array();
 		$this->db_handler->db_escape_chars($group);
 		$query = 'SELECT link_title, link_text, link_url, link_group from '.DB_PREFIX.'link WHERE link_group = '.$group.' ORDER BY link_order';
-		$result = $this->db_handler->query($query);
+		$result = $this->db_handler->select_query($query);
 		$count = 0;
 		while($obj = $result->fetch_object()) {
 			$menu['menu_'.$obj->link_group][$count]['link_title'] = $obj->link_title;
@@ -26,19 +26,20 @@ class CmsModel {
 		$link = array();
 		$this->db_handler->db_escape_chars($link_id);
 		$query = 'SELECT link_title, link_text, link_url, link_group, link_order from '.DB_PREFIX.'link WHERE link_id = '.$link_id.';';
-		$result = $this->db_handler->query($query);
-		$obj = $result->fetch_object();
-		$link['link_title'] = $obj->link_title;
-		$link['link_text'] = $obj->link_text;
-		$link['link_url'] = $obj->link_url;
-		$link['link_group'] = $obj->link_group;
-		$link['link_order'] = $obj->link_order;
+		$result = $this->db_handler->select_query($query);
+		if($obj = $result->fetch_object()) {
+			$link['link_title'] = $obj->link_title;
+			$link['link_text'] = $obj->link_text;
+			$link['link_url'] = $obj->link_url;
+			$link['link_group'] = $obj->link_group;
+			$link['link_order'] = $obj->link_order;
+		}
 		return $link;
 	}
 	public function get_menus() {
 		$menu = array();
 		$query = 'SELECT link_id, link_title, link_text, link_url, link_group, link_order from '.DB_PREFIX.'link';
-		$result = $this->db_handler->query($query);
+		$result = $this->db_handler->select_query($query);
 		$count = 0;
 		while($obj = $result->fetch_object()) {
 			$menu['links'][$count]['link_title'] = $obj->link_title;
@@ -53,7 +54,7 @@ class CmsModel {
 	}
 	public function get_regions() {
 		$regions = array();
-		$result = $this->db_handler->query('SELECT * FROM '.DB_PREFIX.'region');
+		$result = $this->db_handler->select_query('SELECT * FROM '.DB_PREFIX.'region');
 
 		while($obj = $result->fetch_object()) {
 			$regions['regions'][$obj->region_name]['region_text'] = $obj->region_text;
@@ -65,27 +66,29 @@ class CmsModel {
 		$post = array();
 		$this->db_handler->db_escape_chars($post_id);
 		$query = 'SELECT p.post_title, p.post_date, p.post_meta_content, p.post_meta_keyword, p.post_content, p.post_url, u.user_id, u.user_realname FROM '.DB_PREFIX.'post AS p INNER JOIN '.DB_PREFIX.'user AS u ON p.post_author = u.user_id WHERE p.post_id = '.$post_id.';';
-		$result = $this->db_handler->query($query);
-		$obj = $result->fetch_object();
-		$post['post_title'] = $obj->post_title;
-		$post['meta_content'] = $obj->post_meta_content;
-		$post['post_meta_content'] = $obj->post_meta_content;
-		$post['meta_keyword'] = $obj->post_meta_keyword;
-		$post['post_meta_keyword'] = $obj->post_meta_keyword;
-		$post['post_content'] = $obj->post_content;
-		$post['post_url'] = $obj->post_url;
-		$post['post_author_id'] = $obj->user_id;
-		$post['post_author_name'] = $obj->user_realname;
+		$result = $this->db_handler->select_query($query);
+		if($obj = $result->fetch_object()) {
+			$post['post_title'] = $obj->post_title;
+			$post['meta_content'] = $obj->post_meta_content;
+			$post['post_meta_content'] = $obj->post_meta_content;
+			$post['meta_keyword'] = $obj->post_meta_keyword;
+			$post['post_meta_keyword'] = $obj->post_meta_keyword;
+			$post['post_content'] = $obj->post_content;
+			$post['post_url'] = $obj->post_url;
+			$post['post_author_id'] = $obj->user_id;
+			$post['post_author_name'] = $obj->user_realname;
+		}
 		return $post;
 	}
 	public function get_region($region_id) {
 		$region = array();
 		$region_id = $this->db_handler->db_escape_chars($region_id);
 		$query = 'SELECT region_name, region_text FROM '.DB_PREFIX.'region WHERE region_id = \''.$region_id.'\';';
-		$result = $this->db_handler->query($query);
-		$obj = $result->fetch_object();
-		$region['region_name'] = $obj->region_name;
-		$region['region_text'] = $obj->region_text;
+		$result = $this->db_handler->select_query($query);
+		if($obj = $result->fetch_object()) {
+			$region['region_name'] = $obj->region_name;
+			$region['region_text'] = $obj->region_text;
+		}
 		return $region;
 	}
 	public function get_posts($nr_of_posts = 0) {
@@ -96,7 +99,7 @@ class CmsModel {
 			$limit = ' LIMIT '.$nr_of_posts;
 		}
 		$query = 'SELECT p.post_id, p.post_title, p.post_date, p.post_content, p.post_url, u.user_id, u.user_realname FROM '.DB_PREFIX.'post AS p INNER JOIN '.DB_PREFIX.'user AS u ON p.post_author = u.user_id'.$limit.';';
-		$result = $this->db_handler->query($query);
+		$result = $this->db_handler->select_query($query);
 		$count = 0;
 		while($obj = $result->fetch_object()) {
 			$posts['posts'][$count]['post_title'] = $obj->post_title;
@@ -113,7 +116,7 @@ class CmsModel {
 		$id = 0;
 		$this->db_handler->mysqli->real_escape_string($post_url);
 		$query = 'SELECT post_id FROM '.DB_PREFIX.'post WHERE post_url = \''.$post_url.'\';';
-		$result = $this->db_handler->query($query);
+		$result = $this->db_handler->select_query($query);
 		if($obj = $result->fetch_object()) {
 			$id = $obj ->post_id;
 		}

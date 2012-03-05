@@ -18,7 +18,6 @@ class Permission_handler {
 	public function has_permission($action, $type, $id) {
 		$authorized = false;
 		$role = $this->get_role($_SESSION['user_id']); //1- Admin, 2- Editor, 3- Author
-		//echo "roll: ".$role;
 		$permissions = array();
 		switch($role) {
 		case 1:
@@ -34,36 +33,24 @@ class Permission_handler {
 			return false;
 			break;
 		}
-		//echo $type;
-		//echo "<pre>";
-		//print_r($permissions['other']);
-		//echo "</pre>";
 		if(array_key_exists($type, $permissions['other'])) {
-			//echo $type." found in other array<br>";
 			if(in_array($action, $permissions['other'][$type])) {
 				$authorized = true;
-				//echo $action." found in other[".$type."]<br>";
 			}
 		}
-		else {
-			//echo $type." Not found in other array <br>";
-		}
 		if(array_key_exists($type, $permissions['me'])) {
-			//echo $type." found in me array<br>";
 			if($action == 'create' || $action == 'view') {
 				if(in_array($action, $permissions['me'][$type])) {
 					$authorized = true;
-					//echo $action." found in me[".$type."]<br>";
 				}
 			}
 			else {
 				$query = "SELECT ".$type."_id FROM ".DB_PREFIX.$type." WHERE ".$type."_author = ".$_SESSION['user_id']." AND ".$type."_id = ".$id.";";
-				$result = $this->db_handler->query($query);
+				$result = $this->db_handler->select_query($query);
 				$found = $result->num_rows;
 				if($found > 0) {
 					if(in_array($action, $permissions['me'][$type])) {
 						$authorized = true;
-						//echo $action." found in me[".$type."]<br>";
 					}
 				}
 			}
@@ -72,7 +59,7 @@ class Permission_handler {
 	}
 	public function get_role() {
 		$query = "SELECT user_role FROM ".DB_PREFIX."user WHERE user_id = ".$_SESSION['user_id'].";";
-		$result = $this->db_handler->query($query);
+		$result = $this->db_handler->select_query($query);
 		$obj = $result->fetch_object();
 		return $obj->user_role;
 	}
