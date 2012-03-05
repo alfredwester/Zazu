@@ -60,6 +60,12 @@ class Admin extends Controller implements IController {
 		$this->permission_handler->print_permissions();
 		echo "</pre>";
 	}
+	public function user_profile() {
+		$data = $this->get_header();
+		$data = array_merge($data, $this->admin_model->get_user($_SESSION['user_id']));
+		$this->load_theme($this->config['admin_theme'], $data, 'user_profile');
+	
+	}
 	public function users() {
 		if(!$this->permission_handler->has_permission('view', 'user', null)) {
 			$_SESSION['errors'][] = "You don't have permissions to manage users";
@@ -130,7 +136,7 @@ class Admin extends Controller implements IController {
 		}
 		$this->redirect(0, '/admin/'.$redirect);
 	}
-		public function add($type = null) {
+	public function add($type = null) {
 		if(empty($type) || !in_array($type, $this->types)){
 			$this->redirect(404);
 		}
@@ -166,8 +172,8 @@ class Admin extends Controller implements IController {
 		if(empty($type) || !in_array($type, $this->types)){
 			$this->redirect(404);
 		}
-		if(!$this->permission_handler->has_permission('update', $type, null)) {
-			$_SESSION['errors'][] = "You don't have permissions to create ".$type;
+		if(!$this->permission_handler->has_permission('update', $type, $id)) {
+			$_SESSION['errors'][] = "You don't have permissions to update this ".$type;
 			$this->redirect(0, '/admin/new_edit/'.$type.'/'.$id);
 		}
 		$array_name = $type.'_array';
@@ -186,6 +192,28 @@ class Admin extends Controller implements IController {
 			$_SESSION[$type] = $_POST;
 		}
 		$this->redirect(0, '/admin/new_edit/'.$type.'/'.$id);
+	}
+	public function save_user_profile() {
+		if(!$this->permission_handler->has_permission('update', 'user', $_SESSION['user_id'])) {
+			$_SESSION['errors'][] = "You don't have permissions to update your profile";
+			$this->redirect(0, '/admin/user_profile');
+		}
+		$array_name = 'user_array';
+		$_POST['user_role'] = $this->admin_model->get_current_role();
+		$errors = $this->check_empty($this->$array_name, $_POST);
+		if(empty($errors)) {
+			if($this->admin_model->update_user($_POST, $_SESSION['user_id'])) {
+				$_SESSION['success'] = "Your profile was successfully updated";
+			}
+			else {
+				$_SESSION['notice'] = "Your profile was not updated, maybe no change was made";
+			}
+		}
+		else {
+			$_SESSION['errors'] = $errors;
+			$_SESSION['user'] = $_POST;
+		}
+		$this->redirect(0, '/admin/user_profile');
 	}
 	public function save_settings() {
 		if(!$this->permission_handler->has_permission('update', 'settings', null)) {

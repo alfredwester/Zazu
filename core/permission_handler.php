@@ -7,10 +7,12 @@ class Permission_handler {
 	public function __construct() {
 		$this->db_handler = Db_handler::GetInstance();
 		$this->author_permissions = array(	'me' => array(	'post' => array('view', 'delete', 'update', 'create'),
-															'link' => array('view', 'delete', 'update', 'create')),
+															'link' => array('view', 'delete', 'update', 'create'),
+															'user' => array('view', 'update')),
 											'other' =>array());
 		$this->editor_permissions = array(	'me' => array(	'post' => array('view', 'delete', 'update', 'create'),
-															'link' => array('view', 'delete', 'update', 'create')),
+															'link' => array('view', 'delete', 'update', 'create'),
+															'user' => array('view', 'update')),
 											'other' =>array('post' => array('view', 'delete', 'update'),
 															'link' => array('view', 'delete', 'update'), 
 															'region' => array('view', 'update')));
@@ -45,7 +47,12 @@ class Permission_handler {
 				}
 			}
 			else {
-				$query = "SELECT ".$type."_id FROM ".DB_PREFIX.$type." WHERE ".$type."_author = ".$_SESSION['user_id']." AND ".$type."_id = ".$id.";";
+				if($type == 'user') {
+					$query = "SELECT ".$type."_id FROM ".DB_PREFIX.$type." WHERE ".$type."_id = ".$id.";";
+				}
+				else {
+					$query = "SELECT ".$type."_id FROM ".DB_PREFIX.$type." WHERE ".$type."_author = ".$_SESSION['user_id']." AND ".$type."_id = ".$id.";";
+				}
 				$result = $this->db_handler->select_query($query);
 				$found = $result->num_rows;
 				if($found > 0) {

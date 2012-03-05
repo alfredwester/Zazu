@@ -43,13 +43,13 @@ class Adminmodel {
 		$this->new_password_salt = '##zazu mvc framework## temp link'.date('y-m-d');
 		$this->author_menu = array(array('menu_title' => 'Posts', 'menu_text' => 'Posts', 'menu_url' => '/admin/'),
 							array('menu_title' => 'Menus', 'menu_text' => 'Menus', 'menu_url' => '/admin/links/'),
-							array('menu_title' => 'Settings', 'menu_text' => 'Settings', 'menu_url' => '/admin/user_settings/'),
+							array('menu_title' => 'User profile settings', 'menu_text' => 'User Profile', 'menu_url' => '/admin/user_profile/'),
 							array('menu_title' => 'Log out', 'menu_text' => 'Log out', 'menu_url' => '/admin/logout/')
 							);
 		$this->editor_menu = array(array('menu_title' => 'Posts', 'menu_text' => 'Posts', 'menu_url' => '/admin/'),
 							array('menu_title' => 'Regions', 'menu_text' => 'Regions', 'menu_url' => '/admin/regions/'), 
 							array('menu_title' => 'Menus', 'menu_text' => 'Menus', 'menu_url' => '/admin/links/'),
-							array('menu_title' => 'Settings', 'menu_text' => 'Settings', 'menu_url' => '/admin/user_settings/'),
+							array('menu_title' => 'User profile settings', 'menu_text' => 'User Profile', 'menu_url' => '/admin/user_profile/'),
 							array('menu_title' => 'Log out', 'menu_text' => 'Log out', 'menu_url' => '/admin/logout/')
 							);
 		$this->admin_menu = array(array('menu_title' => 'Posts', 'menu_text' => 'Posts', 'menu_url' => '/admin/'),
