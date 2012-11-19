@@ -2,14 +2,18 @@
 class Login extends Controller implements IController {
 	private $config;
 	private $admin_model;
+	private $model;
 	
 	public function __construct($config) {
 		$this->config = $config;
 		$this->load_model('adminmodel');
+		$this->load_model('cmsmodel');
 		$this->admin_model = new Adminmodel();
+		$this->model = new CmsModel();
 	}
 	private function get_header() {
 		$data['head'] = '';
+		$data += $this->model->get_menu();
 		$data['admin_menu'] = array();
 		if(isset($_SESSION['success'])) {
 			$data['success'] = $_SESSION['success'];
@@ -24,7 +28,8 @@ class Login extends Controller implements IController {
 	public function index(){
 		$data = $this->config;
 		$data += $this->get_header();
-		$this->load_theme($this->config['admin_theme'], $data, 'login_form');
+		$data += $this->model->get_regions();
+		$this->load_theme($this->config['theme'], $data, 'login_form');
 	}
 	public function login() {
 		$user = $this->admin_model->check_login($_POST['username'], $_POST['password']);

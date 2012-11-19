@@ -115,9 +115,9 @@ class Zazu extends Helper {
 	}
 
 	public function print_debug() {
-		echo "<pre>";
+		/*echo "<pre>";
 		print_r($this->debug_info);
-		echo "</pre>";
+		echo "</pre>";*/
 	}
 }
 ?>

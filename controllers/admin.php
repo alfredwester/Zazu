@@ -56,9 +56,9 @@ class Admin extends Controller implements IController {
 		$data = $this->get_header();
 		$data = array_merge($data, $this->cms_model->get_posts());
 		$this->load_theme($this->config['admin_theme'], $data);
-		echo "<pre><b>Permissions: </b><br />";
+		/* echo "<pre><b>Permissions: </b><br />";
 		$this->permission_handler->print_permissions();
-		echo "</pre>";
+		echo "</pre>"; */
 	}
 	public function user_profile() {
 		$data = $this->get_header();

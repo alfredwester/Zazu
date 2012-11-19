@@ -34,11 +34,11 @@ class Controller extends Helper{
 		$theme = ob_get_contents();
 		ob_end_clean();
 		echo $theme;
-		echo "<pre>";
+		/* echo "<pre>";
 		print_r($data);
 		echo "<b>Sessions:</b><br >";
 		print_r($_SESSION);
-		echo "</pre>";
+		echo "</pre>"; */
 	}
 	public function load_model($model) {
 		

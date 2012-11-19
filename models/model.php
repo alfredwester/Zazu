@@ -33,7 +33,7 @@ class Model {
 
 		$header['title'] = $obj->title;
 		$header['meta_content'] = $obj->metaContent;
-		return $header;				
+		return $header;
 	}
 }
 ?>

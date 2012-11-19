@@ -39,12 +39,8 @@ class Db_handler {
 		return $result;
 	}
 	public function query($query) {
-		$success = false;
 		$result = $this->mysqli->query($query) or die ($this->mysqli->error);
-		if($result && $this->get_affected_rows() > 0) {
-			$success = true;
-		}
-		return $success;
+		return $result;
 	}
 	public function db_escape_chars($data) {
 		$temp = $data;
