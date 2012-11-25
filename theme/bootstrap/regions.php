@@ -13,7 +13,6 @@
 			}
 			?>
 		</nav>
-		
 		<section>
 			<?php
 			if(isset($regions)) {
