@@ -1,3 +1,14 @@
-.main {
- margin-top: 50px;
+#main {
+	padding-top: 50px;
+}
+#footer {
+	background-color: #F9F9F9;
+}
+#footer .container {
+	line-height: 20px;
+    padding: 8px;
+}
+.divider {
+	border-top: 1px solid #EEEEEE;
+	height: 1px;
 }
