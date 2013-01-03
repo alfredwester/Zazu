@@ -12,5 +12,11 @@
 		</footer>
 		<script type="text/javascript" src="<?php echo BASE_PATH;?>/include/jquery/jquery.min.js" ></script>
 		<script type="text/javascript" src="<?php echo BASE_PATH;?>/include/bootstrap/js/bootstrap.min.js" ></script>
+		<?php 
+		if(!empty($footer_js)) {
+			echo $footer_js;
+			echo "<script type=\"text/javascript\" src=\"".BASE_PATH."/theme/bootstrap/js/textarea.js\"></script>";
+		}
+		?>
     </body>
 </html>

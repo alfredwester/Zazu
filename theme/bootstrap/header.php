@@ -14,7 +14,7 @@
 				#wrap {display:table;height:100%}
 			</style>
 		<![endif]-->
-		<?=$head;?>
+		<?php echo $head;?>
 	</head>
 	<body>
 		<div id="wrap">
@@ -22,7 +22,7 @@
 				<div class="navbar-inner">
 					<nav class="container">
 						<a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse"></a>
-						<a class="brand" href="#">Zazu Administration</a>
+						<a class="brand" href="/admin">Zazu Administration</a>
 						<div class="nav-collapse collapse">
 							<ul class="nav">
 							<?php

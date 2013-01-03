@@ -290,7 +290,8 @@ class Admin extends Controller implements IController {
 	}
 	private function create_form($type, $input_data) {
 		$data = $this->get_header();
-		$data['head'] = $this->get_standard_tinymce_head();
+		$data['head'] = $this->get_bootstrap_wysihtml5_head();
+		$data['footer_js'] = $this->get_bootstrap_wysihtml5_footer();
 		$data = array_merge($data, $input_data);
 		$this->load_theme($this->config['admin_theme'], $data, $type);
 	}

@@ -91,4 +91,21 @@ EOD;
 EOD;
 		return $colorbox;
 	}
+	
+	public function get_bootstrap_wysihtml5_head() {
+		$base = BASE_PATH."include/bootstrap-wysihtml5";
+		$wysihtml5 = <<<EOD
+		<link rel="stylesheet" href="/{$base}/bootstrap-wysihtml5.css" />
+EOD;
+		return $wysihtml5;
+	}
+	
+	public function get_bootstrap_wysihtml5_footer() {
+		$base = BASE_PATH."include/bootstrap-wysihtml5";
+		$wysihtml5 = <<<EOD
+		<script src="/{$base}/libs/js/wysihtml5-0.3.0.js" type="text/javascript"></script>
+		<script src="/{$base}/bootstrap-wysihtml5.js" type="text/javascript"></script>
+EOD;
+		return $wysihtml5;
+	}
 }
