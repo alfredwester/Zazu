@@ -61,6 +61,10 @@ class Admin extends Controller implements IController {
 		echo "</pre>"; */
 	}
 	public function user_profile() {
+		if(!$this->permission_handler->has_permission('view', 'user', null)) {
+			$_SESSION['errors'][] = "You don't have permissions to view your profile";
+			$this->redirect(0, '/admin/');
+		}
 		$data = $this->get_header();
 		$data = array_merge($data, $this->admin_model->get_user($_SESSION['user_id']));
 		$this->load_theme($this->config['admin_theme'], $data, 'user_profile');
