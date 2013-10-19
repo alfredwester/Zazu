@@ -2,4 +2,5 @@ User-agent: *
 Disallow /controllers
 Disallow /core
 Disallow /models
+Disallow /.git
 Sitemap: sitemap.xml
