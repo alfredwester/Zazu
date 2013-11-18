@@ -17,7 +17,15 @@ class Permission_handler {
 															'link' => array('view', 'delete', 'update'), 
 															'region' => array('view', 'update')));
 	}
-	public function has_permission($action, $type, $id) {
+
+	/** 
+	* Determines if a user has the right access for doing stuff.
+	* $action is a string saying what action the user wants to do. eg. view, create, update, delete
+	* $type is what the action will be executed on. eg. post, link region
+	* $id is the id of the item that the user will access. Used to se if the user has rights to manipulate a specific item,
+	* default value for id is null
+	*/
+	public function has_permission($action, $type, $id = null) {
 		$authorized = false;
 		$role = $this->get_role($_SESSION['user_id']); //1- Admin, 2- Editor, 3- Author
 		$permissions = array();
