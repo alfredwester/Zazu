@@ -9,6 +9,12 @@ body {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c5deea', endColorstr='#066dab',GradientType=0 );
 	background-attachment: fixed;
 }
+h3 {
+	margin-bottom: 0.2em;
+}
+h1 {
+	margin-bottom: 0.2em;
+}
 .header h4 {
 	font-size: 36px;
 	margin-bottom: 18px;

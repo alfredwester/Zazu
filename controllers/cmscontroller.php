@@ -22,23 +22,30 @@ class CmsController extends Controller implements IController {
 		}
 		return $data;
 	}
-	function index($post_url = null) {
+	function index($request_url = null) {
 		$post_id = 0;
 		$type = 'start';
 		$data = $this->get_header();
 		
-		if($post_url != null) {
-			$post_id = $this->model->get_post_id($post_url);
-			if($post_id == 0) {
-				$this->redirect(404);
+		if($request_url != null) {
+			$category_id = $this->model->get_category_id($request_url);
+			if($category_id > 0) {
+				$data = array_merge($data, $this->model->get_posts(0, $category_id));
+				$type = 'category';
 			}
-		}	
-		if($post_id > 0 && $post_id == $this->config['start_content']) {
-			$this->redirect(301, '/');
-		}
-		elseif($post_id > 0) {
-			$data = array_merge($data, $this->model->get_post($post_id));
-			$type = 'post';
+			else {	
+				$post_id = $this->model->get_post_id($request_url);
+				if($post_id == 0) {
+					$this->redirect(404);
+				}
+				else if($post_id == $this->config['start_content']) {
+					$this->redirect(301, '/');
+				}
+				elseif($post_id > 0) {
+					$data = array_merge($data, $this->model->get_post($post_id));
+					$type = 'post';
+				}
+			}
 		}
 		elseif(is_numeric($this->config['start_content']) && $this->config['start_content'] > 0) {
 			$data = array_merge($data, $this->model->get_post($this->config['start_content']));

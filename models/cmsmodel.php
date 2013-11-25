@@ -65,18 +65,26 @@ class CmsModel {
 	public function get_post($post_id) {
 		$post = array();
 		$this->db_handler->db_escape_chars($post_id);
-		$query = 'SELECT p.post_title, p.post_date, p.post_meta_content, p.post_meta_keyword, p.post_content, p.post_url, u.user_id, u.user_realname FROM '.DB_PREFIX.'post AS p INNER JOIN '.DB_PREFIX.'user AS u ON p.post_author = u.user_id WHERE p.post_id = '.$post_id.';';
+		$query = 'SELECT p.post_id, p.post_meta_content, p.post_meta_keyword,  p.post_title, p.post_date, p.post_content, p.post_url, u.user_id, u.user_realname, c.category_id, c.category_name, c.category_url
+		FROM '.DB_PREFIX.'post AS p 
+		INNER JOIN '.DB_PREFIX.'user AS u ON p.post_author = u.user_id
+		INNER JOIN '.DB_PREFIX.'category AS c ON p.post_category = c.category_id
+		WHERE p.post_id = '.$post_id.';';
+		
 		$result = $this->db_handler->select_query($query);
 		if($obj = $result->fetch_object()) {
+			$post['post_date'] = $obj->post_date;
 			$post['post_title'] = $obj->post_title;
 			$post['meta_content'] = $obj->post_meta_content;
 			$post['post_meta_content'] = $obj->post_meta_content;
-			$post['meta_keyword'] = $obj->post_meta_keyword;
 			$post['post_meta_keyword'] = $obj->post_meta_keyword;
 			$post['post_content'] = $obj->post_content;
 			$post['post_url'] = $obj->post_url;
 			$post['post_author_id'] = $obj->user_id;
 			$post['post_author_name'] = $obj->user_realname;
+			$post['post_category_id'] = $obj->category_id;
+			$post['post_category_name'] = $obj->category_name;
+			$post['post_category_url'] = $obj->category_url;
 		}
 		return $post;
 	}
@@ -91,14 +99,21 @@ class CmsModel {
 		}
 		return $region;
 	}
-	public function get_posts($nr_of_posts = 0) {
+	public function get_posts($nr_of_posts = 0, $category_id = 0) {
 		$posts = array();
 		$nr_of_posts = $this->db_handler->db_escape_chars($nr_of_posts);
 		$limit = '';
+		$category = '';
 		if($nr_of_posts > 0) {
 			$limit = ' LIMIT '.$nr_of_posts;
 		}
-		$query = 'SELECT p.post_id, p.post_title, p.post_date, p.post_content, p.post_url, u.user_id, u.user_realname FROM '.DB_PREFIX.'post AS p INNER JOIN '.DB_PREFIX.'user AS u ON p.post_author = u.user_id'.$limit.';';
+		if($category_id > 0) {
+			$category = ' WHERE c.category_id = '.$category_id;
+		}
+		$query = 'SELECT p.post_id, p.post_title, p.post_date, p.post_content, p.post_url, u.user_id, u.user_realname, c.category_id, c.category_name, c.category_url
+		FROM '.DB_PREFIX.'post AS p 
+		INNER JOIN '.DB_PREFIX.'user AS u ON p.post_author = u.user_id 
+		INNER JOIN '.DB_PREFIX.'category AS c ON p.post_category = c.category_id '.$category.' '.$limit.';';
 		$result = $this->db_handler->select_query($query);
 		$count = 0;
 		while($obj = $result->fetch_object()) {
@@ -106,19 +121,33 @@ class CmsModel {
 			$posts['posts'][$count]['post_content'] = $obj->post_content;
 			$posts['posts'][$count]['post_url'] = $obj->post_url;
 			$posts['posts'][$count]['post_id'] = $obj->post_id;
+			$posts['posts'][$count]['post_date'] = $obj->post_date;
 			$posts['posts'][$count]['post_author_id'] = $obj->user_id;
 			$posts['posts'][$count]['post_author_name'] = $obj->user_realname;
+			$posts['posts'][$count]['post_category_id'] = $obj->category_id;
+			$posts['posts'][$count]['post_category_name'] = $obj->category_name;
+			$posts['posts'][$count]['post_category_url'] = $obj->category_url;
 			$count++;
 		}
 		return $posts;
 	}
 	public function get_post_id($post_url) {
 		$id = 0;
-		$this->db_handler->mysqli->real_escape_string($post_url);
+		$this->db_handler->db_escape_chars($post_url);
 		$query = 'SELECT post_id FROM '.DB_PREFIX.'post WHERE post_url = \''.$post_url.'\';';
 		$result = $this->db_handler->select_query($query);
 		if($obj = $result->fetch_object()) {
 			$id = $obj ->post_id;
+		}
+		return $id;
+	}
+	public function get_category_id($category_url) {
+		$id = 0;
+		$this->db_handler->db_escape_chars($category_url);
+		$query = 'SELECT category_id FROM '.DB_PREFIX.'category WHERE category_url = \''.$category_url.'\';';
+		$result = $this->db_handler->select_query($query);
+		if($obj = $result->fetch_object()) {
+			$id = $obj ->category_id;
 		}
 		return $id;
 	}
