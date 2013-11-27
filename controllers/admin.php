@@ -60,6 +60,16 @@ class Admin extends Controller implements IController {
 		$this->permission_handler->print_permissions();
 		echo "</pre>"; */
 	}
+	public function categories() {
+		if(!$this->permission_handler->has_permission('view', 'category', null)) {
+			$_SESSION['errors'][] = "You don't have permissions to view categories";
+			$this->redirect(0, '/admin/');
+		}
+		$data = $this->get_header();
+		$data = array_merge($data, $this->cms_model->get_categories());
+		$this->load_theme($this->config['admin_theme'], $data, 'categories');
+	}
+
 	public function user_profile() {
 		if(!$this->permission_handler->has_permission('view', 'user', null)) {
 			$_SESSION['errors'][] = "You don't have permissions to view your profile";

@@ -53,6 +53,7 @@ class Adminmodel {
 							array('menu_title' => 'Log out', 'menu_text' => 'Log out', 'menu_url' => '/admin/logout/')
 							);
 		$this->admin_menu = array(array('menu_title' => 'Posts', 'menu_text' => 'Posts', 'menu_url' => '/admin/'),
+							array('menu_title' => 'Categories', 'menu_text' => 'Categories', 'menu_url' => '/admin/categories/'), 
 							array('menu_title' => 'Regions', 'menu_text' => 'Regions', 'menu_url' => '/admin/regions/'), 
 							array('menu_title' => 'Menus', 'menu_text' => 'Menus', 'menu_url' => '/admin/links/'),
 							array('menu_title' => 'Users', 'menu_text' => 'Users', 'menu_url' => '/admin/users/'),

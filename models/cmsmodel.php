@@ -151,5 +151,14 @@ class CmsModel {
 		}
 		return $id;
 	}
+	public function get_categories() {
+		$categories = array();
+		$result = $this->db_handler->select_query('SELECT category_id, category_name, category_url  FROM '.DB_PREFIX.'category');
+		while($obj = $result->fetch_object()) {
+			$categories['categories'][$obj->category_name]['category_url'] = $obj->category_url;
+			$categories['categories'][$obj->category_name]['category_id'] = $obj->category_id;
+		}
+		return $categories;
+	}
 }
 ?>
