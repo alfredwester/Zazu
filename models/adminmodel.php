@@ -18,7 +18,12 @@ class Adminmodel {
 									'post_url',
 									'post_content',
 									'post_meta_content',
-									'post_meta_keyword'
+									'post_meta_keyword',
+									'post_category'
+									);
+		$this->category_array = array(
+									'category_name',
+									'category_url'
 									);
 		$this->region_array = array(
 									'region_name',
@@ -38,7 +43,7 @@ class Adminmodel {
 									'user_realname',
 									'user_role'
 									);
-		$this->types = array('post', 'region', 'link', 'user');
+		$this->types = array('post', 'region', 'link', 'user', 'category');
 		$this->password_salt = '##zazu mvc framework## is the best salt ever!!';
 		$this->new_password_salt = '##zazu mvc framework## temp link'.date('y-m-d');
 		$this->author_menu = array(array('menu_title' => 'Posts', 'menu_text' => 'Posts', 'menu_url' => '/admin/'),
@@ -96,7 +101,7 @@ class Adminmodel {
 		if(is_array($insert) && !empty($insert)) {
 			$insert = $this->db_handler->db_escape_chars($insert);
 			extract($insert);
-			$query = "INSERT INTO ".DB_PREFIX."post( post_date, post_title, post_meta_content, post_meta_keyword, post_content, post_url, post_author) VALUES(NOW(), '".$post_title."', '".$post_meta_content."', '".$post_meta_keyword."', '".$post_content."', '".$post_url."', ".$_SESSION['user_id'].");";
+			$query = "INSERT INTO ".DB_PREFIX."post( post_date, post_title, post_meta_content, post_meta_keyword, post_content, post_url, post_author, post_category) VALUES(NOW(), '".$post_title."', '".$post_meta_content."', '".$post_meta_keyword."', '".$post_content."', '".$post_url."', ".$_SESSION['user_id'].", ".$post_category.");";
 			$success = $this->db_handler->query($query);
 		}
 		return $success;
@@ -108,6 +113,17 @@ class Adminmodel {
 			$insert = $this->db_handler->db_escape_chars($insert);
 			extract($insert);
 			$query = "INSERT INTO ".DB_PREFIX."region( region_name, region_text) VALUES('".$region_name."', '".$region_text."');";
+			$success = $this->db_handler->query($query);
+		}
+		return $success;
+	}
+	public function insert_category($category_data) {
+		$insert = $category_data;
+		$success = false;
+		if(is_array($insert) && !empty($insert)) {
+			$insert = $this->db_handler->db_escape_chars($insert);
+			extract($insert);
+			$query = "INSERT INTO ".DB_PREFIX."category( category_name, category_url) VALUES('".$category_name."', '".$category_url."');";
 			$success = $this->db_handler->query($query);
 		}
 		return $success;
@@ -145,7 +161,7 @@ class Adminmodel {
 			$insert = $this->db_handler->db_escape_chars($insert);
 			$id = $this->db_handler->db_escape_chars($id);
 			extract($insert);
-			$query = "UPDATE ".DB_PREFIX."post SET post_title = '".$post_title."', post_meta_content = '".$post_meta_content."', post_meta_keyword = '".$post_meta_keyword."', post_content = '".$post_content."', post_url = '".$post_url."' WHERE post_id = ".$id.";";
+			$query = "UPDATE ".DB_PREFIX."post SET post_title = '".$post_title."', post_meta_content = '".$post_meta_content."', post_meta_keyword = '".$post_meta_keyword."', post_content = '".$post_content."', post_url = '".$post_url."', post_category = '".$post_category."' WHERE post_id = ".$id.";";
 			$success = $this->db_handler->query($query);
 		}
 		return $success;
@@ -206,6 +222,18 @@ class Adminmodel {
 		}
 		return $success;
 	}
+	public function update_category($category_data, $id) {
+		$insert = $category_data;
+		$success = false;
+		if(is_array($insert) && !empty($insert)) {
+			$insert = $this->db_handler->db_escape_chars($insert);
+			$id = $this->db_handler->db_escape_chars($id);
+			extract($insert);
+			$query = "UPDATE ".DB_PREFIX."category SET category_name = '".$category_name."', category_url = '".$category_url."' WHERE category_id = ".$id.";";
+			$success = $this->db_handler->query($query);
+		}
+		return $success;
+	}	
 	public function delete_post($id) {
 		$this->db_handler->db_escape_chars($id);
 		$query = "DELETE FROM ".DB_PREFIX."post WHERE post_id =".$id.";";
@@ -216,6 +244,22 @@ class Adminmodel {
 		$this->db_handler->db_escape_chars($id);
 		$query = "DELETE FROM ".DB_PREFIX."region WHERE region_id =".$id.";";
 		$success = $this->db_handler->query($query);
+		return $success;
+	}
+	public function delete_category($id) {
+		$this->db_handler->db_escape_chars($id);
+		$query = "SELECT COUNT(post_id) AS nrOfPosts FROM ".DB_PREFIX."post WHERE post_category = ".$id.";";
+		$result = $this->db_handler->select_query($query);
+		if($obj = $result->fetch_object()) {
+			if($obj->nrOfPosts > 0) {
+				$_SESSION['errors'][] = $obj->nrOfPosts." posts exist in this category. Delete them or move them to another category.";
+				$success = false;
+			}
+			else {
+				$query = "DELETE FROM ".DB_PREFIX."category WHERE category_id =".$id.";";
+				$success = $this->db_handler->query($query);
+			}
+		}
 		return $success;
 	}
 	public function delete_link($id) {
@@ -306,6 +350,9 @@ class Adminmodel {
 	}
 	public function get_post_array() {
 		return $this->post_array;
+	}
+	public function get_category_array() {
+		return $this->category_array;
 	}
 	public function get_region_array() {
 		return $this->region_array;

@@ -10,8 +10,7 @@
 					}
 				}
 				else {
-					echo "<h1>".$post_title."</h1>";
-					echo "<p>".$post_content."</p>";
+					echo "<h1>No posts found</h1><br>";
 				}
 				?>
 			</article>

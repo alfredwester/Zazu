@@ -20,6 +20,7 @@ class Admin extends Controller implements IController {
 		$this->cms_model = new Cmsmodel();
 		$this->admin_model = new Adminmodel();
 		$this->post_array = $this->admin_model->get_post_array();
+		$this->category_array = $this->admin_model->get_category_array();
 		$this->region_array = $this->admin_model->get_region_array();
 		$this->link_array = $this->admin_model->get_link_array();
 		$this->user_array = $this->admin_model->get_user_array();
@@ -129,6 +130,9 @@ class Admin extends Controller implements IController {
 		if($type == 'post') {
 			$redirect = '';
 		}
+		elseif($type == 'category') {
+			$redirect = 'categories';
+		}
 		else {
 			$redirect = $type.'s';
 		}
@@ -142,7 +146,7 @@ class Admin extends Controller implements IController {
 				$_SESSION['success'] = ucfirst($type)." successfully deleted";
 			}
 			else {
-				$_SESSION['errors'][] = ucfirst($type)." was not deleted, probobly not found";
+				$_SESSION['errors'][] = ucfirst($type)." could not be deleted";
 			}
 		}
 		else {
@@ -156,6 +160,9 @@ class Admin extends Controller implements IController {
 		}
 		if($type == 'post') {
 			$redirect = '';
+		}
+		elseif($type == 'category') {
+			$redirect = 'categories';
 		}
 		else {
 			$redirect = $type.'s';
@@ -295,6 +302,9 @@ class Admin extends Controller implements IController {
 		}
 		if($type == 'user') {
 				$data = array_merge($data, $this->admin_model->get_roles());
+		}
+		elseif($type == 'post') {
+			$data = array_merge($data, $this->cms_model->get_categories());
 		}
 		if(isset($_SESSION[$type])) {
 			$data = array_merge($data, $_SESSION[$type]);

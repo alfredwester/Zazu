@@ -13,4 +13,5 @@ define('DB_DATABASE', 'zazu');
 
 define('BASE_PATH', '');
 
+define('PRINT_DEBUG', false);
 ?>

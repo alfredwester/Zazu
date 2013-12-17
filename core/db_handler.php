@@ -39,7 +39,11 @@ class Db_handler {
 		return $result;
 	}
 	public function query($query) {
-		$result = $this->mysqli->query($query) or die ($this->mysqli->error);
+		$result = $this->mysqli->query($query);
+		if(!empty($this->mysqli->error)) {
+			$_SESSION['errors'][] = $this->mysqli->error;
+			$result = false;
+		}
 		return $result;
 	}
 	public function db_escape_chars($data) {

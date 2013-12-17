@@ -82,7 +82,7 @@ class CmsModel {
 			$post['post_url'] = $obj->post_url;
 			$post['post_author_id'] = $obj->user_id;
 			$post['post_author_name'] = $obj->user_realname;
-			$post['post_category_id'] = $obj->category_id;
+			$post['post_category'] = $obj->category_id;
 			$post['post_category_name'] = $obj->category_name;
 			$post['post_category_url'] = $obj->category_url;
 		}
@@ -124,7 +124,7 @@ class CmsModel {
 			$posts['posts'][$count]['post_date'] = $obj->post_date;
 			$posts['posts'][$count]['post_author_id'] = $obj->user_id;
 			$posts['posts'][$count]['post_author_name'] = $obj->user_realname;
-			$posts['posts'][$count]['post_category_id'] = $obj->category_id;
+			$posts['posts'][$count]['post_category'] = $obj->category_id;
 			$posts['posts'][$count]['post_category_name'] = $obj->category_name;
 			$posts['posts'][$count]['post_category_url'] = $obj->category_url;
 			$count++;
@@ -150,6 +150,17 @@ class CmsModel {
 			$id = $obj ->category_id;
 		}
 		return $id;
+	}
+	public function get_category($category_id) {
+		$category = array();
+		$category_id = $this->db_handler->db_escape_chars($category_id);
+		$query = 'SELECT category_url, category_name FROM '.DB_PREFIX.'category WHERE category_id = \''.$category_id.'\';';
+		$result = $this->db_handler->select_query($query);
+		if($obj = $result->fetch_object()) {
+			$category['category_url'] = $obj->category_url;
+			$category['category_name'] = $obj->category_name;
+		}
+		return $category;
 	}
 	public function get_categories() {
 		$categories = array();

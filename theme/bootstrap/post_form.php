@@ -18,6 +18,22 @@
 					</div>
 				</div>
 				<div class="control-group">
+					<label class="control-label" for="category">Category</label>
+					<div class="controls">
+						<select id="category" name="post_category" class="span3" required >
+							<?php
+							foreach ($categories as $name => $value) {
+								$selected = "";
+								if($post_category == $value['category_id']) {
+									$selected = "selected=\"selected\"";
+								}
+								echo "<option value=\"".$value['category_id']."\" ".$selected.">".$name."</option>";
+							}
+							?>
+						</select>
+					</div>
+				</div>
+				<div class="control-group">
 					<label class="control-label" for="post_meta_keyword">Meta keyword</label>
 					<div class="controls">
 						<input type="text" class="span5" required value="<?php echo $post_meta_keyword?>" name="post_meta_keyword"/>
