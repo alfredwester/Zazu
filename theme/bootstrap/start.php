@@ -21,6 +21,7 @@
 						<th>Action</th>
 						<th>Author</th>
 						<th>Title</th>
+						<th>Category</th>
 						<th>Summary</th>
 					</tr>
 				</thead>
@@ -44,6 +45,7 @@
 					}
 					echo "</td><td>".$post_author_name;
 					echo "</td><td><strong><a href=\"".BASE_PATH."/".$post_url."\" title=\"Go to ".$post_title."\">".$post_title."</a></strong></td>";
+					echo "<td>".$post_category_name."</td>";
 					echo "<td>".mb_strcut(strip_tags($post_content), 0, 200)."</td>";
 					echo "</tr>";
 				}

@@ -28,6 +28,9 @@ ul.wysihtml5-toolbar a[data-wysihtml5-command=italic] {
 ul.wysihtml5-toolbar a[data-wysihtml5-command=underline] {
 	text-decoration: underline;
 }
+ul.wysihtml5-toolbar a[data-wysihtml5-command=strike] {
+	text-decoration: line-through;
+}
 
 ul.wysihtml5-toolbar a.btn.wysihtml5-command-active {
 	background-image: none;

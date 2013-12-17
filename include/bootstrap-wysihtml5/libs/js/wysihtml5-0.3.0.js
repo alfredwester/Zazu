@@ -6873,6 +6873,24 @@ wysihtml5.Commands = Base.extend(
     }
   };
 })(wysihtml5);
+//Strikethru (adds <del> tag)
+(function(wysihtml5) {
+  var undef;
+  
+  wysihtml5.commands.strike = {
+    exec: function(composer, command) {
+      return wysihtml5.commands.formatInline.exec(composer, command, "del");
+    },
+
+    state: function(composer, command, color) {
+      return wysihtml5.commands.formatInline.state(composer, command, "del");
+    },
+
+    value: function() {
+      return undef;
+    }
+  };
+})(wysihtml5);
 
 (function(wysihtml5) {
   var undef,
@@ -7008,15 +7026,15 @@ wysihtml5.Commands = Base.extend(
  */
 (function(wysihtml5) {
   var undef,
-      REG_EXP = /wysiwyg-color-[a-z]+/g;
+      REG_EXP = /[a-z]+/g;
   
   wysihtml5.commands.foreColor = {
     exec: function(composer, command, color) {
-      return wysihtml5.commands.formatInline.exec(composer, command, "span", "wysiwyg-color-" + color, REG_EXP);
+      return wysihtml5.commands.formatInline.exec(composer, command, "span", "" + color, REG_EXP);
     },
 
     state: function(composer, command, color) {
-      return wysihtml5.commands.formatInline.state(composer, command, "span", "wysiwyg-color-" + color, REG_EXP);
+      return wysihtml5.commands.formatInline.state(composer, command, "span", "" + color, REG_EXP);
     },
 
     value: function() {
