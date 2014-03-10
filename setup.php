@@ -26,7 +26,8 @@ INSERT IGNORE INTO {$prefix}config (setting, value) VALUES
 ('site_title', 'Zazu'),
 ('start_content', 'latest10'),
 ('theme', 'default'),
-('title', 'Default title if no post title is not used');
+('title', 'Default title if no post title is not used'),
+('webmaster_email', 'webmaster@zazu.se');
 
 ## Create role table ##
 CREATE TABLE IF NOT EXISTS {$prefix}role (
