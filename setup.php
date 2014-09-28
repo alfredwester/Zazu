@@ -1,9 +1,9 @@
 <?php
 /*--------------------------------
-	Setup script for zazu database
+Setup script for zazu database
 ----------------------------------*/
-require_once('config.php');
-require_once('core/db_handler.php');
+require_once ('config.php');
+require_once ('core/db_handler.php');
 $db_handler = Db_handler::getInstance();
 $prefix = DB_PREFIX;
 
@@ -97,6 +97,7 @@ INSERT IGNORE INTO {$prefix}region (region_id, region_name, region_text) VALUES
 (3, 'top3', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'),
 (4, 'footer', 'Zazu default theme &copy; Zazu.se');
 
+
 ## Create category table ##
 CREATE TABLE IF NOT EXISTS {$prefix}category (
   category_id int(11) NOT NULL AUTO_INCREMENT,
@@ -129,38 +130,37 @@ CREATE TABLE IF NOT EXISTS {$prefix}post (
 
 ## Insert values into post table ##
 INSERT IGNORE INTO {$prefix}post (post_id, post_date, post_title, post_meta_content, post_meta_keyword, post_content, post_url, post_author) VALUES
-(1, '2012-01-11 19:38:30', 'Welcome', 'Congratulations, this is the first post and everything works fine!', 'zazu, mvc, first, post', '<p>This is the first post in the cms. and everything seems to work fine! Delete it or change it as you wish.<img title="zazu" src="http://www.lionking.org/imgarchive/Clip_Art/zazu03.gif" alt="Zazu" /></p>', 'first_page', 1);
+(1, '2012-01-11 19:38:30', 'Welcome', 'Congratulations, this is the first post and everything works fine!', 'zazu, mvc, first, post', '<p>This is the first post in the cms. and everything seems to work fine! Delete it or change it as you wish.<img title="zazu" src="http://www.lionking.org/imgarchive/Clip_Art/zazu03.gif" alt="Zazu" /></p>', 'first_page', 1)
+
+;
 EOD;
 
 echo "<pre>";
-if(isset($_GET['sql'])) {
-  echo "<br>".htmlentities($sql)."<br>";
-}
-else {
+if (isset($_GET['sql'])) {
+	echo "<br>" . htmlentities($sql) . "<br>";
+} else {
 
-  $result = $db_handler->multi_query($sql);
-  $success = true;
+	$result = $db_handler->multi_query($sql);
+	$success = true;
 
-  foreach($result as $key => $val) {
-  	$s = $key+1;
-  	if($val == 1) {
-  		echo "Statement ". $s ." passed <br>";
-  	}
-  	else {
-  		$success = false;
-  		echo "Statement ". $s ." failed: ".$db_handler->get_latest_error()."<br>";
-  	}
-  }
+	foreach ($result as $key => $val) {
+		$s = $key + 1;
+		if ($val == 1) {
+			echo "Statement " . $s . " passed <br>";
+		} else {
+			$success = false;
+			echo "Statement " . $s . " failed: " . $db_handler->get_latest_error() . "<br>";
+		}
+	}
 
-  if($success) {
-  	echo "<br><strong>Congratulations, setup has finished!</strong>
-  	<br>To access cms administration, go to <a href='login'>login</a> and enter username: admin, password: admin. You can change password in the admin-area. 
+	if ($success) {
+		echo "<br><strong>Congratulations, setup has finished!</strong>
+  	<br>To access cms administration, go to <a href='login'>login</a> and enter username: admin, password: admin. You can change password in the admin-area.
   	<br>Remove or change permissions to this file to prevent damage.
     <br><br><a href='?sql' title='sql'>Click here to see the sql</a>";
-  }
-  else {
-  	echo "<strong>Setup has failed! Please check failing statements, fix the problem and run this script again.</strong>";
-  }
-  echo "</pre>";
+	} else {
+		echo "<strong>Setup has failed! Please check failing statements, fix the problem and run this script again.</strong>";
+	}
+	echo "</pre>";
 }
 ?>

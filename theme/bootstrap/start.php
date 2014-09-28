@@ -33,15 +33,15 @@
 					$auth = false;
 					echo "<tr><td>";
 					if($this->permission_handler->has_permission('update', 'post', $post_id)) {
-						echo " <a href=\"".BASE_PATH."/admin/new_edit/post/".$post_id."\"><i class=\"icon-pencil\"></i></a>";
+						echo " <a href=\"".BASE_PATH."/admin/new_edit/post/".$post_id."\" title=\"Edit this post\"><i class=\"fa fa-pencil\"></i></a>";
 						$auth = true;
 					}
 					if($this->permission_handler->has_permission('delete', 'post', $post_id)) {
-						echo " <a href=\"".BASE_PATH."/admin/delete/post/".$post_id."\" onclick=\"return confirm('Do you really want to delete this post?')\"><i class=\"icon-trash\"></i></a>";
+						echo " <a href=\"".BASE_PATH."/admin/delete/post/".$post_id."\" onclick=\"return confirm('Do you really want to delete this post?')\" title=\"Delete this post\"><i class=\"fa fa-trash\"></i></a>";
 						$auth = true;
 					}
 					if(!$auth) {
-						echo "<i class=\"icon-lock\" title=\"You have no permissions to edit this post\"></i>";
+						echo "<i class=\"fa fa-lock\" title=\"You have no permissions to edit this post\"></i>";
 					}
 					echo "</td><td>".$post_author_name;
 					echo "</td><td><strong><a href=\"".BASE_PATH."/".$post_url."\" title=\"Go to ".$post_title."\">".$post_title."</a></strong></td>";

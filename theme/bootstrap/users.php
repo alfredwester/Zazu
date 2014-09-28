@@ -33,15 +33,15 @@
 					$auth = false;
 					echo "<tr><td>";
 					if($this->permission_handler->has_permission('update', 'user', $user_id)) {
-						echo " <a href=\"".BASE_PATH."/admin/new_edit/user/".$user_id."\"><i class=\"icon-pencil\"></i></a>";
+						echo " <a href=\"".BASE_PATH."/admin/new_edit/user/".$user_id."\"><i class=\"fa fa-pencil\"></i></a>";
 						$auth = true; 
 					}
 					if($this->permission_handler->has_permission('delete', 'user', $user_id)) {
-						echo " <a href=\"".BASE_PATH."/admin/delete/user/".$user_id."\" onclick=\"return confirm('Do you really want to delete this region?')\"><i class=\"icon-trash\"></i></a></td>";
+						echo " <a href=\"".BASE_PATH."/admin/delete/user/".$user_id."\" onclick=\"return confirm('Do you really want to delete this region?')\"><i class=\"fa fa-trash\"></i></a></td>";
 						$auth = true;
 					}
 					if(!$auth) {
-						echo "<i class=\"icon-lock\" title=\"You have no permissions to manage this user\"></i>";
+						echo "<i class=\"fa fa-lock\" title=\"You have no permissions to manage this user\"></i>";
 					}
 					echo "<td><strong>".$user_username."</strong></td>";
 					echo "<td>".$user_realname."</td>";

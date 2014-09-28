@@ -1,37 +1,37 @@
 <?php
 class Helper {
 	public function redirect($status, $url = null, $message = null) {
-		switch($status) {
+		switch ($status) {
 			case 404:
-				header($_SERVER['SERVER_PROTOCOL'].' 404 Not Found');
+				header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found');
 				echo "404 Not Found";
 				exit;
 			case 301:
-				header($_SERVER['SERVER_PROTOCOL'].' 301 Moved Permanently');
-				header('location: '.$url);
+				header($_SERVER['SERVER_PROTOCOL'] . ' 301 Moved Permanently');
+				header('location: ' . $url);
 				exit;
 			case 500:
-				header($_SERVER['SERVER_PROTOCOL'].' 500 Internal Server Error');
+				header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error');
 				echo "500 Internal Server Error <br>";
 				echo $message;
 				exit;
 			case 0:
-				header('location: '.BASE_PATH.$url);
+				header('location: ' . BASE_PATH . $url);
 				exit;
-			break;
+				break;
 		}
 	}
-	
+
 	protected function check_empty($key_array, $data) {
 		$data_empty = array();
-		foreach($key_array as $val) {
-			if(!isset($data[$val]) || !is_numeric($data[$val]) && (empty($data[$val]) || $data[$val] == "")) {
-				$data_empty[] = str_replace('_', ' ', ucfirst($val)).' was empty';
+		foreach ($key_array as $val) {
+			if (!isset($data[$val]) || !is_numeric($data[$val]) && (empty($data[$val]) || $data[$val] == "")) {
+				$data_empty[] = str_replace('_', ' ', ucfirst($val)) . ' was empty';
 			}
 		}
 		return $data_empty;
 	}
-	
+
 	public function get_standard_tinymce_head() {
 		$base = BASE_PATH;
 		$tinymce = <<<EOD
@@ -79,7 +79,10 @@ class Helper {
 		}
 	});
 </script>
-EOD;
+EOD
+
+		;
+
 		return $tinymce;
 	}
 	public function get_colorbox_head() {
@@ -88,24 +91,33 @@ EOD;
 		<link rel="stylesheet" href="{$base}/include/colorbox/example1/colorbox.css" />
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 		<script src="{$base}/include/colorbox/colorbox/jquery.colorbox.js"></script>
-EOD;
+EOD
+
+		;
+
 		return $colorbox;
 	}
-	
+
 	public function get_bootstrap_wysihtml5_head() {
-		$base = BASE_PATH."include/bootstrap-wysihtml5";
+		$base = BASE_PATH . "include/bootstrap-wysihtml5";
 		$wysihtml5 = <<<EOD
 		<link rel="stylesheet" href="/{$base}/bootstrap-wysihtml5.css" />
-EOD;
+EOD
+
+		;
+
 		return $wysihtml5;
 	}
-	
+
 	public function get_bootstrap_wysihtml5_footer() {
-		$base = BASE_PATH."include/bootstrap-wysihtml5";
+		$base = BASE_PATH . "include/bootstrap-wysihtml5";
 		$wysihtml5 = <<<EOD
 		<script src="/{$base}/libs/js/wysihtml5-0.3.0.js" type="text/javascript"></script>
 		<script src="/{$base}/bootstrap-wysihtml5.js" type="text/javascript"></script>
-EOD;
+EOD
+
+		;
+
 		return $wysihtml5;
 	}
 }

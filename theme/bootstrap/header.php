@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
 		<title>Administration --Zazu cms--</title>
@@ -7,14 +7,21 @@
 		<meta name="keyword" content="Admin, cms, mvc, zazu, administation" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link href="<?php echo BASE_PATH;?>/include/stickyfooter/stickyfooter.css" rel="stylesheet" media="screen" />
-		<link href="<?php echo BASE_PATH;?>/include/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen" />
+		<link href="<?php echo BASE_PATH;?>/include/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="<?php echo BASE_PATH;?>/include/font-awesome-4.2.0/css/font-awesome.min.css" />
 		<link href="<?php echo BASE_PATH;?>/theme/bootstrap/css/zazu.css" rel="stylesheet" media="screen" />
 		<!--[if !IE 7]>
 			<style type="text/css">
 				#wrap {display:table;height:100%}
 			</style>
 		<![endif]-->
-		<?php echo $head;?>
+
+		<?php foreach ($head as $css) {
+			echo "<link href=\"".BASE_PATH."/".$css."\" rel=\"stylesheet\" media=\"screen\" />";
+		}
+
+		?>
+		
 	</head>
 	<body>
 		<div id="wrap">
