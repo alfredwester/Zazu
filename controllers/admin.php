@@ -299,7 +299,7 @@ class Admin extends Controller implements IController {
 		$data = $this->get_header();
 		$data['head'] = array("include/summernote-0.5.9/summernote.css");
 		$data['footer_js'] = array("include/summernote-0.5.9/summernote.min.js", "theme/bootstrap/js/textarea.js");
-		if ($type = "post") {
+		if ($type == "post") {
 			$data['footer_js'][] = "theme/bootstrap/js/post_form.js";
 		}
 		$data = array_merge($data, $input_data);
