@@ -39,7 +39,7 @@ class Login extends Controller implements IController {
 		}
 		else {
 			$_SESSION['errors'][] = 'You have entered wrong username or password';
-			$this->redirect(0, '/login/');
+			$this->redirect(0, '/login');
 		}
 	}
 	public function lost_password() {
