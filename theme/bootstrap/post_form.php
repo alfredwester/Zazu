@@ -31,26 +31,26 @@
 				<div class="accordion" id="advanced-fields">
 					<div class="accordion-group">
 						<div class="accordion-heading">
-							<a class="accordion-toggle" data-toggle="collapse" data-parent="#advanced-fields" href="#collapseOne">Advanced <i class="fa fa-caret-down"></i></a>
+							<a class="accordion-toggle" data-toggle="collapse" tabindex="-1" data-parent="#advanced-fields" href="#collapseOne">Advanced <i class="fa fa-caret-down"></i></a>
 						</div>
 						<div id="collapseOne" class="accordion-body collapse">
 							<div class="accordion-inner">
 								<div class="control-group">
 									<label class="control-label" for="url">Url</label>
 									<div class="controls">
-										<input type="text" class="span3" id="url" required value="<?php echo $post_url;?>" name="post_url"/>
+										<input type="text" class="span3" id="url" tabindex="-1" required value="<?php echo $post_url;?>" name="post_url"/>
 									</div>
 								</div>
 								<div class="control-group">
 									<label class="control-label" for="post_meta_keyword">Meta keyword (used by search engines)</label>
 									<div class="controls">
-										<input type="text" class="span5" value="<?php echo (isset($post_meta_keyword)? $post_meta_keyword : '')?>" name="post_meta_keyword"/>
+										<input type="text" class="span5" tabindex="-1" value="<?php echo (isset($post_meta_keyword)? $post_meta_keyword : '')?>" name="post_meta_keyword"/>
 									</div>
 								</div>
 								<div class="control-group">
 									<label class="control-label" for="post_meta_content">Meta content (used by search engines)</label>
 									<div class="controls">
-										<input type="text" class="span5" value="<?php echo (isset($post_meta_content)? $post_meta_content : '')?>" name="post_meta_content"/>
+										<input type="text" class="span5" tabindex="-1" value="<?php echo (isset($post_meta_content)? $post_meta_content : '')?>" name="post_meta_content"/>
 									</div>
 								</div>
 							</div>
