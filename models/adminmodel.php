@@ -10,6 +10,7 @@ class Adminmodel {
 	private $editor_menu;
 	private $admin_menu;
 	private $new_password_salt;
+	private $allowed_filetypes;
 
 	public function __construct() {
 		$this->db_handler = Db_handler::GetInstance();
@@ -63,6 +64,7 @@ class Adminmodel {
 			array('menu_title' => 'Site settings', 'menu_text' => 'Site settings', 'menu_url' => '/admin/settings/'),
 			array('menu_title' => 'Log out', 'menu_text' => 'Log out', 'menu_url' => '/admin/logout/')
 		);
+		$this->allowed_filetypes = array('jpg' => 'image/jpeg', 'png' => 'image/png', 'gif' => 'image/gif');
 	}
 	private function get_md5_pass($password) {
 		$password = md5(md5($this->password_salt) . $password . $this->password_salt);
@@ -384,5 +386,8 @@ class Adminmodel {
 	}
 	public function get_types() {
 		return $this->types;
+	}
+	public function get_allowed_filetypes() {
+		return $this->allowed_filetypes;
 	}
 }
