@@ -105,6 +105,9 @@ class Zazu extends Helper {
 			$this->debug_info['Errors'][] = $e;
 			$this->redirect(500, null, $e->getmessage());
 		}
+		if (PRINT_DEBUG) {
+			$this->print_debug();
+		}
 	}
 
 	public static function getInstance() {
@@ -115,9 +118,9 @@ class Zazu extends Helper {
 	}
 
 	public function print_debug() {
-		/*echo "<pre>";
+		echo "<pre>";
 		print_r($this->debug_info);
-		echo "</pre>";*/
+		echo "</pre>";
 	}
 }
 ?>

@@ -2,6 +2,14 @@
 class Helper {
 	public function redirect($status, $url = null, $message = null) {
 		switch ($status) {
+			case 400:
+				header($_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request');
+				echo $message;
+				exit;
+			case 401:
+				header($_SERVER['SERVER_PROTOCOL'] . ' 401 Unauthorized');
+				header('location: ' . BASE_PATH . $url);
+				exit;
 			case 404:
 				header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found');
 				echo "404 Not Found";
@@ -12,7 +20,6 @@ class Helper {
 				exit;
 			case 500:
 				header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error');
-				echo "500 Internal Server Error <br>";
 				echo $message;
 				exit;
 			case 0:
@@ -20,6 +27,36 @@ class Helper {
 				exit;
 				break;
 		}
+	}
+
+	public function get_file_upload_errormessage($errorcode) {
+		 switch ($errorcode) {
+			case UPLOAD_ERR_INI_SIZE:
+				$message = "The uploaded file exceeds the upload max filesize directive";
+				break;
+			case UPLOAD_ERR_FORM_SIZE:
+				$message = "The uploaded file exceeds the max filesize directive that was specified in the HTML form";
+				break;
+			case UPLOAD_ERR_PARTIAL:
+				$message = "The uploaded file was only partially uploaded";
+				break;
+			case UPLOAD_ERR_NO_FILE:
+				$message = "No file was uploaded";
+				break;
+			case UPLOAD_ERR_NO_TMP_DIR:
+				$message = "Missing a temporary folder";
+				break;
+			case UPLOAD_ERR_CANT_WRITE:
+				$message = "Failed to write file to disk";
+				break;
+			case UPLOAD_ERR_EXTENSION:
+				$message = "File upload stopped by extension";
+				break;
+			default:
+				$message = "Unknown upload error";
+				break;
+		}
+		return $message; 
 	}
 
 	protected function check_empty($key_array, $data) {

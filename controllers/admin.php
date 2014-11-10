@@ -13,7 +13,7 @@ class Admin extends Controller implements IController {
 
 	public function __construct($config) {
 		if (!isset($_SESSION['user_id'])) {
-			$this->redirect(0, '/login/');
+			$this->redirect(401, '/login');
 		}
 		$this->load_model('cmsmodel');
 		$this->load_model('adminmodel');
@@ -49,7 +49,7 @@ class Admin extends Controller implements IController {
 	}
 	public function logout() {
 		unset($_SESSION['user_id']);
-		$this->redirect(0, '/login/');
+		$this->redirect(0, '/login');
 	}
 
 	//------------Lists-------------------
@@ -304,5 +304,52 @@ class Admin extends Controller implements IController {
 		}
 		$data = array_merge($data, $input_data);
 		$this->load_theme($this->config['admin_theme'], $data, $type . '_form');
+	}
+
+	public function upload_file() {
+		if(isset($_FILES["file"])) {
+			if (!$_FILES['file']['error']) {
+				if(in_array($_FILES['file']['type'], $this->admin_model->get_allowed_filetypes())) {
+					$upload_dir = $_SERVER['DOCUMENT_ROOT']."/".USER_UPLOAD_DIR;
+					if(!file_exists($upload_dir) || !is_dir($upload_dir)) {
+						if(!mkdir($upload_dir)) {
+							$this->redirect(500, null, $upload_dir.' did not exist and coud not be created');
+						}
+					}
+					elseif(!is_writable($upload_dir)) {
+						$this->redirect(500, null, "Can not write to dir ".$upload_dir);
+					}
+					else {
+						$filename = $this->generate_filename($_FILES['file']["name"]);
+						$location = $_FILES["file"]["tmp_name"];
+						move_uploaded_file($location, $upload_dir."/".$filename);
+						echo "/".USER_UPLOAD_DIR."/".$filename;
+					}
+				} else {
+					$allowed = "";
+					foreach($this->admin_model->get_allowed_filetypes() as $key => $value) {
+						$allowed .= $key.", ";
+					}
+					$allowed = substr($allowed, 0, -2);
+					$this->redirect(400, null, "File types allowed are: ".$allowed);
+				}
+
+			 } else {
+				$this->redirect(500, null, $this->get_file_upload_errormessage($_FILES['file']['error']));
+			 }
+		} else {
+			$this->redirect(400, null, "No file data");
+		}
+	}
+
+	private function generate_filename($filename) {
+		$new_name = trim($filename);
+		$new_name = strtolower($new_name);
+		$ext = explode('.', $new_name);
+		$search = array(' ', 'å', 'ä', 'ö', '=');
+		$replace = array('_', 'a', 'a', 'o', '');
+		$new_name = str_replace($search, $replace, $ext[0]);
+		$new_name .= "_".time().".".$ext[1];
+		return $new_name;
 	}
 }
