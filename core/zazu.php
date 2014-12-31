@@ -32,6 +32,7 @@ class Zazu extends Helper {
 
 		$url = substr($_SERVER['REQUEST_URI'], strlen(rtrim(dirname($_SERVER['SCRIPT_NAME']), '/')));
 		$this->debug_info['request_url'] = $url;
+		$this->config['request_url'] = $url;
 
 		$tmp_array = explode('/', trim($url, '/'));
 		$this->debug_info['splitted_url'] = $tmp_array;

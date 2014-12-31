@@ -56,6 +56,7 @@ class CmsController extends Controller implements IController {
 		else {
 			$data = array_merge($data, $this->model->get_posts()); 
 		}
+		$data['request_url'] = $this->config['request_url'];
 		$data += $this->model->get_regions();
 		$this->load_theme($this->config['theme'], $data, $type);
 	}
