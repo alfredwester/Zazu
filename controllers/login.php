@@ -12,7 +12,7 @@ class Login extends Controller implements IController {
 		$this->model = new CmsModel();
 	}
 	private function get_header() {
-		$data['head'] = '';
+		$data['head'] = array();
 		$data += $this->model->get_menu();
 		$data['admin_menu'] = array();
 		if(isset($_SESSION['success'])) {

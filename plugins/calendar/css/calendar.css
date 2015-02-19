@@ -1,0 +1,70 @@
+.calendar-event-container {
+	border: 1px solid #EEEEEE;
+	background-color: #F9F9F9;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.calendar-event-row {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.calendar-event-date  {
+	text-align: center;
+	float: left;
+	min-width: 80px;
+	width: 90px;
+}
+
+.calendar-event-date {
+	color: #0088cc;
+	text-shadow: 1px 1px 1px rgba(150, 150, 150, 0.3);
+}
+
+.calendar-event-date span {
+	display: block;
+}
+
+.calendar-event-date .date {
+	font-size: 32px;
+    line-height: 32px;
+    display: block;
+}
+
+.calendar-event-date .month {
+	margin-top: -5px;
+}
+
+.calendar-event-info {
+	background-color: #FFFFFF;
+	margin-left: 91px;
+	padding: 3px 10px;
+	border-left: 1px solid #EEEEEE;
+}
+
+.calendar-event-info h5{
+	margin: 0;
+}
+
+.calendar-event-info p {
+	margin: 0;
+}
+
+.event-date-box {
+	width: 10%;
+	float: left;
+	padding: 8px 15px;
+	text-align: center;
+	clear: both;
+}
+
+.event-date-box .date{
+	font-size: 30px;
+	display: block;
+}
+
+.event-date-box .month{
+	display: block;
+}

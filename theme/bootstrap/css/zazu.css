@@ -1,6 +1,16 @@
 #main {
 	padding-top: 50px;
 }
+
+@media (max-width: 979px) {
+	#main {
+		padding-top: 0;
+	}
+}
+
+.clickable {
+	cursor: pointer;
+}
 #footer {
 	background-color: #F9F9F9;
 }

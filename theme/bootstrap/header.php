@@ -28,7 +28,11 @@
 			<div class="navbar navbar-inverse navbar-fixed-top">
 				<div class="navbar-inner">
 					<nav class="container">
-						<a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse"></a>
+						<a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</a>
 						<a class="brand" href="/admin">Zazu Administration</a>
 						<div class="nav-collapse collapse">
 							<ul class="nav">

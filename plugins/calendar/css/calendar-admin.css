@@ -1,0 +1,17 @@
+.input-append.date .add-on i, .input-prepend.date .add-on i {
+	display: inline-block;
+}
+.calendar-event-container:hover {
+	background-color: #EAEAEA;
+	cursor: pointer;
+}
+.calendar-event-container-active {
+	background-color: #FCF8E3;
+}
+
+.calendar-event-info:hover {
+	background-color: #F9F9F9;;
+}
+.calendar-event-info-active {
+	background-color: #FFFEF6;
+}

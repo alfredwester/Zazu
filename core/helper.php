@@ -12,7 +12,7 @@ class Helper {
 				exit;
 			case 404:
 				header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found');
-				echo "404 Not Found";
+				echo "404 Not Found " . $message;
 				exit;
 			case 301:
 				header($_SERVER['SERVER_PROTOCOL'] . ' 301 Moved Permanently');
@@ -30,7 +30,7 @@ class Helper {
 	}
 
 	public function get_file_upload_errormessage($errorcode) {
-		 switch ($errorcode) {
+		switch ($errorcode) {
 			case UPLOAD_ERR_INI_SIZE:
 				$message = "The uploaded file exceeds the upload max filesize directive";
 				break;
@@ -56,7 +56,7 @@ class Helper {
 				$message = "Unknown upload error";
 				break;
 		}
-		return $message; 
+		return $message;
 	}
 
 	protected function check_empty($key_array, $data) {
@@ -67,6 +67,35 @@ class Helper {
 			}
 		}
 		return $data_empty;
+	}
+
+	public function replace_and_insert_plugin($text) {
+		$replaced['text'] = $text;
+		preg_match('/\$\{([a-z]*)\}/i', $text, $output_array);
+		if (!empty($output_array)) {
+			$plugin_name = $output_array[1];
+			$this->load_plugin($plugin_name);
+			$plugin = new $plugin_name();
+			$content = $plugin->index();
+			$replaced['css'] = $plugin->get_css_array();
+			$replaced['js'] = $plugin->get_js_array();
+			$replaced['text'] = preg_replace("/" . $this->ecsape_dollar($output_array[0]) . "/", $content, $text);
+		}
+		return $replaced;
+	}
+
+	private function ecsape_dollar($text) {
+		return str_replace('$', '\$', $text);
+	}
+
+	public function load_plugin($plugin, $plugin_controller = null) {
+		$plugin_controller = $plugin_controller == null ? $plugin : $plugin_controller;
+		$path = 'plugins/' . $plugin . '/' . $plugin_controller . '.php';
+		if (file_exists($path)) {
+			require_once $path;
+		} else {
+			throw new Exception('Plugin \'' . $plugin . '\' not found in ' . dirname($path));
+		}
 	}
 
 	public function get_standard_tinymce_head() {

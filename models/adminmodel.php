@@ -62,6 +62,7 @@ class Adminmodel {
 			array('menu_title' => 'Menus', 'menu_text' => 'Menus', 'menu_url' => '/admin/links/'),
 			array('menu_title' => 'Users', 'menu_text' => 'Users', 'menu_url' => '/admin/users/'),
 			array('menu_title' => 'Site settings', 'menu_text' => 'Site settings', 'menu_url' => '/admin/settings/'),
+			array('menu_title' => 'Plugins', 'menu_text' => 'Plugins', 'menu_url' => '/admin/plugins/'),
 			array('menu_title' => 'Log out', 'menu_text' => 'Log out', 'menu_url' => '/admin/logout/')
 		);
 		$this->allowed_filetypes = array('jpg' => 'image/jpeg', 'png' => 'image/png', 'gif' => 'image/gif');

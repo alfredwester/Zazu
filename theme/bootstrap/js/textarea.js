@@ -1,6 +1,7 @@
 $(document).ready(function() {
+	var rows = $('textarea').attr("rows");
 	$('textarea').summernote({
-		height: 400, 
+		height: rows*20, 
 		onImageUpload: function(files, editor, welEditable) {
 			sendFile(files[0], editor, welEditable);
 		}

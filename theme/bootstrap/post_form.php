@@ -59,7 +59,7 @@
 				</div>
 				
 				<div class="control-group">
-					<textarea name="post_content" class="span12" rows="12" id="post_content" ><?php echo htmlentities($post_content, ENT_QUOTES, "UTF-8");?></textarea>
+					<textarea name="post_content" class="span12" rows="20" id="post_content" ><?php echo htmlentities($post_content, ENT_QUOTES, "UTF-8");?></textarea>
 				</div>
 				<div class="control-group">
 					<nav>

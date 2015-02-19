@@ -2,6 +2,7 @@
 class Admin extends Controller implements IController {
 	private $cms_model;
 	private $admin_model;
+	private $plugin_model;
 	private $config;
 	private $menu;
 	private $types;
@@ -17,8 +18,10 @@ class Admin extends Controller implements IController {
 		}
 		$this->load_model('cmsmodel');
 		$this->load_model('adminmodel');
-		$this->cms_model = new Cmsmodel();
+		$this->load_model('pluginmodel');
+		$this->cms_model = new CmsModel();
 		$this->admin_model = new Adminmodel();
+		$this->plugin_model = new PluginModel();
 		$this->post_array = $this->admin_model->get_post_array();
 		$this->category_array = $this->admin_model->get_category_array();
 		$this->region_array = $this->admin_model->get_region_array();
@@ -120,6 +123,46 @@ class Admin extends Controller implements IController {
 			unset($_SESSION['settings']);
 		}
 		$this->load_theme($this->config['admin_theme'], $data, 'settings_form');
+	}
+	public function plugins() {
+		if (!$this->permission_handler->has_permission('view', 'plugins', null)) {
+			$_SESSION['errors'][] = "You don't have permissions to view site settings";
+			$this->redirect(0, '/admin/');
+		}
+		$data = $this->get_header();
+		$data = array_merge($data, $this->plugin_model->get_plugins());
+		$this->load_theme($this->config['admin_theme'], $data, 'plugins');
+	}
+	public function plugin($plugin_name) {
+		$plugin_config = $this->plugin_model->get_plugin($plugin_name);
+		$admin_controller = $plugin_config["plugin_admin_controller"];
+		$admin_view = $plugin_config["plugin_admin_view"];
+		$this->load_plugin($plugin_name, $admin_controller);
+
+		$plugin_admin_controller = new $admin_controller();
+		$plugin_data = $plugin_admin_controller->get_data();
+		$data = $this->get_header();
+		// merga $data with plugin data
+		$data = array_merge($data, $plugin_data);
+		if(isset($_SESSION['additional_data']) && is_array($_SESSION['additional_data'])) {
+			$data = array_merge($data, $_SESSION['additional_data']);
+		}
+		$data['head'] = $plugin_admin_controller->get_css_array();
+		$data['footer_js'] = $plugin_admin_controller->get_js_array();
+		$this->load_theme($this->config['admin_theme'], $data, 'plugin', $plugin_name, $admin_view);
+	}
+
+	public function call_plugin_func($plugin_name, $function_name, $get_data = null) {
+		$plugin_config = $this->plugin_model->get_plugin($plugin_name);
+		$admin_controller = $plugin_config["plugin_admin_controller"];
+		$this->load_plugin($plugin_name, $admin_controller);
+		$plugin_admin_controller = new $admin_controller();
+		if(method_exists($plugin_admin_controller, $function_name)) {
+			$get_data = array($get_data);
+			call_user_func_array(array($plugin_admin_controller,  $function_name), $get_data);
+		} else {
+			$this->redirect(404);
+		}
 	}
 
 	//------------Actions-------------------
@@ -307,36 +350,34 @@ class Admin extends Controller implements IController {
 	}
 
 	public function upload_file() {
-		if(isset($_FILES["file"])) {
+		if (isset($_FILES["file"])) {
 			if (!$_FILES['file']['error']) {
-				if(in_array($_FILES['file']['type'], $this->admin_model->get_allowed_filetypes())) {
-					$upload_dir = $_SERVER['DOCUMENT_ROOT']."/".USER_UPLOAD_DIR;
-					if(!file_exists($upload_dir) || !is_dir($upload_dir)) {
-						if(!mkdir($upload_dir)) {
-							$this->redirect(500, null, $upload_dir.' did not exist and coud not be created');
+				if (in_array($_FILES['file']['type'], $this->admin_model->get_allowed_filetypes())) {
+					$upload_dir = $_SERVER['DOCUMENT_ROOT'] . "/" . USER_UPLOAD_DIR;
+					if (!file_exists($upload_dir) || !is_dir($upload_dir)) {
+						if (!mkdir($upload_dir)) {
+							$this->redirect(500, null, $upload_dir . ' did not exist and coud not be created');
 						}
-					}
-					elseif(!is_writable($upload_dir)) {
-						$this->redirect(500, null, "Can not write to dir ".$upload_dir);
-					}
-					else {
+					} elseif (!is_writable($upload_dir)) {
+						$this->redirect(500, null, "Can not write to dir " . $upload_dir);
+					} else {
 						$filename = $this->generate_filename($_FILES['file']["name"]);
 						$location = $_FILES["file"]["tmp_name"];
-						move_uploaded_file($location, $upload_dir."/".$filename);
-						echo "/".USER_UPLOAD_DIR."/".$filename;
+						move_uploaded_file($location, $upload_dir . "/" . $filename);
+						echo "/" . USER_UPLOAD_DIR . "/" . $filename;
 					}
 				} else {
 					$allowed = "";
-					foreach($this->admin_model->get_allowed_filetypes() as $key => $value) {
-						$allowed .= $key.", ";
+					foreach ($this->admin_model->get_allowed_filetypes() as $key => $value) {
+						$allowed .= $key . ", ";
 					}
 					$allowed = substr($allowed, 0, -2);
-					$this->redirect(400, null, "File types allowed are: ".$allowed);
+					$this->redirect(400, null, "File types allowed are: " . $allowed);
 				}
 
-			 } else {
+			} else {
 				$this->redirect(500, null, $this->get_file_upload_errormessage($_FILES['file']['error']));
-			 }
+			}
 		} else {
 			$this->redirect(400, null, "No file data");
 		}
@@ -349,7 +390,7 @@ class Admin extends Controller implements IController {
 		$search = array(' ', 'å', 'ä', 'ö', '=');
 		$replace = array('_', 'a', 'a', 'o', '');
 		$new_name = str_replace($search, $replace, $ext[0]);
-		$new_name .= "_".time().".".$ext[1];
+		$new_name .= "_" . time() . "." . $ext[1];
 		return $new_name;
 	}
 }

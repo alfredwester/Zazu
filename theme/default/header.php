@@ -11,7 +11,14 @@
 		<![endif]-->
 		<link rel="stylesheet" href="<?php echo BASE_PATH;?>/theme/default/css/buttons.css" type="text/css" media="screen, projection">
 		<link rel="stylesheet" href="<?php echo BASE_PATH;?>/theme/default/css/zazu.css" type="text/css" media="all">
-		<?=$head?>
+		<?php 
+			if(isset($head)) {
+				echo "<!-- css from dynamic places -->\n";
+				foreach ($head as $css) {
+					echo "\t\t<link href=\"".BASE_PATH."/".$css."\" rel=\"stylesheet\" media=\"screen\" />\n";
+				}
+			}
+		?>
 	</head>
 	<body>
 		<div class="container showgrid">
