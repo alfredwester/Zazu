@@ -1,3 +1,7 @@
+.calendar-no-events {
+	font-weight: bold;
+}
+
 .calendar-event-container {
 	border: 1px solid #EEEEEE;
 	background-color: #F9F9F9;
