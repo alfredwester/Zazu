@@ -132,6 +132,17 @@ CREATE TABLE IF NOT EXISTS {$prefix}post (
 INSERT IGNORE INTO {$prefix}post (post_id, post_date, post_title, post_meta_content, post_meta_keyword, post_content, post_url, post_author) VALUES
 (1, '2012-01-11 19:38:30', 'Welcome', 'Congratulations, this is the first post and everything works fine!', 'zazu, mvc, first, post', '<p>This is the first post in the cms. and everything seems to work fine! Delete it or change it as you wish.<img title="zazu" src="http://www.lionking.org/imgarchive/Clip_Art/zazu03.gif" alt="Zazu" /></p>', 'first_page', 1)
 
+## Create plugin table ##
+CREATE TABLE IF NOT EXISTS {$prefix}plugin (
+  plugin_id int(11) NOT NULL AUTO_INCREMENT,
+  plugin_name varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  plugin_description text COLLATE utf8_unicode_ci NOT NULL,
+  plugin_admin_controller varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  plugin_admin_view varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (plugin_id),
+  UNIQUE KEY plugin_name (plugin_name)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 ;
 EOD;
 

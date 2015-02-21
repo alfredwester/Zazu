@@ -126,7 +126,7 @@ class Admin extends Controller implements IController {
 	}
 	public function plugins() {
 		if (!$this->permission_handler->has_permission('view', 'plugins', null)) {
-			$_SESSION['errors'][] = "You don't have permissions to view site settings";
+			$_SESSION['errors'][] = "You don't have permissions to manage plugins";
 			$this->redirect(0, '/admin/');
 		}
 		$data = $this->get_header();
@@ -135,6 +135,9 @@ class Admin extends Controller implements IController {
 	}
 	public function plugin($plugin_name) {
 		$plugin_config = $this->plugin_model->get_plugin($plugin_name);
+		if(empty($plugin_config)) {
+			$this->redirect(404);
+		}
 		$admin_controller = $plugin_config["plugin_admin_controller"];
 		$admin_view = $plugin_config["plugin_admin_view"];
 		$this->load_plugin($plugin_name, $admin_controller);

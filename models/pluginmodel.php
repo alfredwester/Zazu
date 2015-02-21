@@ -40,10 +40,12 @@ class PluginModel {
 				while (($file = readdir($dh)) !== false) {
 					if ($file !== "." && $file !== "..") {
 						$in_array = false;
-						foreach ($plugins['plugins'] as $key => $value) {
-							foreach ($value as $p_key => $p_value) {
-								if ($p_value === $file) {
-									$in_array = true;
+						if (count($plugins) > 0) {
+							foreach ($plugins['plugins'] as $value) {
+								foreach ($value as $p_value) {
+									if ($p_value === $file) {
+										$in_array = true;
+									}
 								}
 							}
 						}
