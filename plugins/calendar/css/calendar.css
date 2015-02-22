@@ -50,6 +50,7 @@
 
 .calendar-event-info h5{
 	margin: 0;
+	font-weight: bold;
 }
 
 .calendar-event-info p {
