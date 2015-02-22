@@ -3,7 +3,7 @@
 		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
 		<title><?=$title?></title>
 		<meta name="description" content="<?=$meta_content?>">
-		<meta name="keyword" content="<?=$meta_keyword?>">
+		<meta name="keywords" content="<?=$meta_keyword?>">
 		<link rel="stylesheet" href="<?php echo BASE_PATH;?>/include/blueprint/screen.css" type="text/css" media="screen, projection">
 		<link rel="stylesheet" href="<?php echo BASE_PATH;?>/include/blueprint/print.css" type="text/css" media="print">
 		<!--[if lt IE 8]>

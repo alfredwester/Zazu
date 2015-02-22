@@ -42,7 +42,7 @@ class Calendar implements IPluginController {
 					</div>
 					<div class=\"calendar-event-info clearfix\">
 						<h5>" . $event_name . "</h5>
-						<p>" . $event_description . "</p>
+						" . $event_description . "
 					</div>
 				</div>
 			</div>";

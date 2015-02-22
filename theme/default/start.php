@@ -1,5 +1,5 @@
 			<div class="span-7 colborder">
-				<p><?=$regions['top1']['region_text'];?></p>
+				<?=$regions['top1']['region_text'];?>
 			</div>
 			<div class="span-7 colborder">
 				<p><?=$regions['top2']['region_text'];?></p>
