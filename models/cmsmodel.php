@@ -8,10 +8,14 @@ class CmsModel {
 	function __construct() {
 		$this->db_handler = Db_handler::GetInstance();
 	}
-	public function get_menu($group = 1) {
+	public function get_menu($group = -1) {
 		$menu = array();
-		$this->db_handler->db_escape_chars($group);
-		$query = 'SELECT link_title, link_text, link_url, link_group from ' . DB_PREFIX . 'link WHERE link_group = ' . $group . ' ORDER BY link_order';
+		$where_group = "";
+		if($group > -1) {
+			$this->db_handler->db_escape_chars($group);
+			$where_group = 'WHERE link_group = ' . $group . '';
+		}
+		$query = 'SELECT link_title, link_text, link_url, link_group from ' . DB_PREFIX . 'link '.$where_group.' ORDER BY link_order';
 		$result = $this->db_handler->select_query($query);
 		$count = 0;
 		while ($obj = $result->fetch_object()) {
