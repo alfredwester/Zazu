@@ -14,7 +14,8 @@ class Permission_handler {
 															'link' => array('view', 'delete', 'update', 'create'),
 															'user' => array('view', 'update')),
 											'other' =>array('post' => array('view', 'delete', 'update'),
-															'link' => array('view', 'delete', 'update'), 
+															'link' => array('view', 'delete', 'update'),
+															'plugins' => array('view'),
 															'region' => array('view', 'update')));
 	}
 

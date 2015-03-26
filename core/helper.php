@@ -12,7 +12,7 @@ class Helper {
 				exit;
 			case 404:
 				header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found');
-				echo "404 Not Found " . $message;
+				echo "404 Not Found " .$url." ". $message;
 				exit;
 			case 301:
 				header($_SERVER['SERVER_PROTOCOL'] . ' 301 Moved Permanently');

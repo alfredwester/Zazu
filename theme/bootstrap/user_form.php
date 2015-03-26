@@ -20,7 +20,7 @@
 				<div class="control-group">
 					<label class="control-label" for="user_password">Password</label>
 					<div class="controls">
-						<input type="text" class="span3" id="user_password" required value="<?=$user_password;?>" name="user_password"/> 
+						<input type="password" class="span3" id="user_password" required value="<?=$user_password;?>" name="user_password"/> 
 						<?php 
 						if($action == "edit") {
 							echo "<span class=\"help-block\">Showing encrypted password, change only if you want to change password</span>";
