@@ -20,8 +20,8 @@ class Admin extends Controller implements IController {
 		$this->load_model('adminmodel');
 		$this->load_model('pluginmodel');
 		$this->cms_model = new CmsModel();
-		$this->admin_model = new Adminmodel();
 		$this->plugin_model = new PluginModel();
+		$this->admin_model = new Adminmodel($this->plugin_model);
 		$this->post_array = $this->admin_model->get_post_array();
 		$this->category_array = $this->admin_model->get_category_array();
 		$this->region_array = $this->admin_model->get_region_array();
@@ -31,6 +31,26 @@ class Admin extends Controller implements IController {
 		$this->config = $config;
 		$this->menu = $this->admin_model->get_menu();
 		$this->permission_handler = new Permission_handler();
+		$this->add_plugins_to_menu();
+	}
+	private function add_plugins_to_menu() {
+		$plugin_names = $this->plugin_model->get_plugin_names();
+		$plugin_menu = array();
+		// TODO: dheck permissions for each plugin
+		foreach ($plugin_names as $plugin_name) {
+			$plugin_menu[] = array('menu_title' => ucfirst($plugin_name), 'menu_text' => ucfirst($plugin_name), 'menu_url' => '/admin/plugin/'.$plugin_name);
+		}
+
+		$res = array_slice($this->menu, 0, count($this->menu)-1, true);
+		if($this->admin_model->get_current_role() == 1) {
+	    	$plugin_menu[] = array('type' => 'divider');
+	    	$plugin_menu[] = array('menu_title' => 'Plugins management', 'menu_text' => 'Plugin management', 'menu_url' => '/admin/plugins');
+	    	$res[] = array('menu_title' => 'Plugins', 'menu_text' => 'Plugins', 'menu_url' => '#', 'submenu' => $plugin_menu);
+		} else {
+			$res = array_merge($res, $plugin_menu);
+		}
+	    $res = array_merge($res, array_slice($this->menu, count($this->menu)-1, count($this->menu) - 1, true));
+	    $this->menu = $res;
 	}
 	private function get_header() {
 		$data = $this->config;

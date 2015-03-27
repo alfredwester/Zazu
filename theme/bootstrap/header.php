@@ -38,9 +38,23 @@
 							<ul class="nav">
 							<?php
 							foreach($admin_menu as $link) {
-							?>
-								<li><a href="<?php echo BASE_PATH.$link['menu_url'];?>" title="<?=$link['menu_title'];?>"><?=$link['menu_text'];?></a></li>
-							<?php
+								if(isset($link['submenu'])) {
+									echo "<li class=\"dropdown\">";
+									echo "<a href=\"".BASE_PATH.$link['menu_url']."\" title=\"".$link['menu_title']."\" id=\"dLabel\" role=\"button\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" data-target=\"#\">".$link['menu_text']." <b class=\"caret\"></b></a>";
+									echo "<ul class=\"dropdown-menu\"  role=\"menu\" aria-labelledby=\"dLabel\">";
+									foreach ($link['submenu'] as $subLink) {
+										if(isset($subLink['type'])  && $subLink['type'] == 'divider') {
+											echo "<li class=\"divider\"></li>";
+										} else {
+											echo "<li><a href=\"".BASE_PATH.$subLink['menu_url']."\" title=\"".$subLink['menu_title']."\">".$subLink['menu_text']."</a></li>";
+										}
+									}
+									echo "</ul>";
+								} else {
+									echo "<li>";
+									echo "<a href=\"".BASE_PATH.$link['menu_url']."\" title=\"".$link['menu_title']."\">".$link['menu_text']."</a>";
+									echo "</li>";
+								}
 							}
 							?>
 							</ul>

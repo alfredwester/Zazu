@@ -45,24 +45,26 @@ class Adminmodel {
 		$this->types = array('post', 'region', 'link', 'user', 'category');
 		$this->password_salt = '##zazu mvc framework## is the best salt ever!!';
 		$this->new_password_salt = '##zazu mvc framework## temp link' . date('y-m-d');
-		$this->author_menu = array(array('menu_title' => 'Posts', 'menu_text' => 'Posts', 'menu_url' => '/admin/'),
+		$this->author_menu = array(
+			array('menu_title' => 'Posts', 'menu_text' => 'Posts', 'menu_url' => '/admin/'),
 			array('menu_title' => 'Menus', 'menu_text' => 'Menus', 'menu_url' => '/admin/links/'),
 			array('menu_title' => 'User profile settings', 'menu_text' => 'User Profile', 'menu_url' => '/admin/user_profile/'),
 			array('menu_title' => 'Log out', 'menu_text' => 'Log out', 'menu_url' => '/admin/logout/')
 		);
-		$this->editor_menu = array(array('menu_title' => 'Posts', 'menu_text' => 'Posts', 'menu_url' => '/admin/'),
+		$this->editor_menu = array(
+			array('menu_title' => 'Posts', 'menu_text' => 'Posts', 'menu_url' => '/admin/'),
 			array('menu_title' => 'Regions', 'menu_text' => 'Regions', 'menu_url' => '/admin/regions/'),
 			array('menu_title' => 'Menus', 'menu_text' => 'Menus', 'menu_url' => '/admin/links/'),
 			array('menu_title' => 'User profile settings', 'menu_text' => 'User Profile', 'menu_url' => '/admin/user_profile/'),
 			array('menu_title' => 'Log out', 'menu_text' => 'Log out', 'menu_url' => '/admin/logout/')
 		);
-		$this->admin_menu = array(array('menu_title' => 'Posts', 'menu_text' => 'Posts', 'menu_url' => '/admin/'),
+		$this->admin_menu = array(
+			array('menu_title' => 'Posts', 'menu_text' => 'Posts', 'menu_url' => '/admin/'),
 			array('menu_title' => 'Categories', 'menu_text' => 'Categories', 'menu_url' => '/admin/categories/'),
 			array('menu_title' => 'Regions', 'menu_text' => 'Regions', 'menu_url' => '/admin/regions/'),
 			array('menu_title' => 'Menus', 'menu_text' => 'Menus', 'menu_url' => '/admin/links/'),
 			array('menu_title' => 'Users', 'menu_text' => 'Users', 'menu_url' => '/admin/users/'),
 			array('menu_title' => 'Site settings', 'menu_text' => 'Site settings', 'menu_url' => '/admin/settings/'),
-			array('menu_title' => 'Plugins', 'menu_text' => 'Plugins', 'menu_url' => '/admin/plugins/'),
 			array('menu_title' => 'Log out', 'menu_text' => 'Log out', 'menu_url' => '/admin/logout/')
 		);
 		$this->allowed_filetypes = array('jpg' => 'image/jpeg', 'png' => 'image/png', 'gif' => 'image/gif');

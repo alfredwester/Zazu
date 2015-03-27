@@ -22,6 +22,18 @@ class PluginModel {
 		return $plugin;
 	}
 
+	public function get_plugin_names() {
+		$plugins = array();
+		$query = 'SELECT plugin_name FROM ' . DB_PREFIX . 'plugin;';
+		$result = $this->db_handler->select_query($query);
+		$count = 0;
+		while ($obj = $result->fetch_object()) {
+			$plugins[] = $obj->plugin_name;
+			$count++;
+		}
+		return $plugins;
+	}
+
 	public function get_plugins() {
 		$plugins = array();
 		$query = 'SELECT plugin_id, plugin_name, plugin_description FROM ' . DB_PREFIX . 'plugin;';
