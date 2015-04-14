@@ -8,7 +8,7 @@ class Calendar implements IPluginController {
 		$this->calendar_model = new Calendar_model();
 	}
 
-	public function index() {
+	public function index($sessions) {
 		return $this->draw_calendar();
 	}
 

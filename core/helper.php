@@ -12,7 +12,7 @@ class Helper {
 				exit;
 			case 404:
 				header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found');
-				echo "404 Not Found " .$url." ". $message;
+				echo "404 Not Found " . $url . " " . $message;
 				exit;
 			case 301:
 				header($_SERVER['SERVER_PROTOCOL'] . ' 301 Moved Permanently');
@@ -63,20 +63,28 @@ class Helper {
 		$data_empty = array();
 		foreach ($key_array as $val) {
 			if (!isset($data[$val]) || !is_numeric($data[$val]) && (empty($data[$val]) || $data[$val] == "")) {
-				$data_empty[] = str_replace('_', ' ', ucfirst($val)) . ' was empty';
+				$data_empty[$val] = 'Must be entered';
 			}
 		}
 		return $data_empty;
 	}
 
-	public function replace_and_insert_plugin($text) {
+	protected function is_email($value) {
+		$valid = false;
+		if (!empty($value) && preg_match("/^[a-z0-9\å\ä\ö._-]+@[a-z0-9\å\ä\ö.-]+\.[a-z]{2,6}$/i", $value)) {
+			$valid = true;
+		}
+		return $valid;
+	}
+
+	public function replace_and_insert_plugin($text, $sessions) {
 		$replaced['text'] = $text;
 		preg_match('/\$\{([a-z]*)\}/i', $text, $output_array);
 		if (!empty($output_array)) {
 			$plugin_name = $output_array[1];
 			$this->load_plugin($plugin_name);
 			$plugin = new $plugin_name();
-			$content = $plugin->index();
+			$content = $plugin->index($sessions);
 			$replaced['css'] = $plugin->get_css_array();
 			$replaced['js'] = $plugin->get_js_array();
 			$replaced['text'] = preg_replace("/" . $this->ecsape_dollar($output_array[0]) . "/", $content, $text);

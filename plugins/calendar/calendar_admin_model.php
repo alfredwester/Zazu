@@ -49,7 +49,7 @@ class Calendar_admin_model extends Calendar_Model {
 
 	public function delete_event($id) {
 		$id = $this->db_handler->db_escape_chars($id);
-		$query = "DELETE FROM " . DB_PREFIX . "calendar_event WHERE event_id;";
+		$query = "DELETE FROM " . DB_PREFIX . "calendar_event WHERE event_id=".$id.";";
 		return $this->db_handler->query($query);
 	}
 }
