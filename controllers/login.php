@@ -45,15 +45,7 @@ class Login extends Controller implements IController {
 	public function lost_password() {
 		$data = $this->config;
 		$data += $this->get_header();
-		$this->load_theme($this->config['admin_theme'], $data, 'lost_password_form');
-	}
-	private function is_email($value) {
-		$valid = false;
-		if (!empty($value) && preg_match("/^[a-z0-9\å\ä\ö._-]+@[a-z0-9\å\ä\ö.-]+\.[a-z]{2,6}$/i",$value ))
-		{
-			$valid = true;
-		}
-		return $valid;
+		$this->load_theme($this->config['theme'], $data, 'lost_password_form');
 	}
 	private function generate_send_confirm_link($email) {
 		$url = $this->admin_model->get_md5_link($email);
@@ -65,12 +57,12 @@ class Login extends Controller implements IController {
 		$message = str_replace(array('##host-url##', '##reset-url##', '##site-title##', '##webmaster-email##'), array($_SERVER['SERVER_NAME'], $email.'/'.$url, $this->config['site_title'], $this->config['webmaster_email']), $message);
 
 		$headers  = 'MIME-Version: 1.0' . "\r\n";
-		$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+		$headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
 
 		$headers .= "From: ".ucfirst($this->config['site_title'])." <no-reply@".$hostname.">\r\n";
 
 		if(mail($email, $subject, $message, $headers)) {
-			$_SESSION['success'] = "An email with further instructions was sent to your email";
+			$_SESSION['success'] = "An email with further instructions was sent to ". $email;
 		} 
 		else {
 			$_SESSION['errors'][] = "An email was not sent, please contact administrator";
@@ -86,7 +78,7 @@ class Login extends Controller implements IController {
 			$data += $this->get_header();
 			$data['email'] = $email;
 			$data['magic_link'] = $magic_link;
-			$this->load_theme($this->config['admin_theme'], $data, 'new_password_form');
+			$this->load_theme($this->config['theme'], $data, 'new_password_form');
 		}
 		else {
 			$_SESSION['errors'][] = 'The link has expired, klick \'Forgot password\' to generate a new one';

@@ -23,7 +23,7 @@ interface IPluginInstaller {
 }
 
 interface IPluginController {
-	public function index();
+	public function index($session);
 	public function get_css_array();
 	public function get_js_array();
 }

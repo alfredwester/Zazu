@@ -55,7 +55,7 @@ class Calendar_admin extends Calendar implements IPluginAdminController {
 	public function delete($id) {
 		if (is_numeric($id) && $id > 0) {
 			if($this->calendar_model->delete_event($id)) {
-				$_SESSION['success'] = "Event successlly deleted ".$id;
+				$_SESSION['success'] = "Event successlly deleted";
 				unset($_SESSION['additional_data']);
 			} else {
 				$_SESSION['errors'][] = "Event was not deleted, database error";
