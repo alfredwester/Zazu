@@ -4,3 +4,6 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php/$1 [L]
 RewriteRule /?\.gitignore$ - [F,L]
 RewriteRule /?\.git/.* - [F,L]
+RewriteRule /?config.php$ - [F,L]
+RewriteRule /?config-sample.php$ - [F,L]
+RewriteRule /?README.md$ - [F,L]

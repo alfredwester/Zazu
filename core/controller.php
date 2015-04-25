@@ -15,12 +15,14 @@ class Controller extends Helper {
 			ob_end_clean(); // end buffer and remove buffer contents
 			echo $view;
 		} else {
+			LOGGER::log(ERROR, 'View \'' . $view . '\' not found in ' . dirname($path));
 			throw new Exception('View \'' . $view . '\' not found in ' . dirname($path));
 		}
 	}
 	public function load_theme($theme, $data, $type = 'start', $plugin_name = null, $plugin_view = null) {
 		$path = 'theme/' . $theme . '/';
 		if (!is_dir($path)) {
+			LOGGER::log(ERROR, "The directory " . $path . " does not exist.");
 			die("The directory " . $path . " does not exist.");
 		}
 		if (is_array($data)) {
@@ -50,6 +52,7 @@ class Controller extends Helper {
 		if (file_exists($path)) {
 			require_once $path;
 		} else {
+			LOGGER::log(ERROR, 'Model \'' . $model . '\' not found in ' . dirname($path));
 			throw new Exception('Model \'' . $model . '\' not found in ' . dirname($path));
 		}
 	}

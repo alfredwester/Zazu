@@ -274,7 +274,6 @@ class Adminmodel {
 				$success = false;
 			} else {
 				$query = "DELETE FROM " . DB_PREFIX . "category WHERE category_id =" . $id . ";";
-
 				$success = $this->db_handler->query($query);
 			}
 		}

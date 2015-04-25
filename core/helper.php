@@ -94,7 +94,7 @@ class Helper {
 					$content = call_user_func_array(array($plugin, $output_array[2]), $params);
 				} else {
 					$content = $output_array[0];
-					Logger::log(ERROR, "Funcion ".$output_array[2]." does not exist in ".ucfirst($plugin_name));
+					Logger::log(ERROR, "Function ".$output_array[2]." does not exist in ".ucfirst($plugin_name));
 				}
 			} else {
 				$content = $plugin->index($sessions);
@@ -116,6 +116,7 @@ class Helper {
 		if (file_exists($path)) {
 			require_once $path;
 		} else {
+			Logger::log(ERROR, 'Plugin \'' . $plugin . '\' not found in ' . dirname($path));
 			throw new Exception('Plugin \'' . $plugin . '\' not found in ' . dirname($path));
 		}
 	}

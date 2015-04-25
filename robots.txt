@@ -1,6 +1,12 @@
 User-agent: *
-Disallow /controllers
 Disallow /core
+Disallow /controllers
+Disallow /include
+Disallow /logs
+Disallow /messages
 Disallow /models
+Disallow /plugins
+Disallow /theme
+Disallow /userdata
+Disallow /views
 Disallow /.git
-Sitemap: sitemap.xml

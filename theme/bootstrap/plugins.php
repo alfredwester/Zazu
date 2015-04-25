@@ -3,13 +3,13 @@
 		<header class="page-header">
 				<h1>Plugins</h1>
 		</header>
-		<nav>
+		<!-- <nav> -->
 			<?php
-			if($this->permission_handler->has_permission('upload', 'plugin', null)) {
+			/*if($this->permission_handler->has_permission('upload', 'plugin', null)) {
 				echo "<a class=\"btn btn-primary disabled\" href=\"#\" title=\"Upload plugin\">Upload plugin</a>";
-			}
+			}*/
 			?>
-		</nav>
+		<!-- </nav> -->
 		<section>
 			<?php
 			if(isset($plugins)) {

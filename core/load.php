@@ -18,6 +18,7 @@ class Load {
 			require_once($path);
 		}
 		else {
+			Logger::log(ERROR, 'Controller '.$controller.' not found in '.dirname($path));
 			throw new Exception('Controller '.$controller.' not found in '.dirname($path));
 		}
 

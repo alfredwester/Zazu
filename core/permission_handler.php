@@ -77,6 +77,7 @@ class Permission_handler {
 		$query = "SELECT user_role FROM ".DB_PREFIX."user WHERE user_id = ".$_SESSION['user_id'].";";
 		$result = $this->db_handler->select_query($query);
 		$obj = $result->fetch_object();
+		Logger::log(DEBUG, "Current role: ".$obj->user_role);
 		return intval($obj->user_role);
 	}
 	public function print_permissions() {
