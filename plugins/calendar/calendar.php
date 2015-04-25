@@ -9,7 +9,8 @@ class Calendar implements IPluginController {
 	}
 
 	public function index($sessions) {
-		return $this->draw_calendar();
+		$events = $this->calendar_model->get_events();
+		return $this->draw_calendar($events);
 	}
 
 	public function get_css_array() {
@@ -20,10 +21,14 @@ class Calendar implements IPluginController {
 		return array();
 	}
 
-	protected function draw_calendar() {
+	public function get($nr_of_items) {
+		$events = $this->calendar_model->get_events($nr_of_items);
+		return $this->draw_calendar($events);
+	}
+
+	protected function draw_calendar($events) {
 
 		$calendar = "<div class=\"calendar\">";
-		$events = $this->calendar_model->get_events();
 		if (empty($events)) {
 			$calendar .= "<p class=\"calendar-no-events\">Inga aktuella händelser hittades, återkom inom kort.</p>";
 		} else {

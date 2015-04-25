@@ -363,8 +363,8 @@ class Admin extends Controller implements IController {
 
 	private function create_form($type, $input_data) {
 		$data = $this->get_header();
-		$data['head'] = array("include/summernote-0.5.9/summernote.css");
-		$data['footer_js'] = array("include/summernote-0.5.9/summernote.min.js", "theme/bootstrap/js/textarea.js");
+		$data['head'] = array("include/summernote-0.6.4/summernote.css");
+		$data['footer_js'] = array("include/summernote-0.6.4/summernote.min.js", "include/summernote-0.6.4/plugin/summernote-ext-fontstyle.js", "include/summernote-0.6.4/plugin/summernote-ext-video.js", "theme/bootstrap/js/textarea.js");
 		if ($type == "post") {
 			$data['footer_js'][] = "theme/bootstrap/js/post_form.js";
 		}

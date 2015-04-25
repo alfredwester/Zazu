@@ -1,7 +1,18 @@
 $(document).ready(function() {
 	var rows = $('textarea').attr("rows");
 	$('textarea').summernote({
-		height: rows*20, 
+		height: rows*20,
+		 toolbar: [
+			['style', ['style']],
+			['font', ['bold', 'italic', 'underline', 'strikethrough', 'clear']],
+			['fontname', ['fontname']],
+			['fontsize', ['fontsize']],
+			['height', ['height']],
+			['color', ['color']],
+			['para', ['ul', 'ol', 'paragraph']],
+			['insert', ['picture', 'link', 'video', 'hr', 'table']],
+			['misc', ['undo','redo','fullscreen', 'codeview', 'help']],
+		  ],
 		onImageUpload: function(files, editor, welEditable) {
 			sendFile(files[0], editor, welEditable);
 		}

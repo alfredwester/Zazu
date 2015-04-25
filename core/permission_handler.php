@@ -28,7 +28,7 @@ class Permission_handler {
 	*/
 	public function has_permission($action, $type, $id = null) {
 		$authorized = false;
-		$role = $this->get_role($_SESSION['user_id']); //1- Admin, 2- Editor, 3- Author
+		$role = $this->get_role(); //1- Admin, 2- Editor, 3- Author
 		$permissions = array();
 		switch($role) {
 		case 1:
@@ -77,7 +77,7 @@ class Permission_handler {
 		$query = "SELECT user_role FROM ".DB_PREFIX."user WHERE user_id = ".$_SESSION['user_id'].";";
 		$result = $this->db_handler->select_query($query);
 		$obj = $result->fetch_object();
-		return $obj->user_role;
+		return intval($obj->user_role);
 	}
 	public function print_permissions() {
 		echo "<b>author:</b> <br>";

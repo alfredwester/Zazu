@@ -37,11 +37,14 @@
 			</nav>
 			<hr>
 			<?php
+				if(isset($info)) {
+					echo "<div class=\"span-10 push-6 info\">".$info."</div>";
+				}
 				if(isset($success)) {
-					echo "<div class=\"span-8 push-8 success\">".$success."</div>";
+					echo "<div class=\"span-10 push-6 success\">".$success."</div>";
 				}
 				if(isset($errors)) {
-					echo "<div class=\"span-8 push-8 error\">";
+					echo "<div class=\"span-10 push-6 error\">";
 					foreach($errors as $val) {
 						echo $val."<br>";
 					}

@@ -20,11 +20,8 @@ if(isset($contact)) {
 	<div class="row">
 		<div class="span12">
 			<header class="page-header">
-				<h1>Contacts</h1>
+				<h1>Kontakter</h1>
 			</header>
-		    <div class="alert alert-info">
-			    <i class="fa fa-wrench"></i> <strong>Under konstruktion!</strong> Detta plugin är under utveckling och fungerar inte än
-		    </div>
 		</div>
 	</div>
 	<div class="row">

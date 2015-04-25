@@ -19,7 +19,11 @@ class Login extends Controller implements IController {
 			$data['success'] = $_SESSION['success'];
 			unset($_SESSION['success']);
 		}
-		elseif(isset($_SESSION['errors'])) {
+		if(isset($_SESSION['info'])) {
+			$data['info'] = $_SESSION['info'];
+			unset($_SESSION['info']);
+		}
+		if(isset($_SESSION['errors'])) {
 			$data['errors'] = $_SESSION['errors'];
 			unset($_SESSION['errors']);
 		}
@@ -45,6 +49,7 @@ class Login extends Controller implements IController {
 	public function lost_password() {
 		$data = $this->config;
 		$data += $this->get_header();
+		$data += $this->model->get_regions();
 		$this->load_theme($this->config['theme'], $data, 'lost_password_form');
 	}
 	private function generate_send_confirm_link($email) {
@@ -76,6 +81,7 @@ class Login extends Controller implements IController {
 		if($this->admin_model->get_md5_link($email) == $magic_link) {
 			$data = $this->config;
 			$data += $this->get_header();
+			$data += $this->model->get_regions();
 			$data['email'] = $email;
 			$data['magic_link'] = $magic_link;
 			$this->load_theme($this->config['theme'], $data, 'new_password_form');
@@ -95,7 +101,7 @@ class Login extends Controller implements IController {
 				$_SESSION['success'] = "Password successfully changed";
 			}
 			else {
-				$_SESSION['errors'][] = 'Password was not changed, unknown database error';
+				$_SESSION['info'] = 'Password was not changed, new password was same as old';
 			}
 			$this->redirect(0, "/login/");
 		}

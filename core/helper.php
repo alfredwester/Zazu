@@ -79,12 +79,26 @@ class Helper {
 
 	public function replace_and_insert_plugin($text, $sessions) {
 		$replaced['text'] = $text;
-		preg_match('/\$\{([a-z]*)\}/i', $text, $output_array);
+		preg_match('/\$\{([a-z0-9_]*)#?([a-z0-9_]*)#?([a-z0-9_]*)\}/i',  $text, $output_array);
 		if (!empty($output_array)) {
+			Logger::log(DEBUG, "output_array ! empty");
 			$plugin_name = $output_array[1];
 			$this->load_plugin($plugin_name);
 			$plugin = new $plugin_name();
-			$content = $plugin->index($sessions);
+			if(!empty($output_array[2])) {
+				$params = [];
+				for($i = 3; $i<count($output_array); $i++) {
+					$params[] = $output_array[$i];
+				}
+				if(method_exists($plugin,  $output_array[2])) {
+					$content = call_user_func_array(array($plugin, $output_array[2]), $params);
+				} else {
+					$content = $output_array[0];
+					Logger::log(ERROR, "Funcion ".$output_array[2]." does not exist in ".ucfirst($plugin_name));
+				}
+			} else {
+				$content = $plugin->index($sessions);
+			}
 			$replaced['css'] = $plugin->get_css_array();
 			$replaced['js'] = $plugin->get_js_array();
 			$replaced['text'] = preg_replace("/" . $this->ecsape_dollar($output_array[0]) . "/", $content, $text);

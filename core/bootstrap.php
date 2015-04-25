@@ -7,7 +7,19 @@ if (!file_exists('config.php')) {
 	die('No config.php file was found. Copy or rename the sample file and replace it with correct information, then you may need to run setup.php');
 }
 
+define("OFF", 0);
+define("ERROR", 1);
+define("INFO", 2);
+define("DEBUG", 3);
+define("TRACE", 4);
+
 require_once 'config.php';
+
+define("LOG_FILE", __DIR__."/../logs/zazu.log");
+
+if (!defined("LOG_LEVEL")) {
+	define("LOG_LEVEL", INFO);
+}
 
 function __autoload($class_name) {
 	require_once strtolower($class_name . '.php');
