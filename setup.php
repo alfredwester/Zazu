@@ -2,7 +2,9 @@
 /*--------------------------------
 Setup script for zazu database
 ----------------------------------*/
+require_once ('core/bootstrap.php');
 require_once ('config.php');
+require_once ('core/logger.php');
 require_once ('core/db_handler.php');
 $db_handler = Db_handler::getInstance();
 $prefix = DB_PREFIX;
