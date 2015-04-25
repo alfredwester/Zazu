@@ -132,7 +132,7 @@ CREATE TABLE IF NOT EXISTS {$prefix}post (
 
 ## Insert values into post table ##
 INSERT IGNORE INTO {$prefix}post (post_id, post_date, post_title, post_meta_content, post_meta_keyword, post_content, post_url, post_author) VALUES
-(1, '2012-01-11 19:38:30', 'Welcome', 'Congratulations, this is the first post and everything works fine!', 'zazu, mvc, first, post', '<p>This is the first post in the cms. and everything seems to work fine! Delete it or change it as you wish.<img title="zazu" src="http://www.lionking.org/imgarchive/Clip_Art/zazu03.gif" alt="Zazu" /></p>', 'first_page', 1)
+(1, '2012-01-11 19:38:30', 'Welcome', 'Congratulations, this is the first post and everything works fine!', 'zazu, mvc, first, post', '<p>This is the first post in the cms. and everything seems to work fine! Delete it or change it as you wish.<img title="zazu" src="http://www.lionking.org/imgarchive/Clip_Art/zazu03.gif" alt="Zazu" /></p>', 'first_page', 1);
 
 ## Create plugin table ##
 CREATE TABLE IF NOT EXISTS {$prefix}plugin (
