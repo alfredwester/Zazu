@@ -1,6 +1,6 @@
 # Zazu php mvc-cms framework
 
-## A cusomizable cms framework for php websites
+## A customizable cms framework for php websites
 - Possibility to create and use a you own theme
 - Plugins can be used to add additional functionality
 
