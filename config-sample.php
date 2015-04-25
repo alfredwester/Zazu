@@ -15,6 +15,8 @@ define('BASE_PATH', '');
 
 define('PRINT_DEBUG', false);
 
+define('LOG_LEVEL', INFO);
+
 // Path for file upload storage, relative to $_SERVER['DOCUMENT_ROOT']
 define('USER_UPLOAD_DIR', 'userdata');
 ?>
