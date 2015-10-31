@@ -38,19 +38,19 @@ class Admin extends Controller implements IController {
 		$plugin_menu = array();
 		// TODO: dheck permissions for each plugin
 		foreach ($plugin_names as $plugin_name) {
-			$plugin_menu[] = array('menu_title' => ucfirst($plugin_name), 'menu_text' => ucfirst($plugin_name), 'menu_url' => '/admin/plugin/'.$plugin_name);
+			$plugin_menu[] = array('menu_title' => ucfirst($plugin_name), 'menu_text' => ucfirst($plugin_name), 'menu_url' => '/admin/plugin/' . $plugin_name);
 		}
 
-		$res = array_slice($this->menu, 0, count($this->menu)-1, true);
-		if($this->admin_model->get_current_role() == 1) {
-	    	$plugin_menu[] = array('type' => 'divider');
-	    	$plugin_menu[] = array('menu_title' => 'Plugins management', 'menu_text' => 'Plugin management', 'menu_url' => '/admin/plugins');
-	    	$res[] = array('menu_title' => 'Plugins', 'menu_text' => 'Plugins', 'menu_url' => '#', 'submenu' => $plugin_menu);
+		$res = array_slice($this->menu, 0, count($this->menu) - 1, true);
+		if ($this->admin_model->get_current_role() == 1) {
+			$plugin_menu[] = array('type' => 'divider');
+			$plugin_menu[] = array('menu_title' => 'Plugins management', 'menu_text' => 'Plugin management', 'menu_url' => '/admin/plugins');
+			$res[] = array('menu_title' => 'Plugins', 'menu_text' => 'Plugins', 'menu_url' => '#', 'submenu' => $plugin_menu);
 		} else {
 			$res = array_merge($res, $plugin_menu);
 		}
-	    $res = array_merge($res, array_slice($this->menu, count($this->menu)-1, count($this->menu) - 1, true));
-	    $this->menu = $res;
+		$res = array_merge($res, array_slice($this->menu, count($this->menu) - 1, count($this->menu) - 1, true));
+		$this->menu = $res;
 	}
 	private function get_header() {
 		$data = $this->config;
@@ -149,13 +149,15 @@ class Admin extends Controller implements IController {
 			$_SESSION['errors'][] = "You don't have permissions to manage plugins";
 			$this->redirect(0, '/admin/');
 		}
+		$plugins_data = $this->plugin_model->get_plugins();
 		$data = $this->get_header();
-		$data = array_merge($data, $this->plugin_model->get_plugins());
+		$data['footer_js'][] = "theme/bootstrap/js/plugins.js";
+		$data = array_merge($data, $plugins_data);
 		$this->load_theme($this->config['admin_theme'], $data, 'plugins');
 	}
 	public function plugin($plugin_name) {
 		$plugin_config = $this->plugin_model->get_plugin($plugin_name);
-		if(empty($plugin_config)) {
+		if (empty($plugin_config)) {
 			$this->redirect(404);
 		}
 		$admin_controller = $plugin_config["plugin_admin_controller"];
@@ -167,7 +169,7 @@ class Admin extends Controller implements IController {
 		$data = $this->get_header();
 		// merga $data with plugin data
 		$data = array_merge($data, $plugin_data);
-		if(isset($_SESSION['additional_data']) && is_array($_SESSION['additional_data'])) {
+		if (isset($_SESSION['additional_data']) && is_array($_SESSION['additional_data'])) {
 			$data = array_merge($data, $_SESSION['additional_data']);
 		}
 		$data['head'] = $plugin_admin_controller->get_css_array();
@@ -180,9 +182,9 @@ class Admin extends Controller implements IController {
 		$admin_controller = $plugin_config["plugin_admin_controller"];
 		$this->load_plugin($plugin_name, $admin_controller);
 		$plugin_admin_controller = new $admin_controller();
-		if(method_exists($plugin_admin_controller, $function_name)) {
+		if (method_exists($plugin_admin_controller, $function_name)) {
 			$get_data = array($get_data);
-			call_user_func_array(array($plugin_admin_controller,  $function_name), $get_data);
+			call_user_func_array(array($plugin_admin_controller, $function_name), $get_data);
 		} else {
 			$this->redirect(404);
 		}
@@ -375,29 +377,57 @@ class Admin extends Controller implements IController {
 	public function upload_file() {
 		if (isset($_FILES["file"])) {
 			if (!$_FILES['file']['error']) {
-				if (in_array($_FILES['file']['type'], $this->admin_model->get_allowed_filetypes())) {
-					$upload_dir = $_SERVER['DOCUMENT_ROOT'] . "/" . USER_UPLOAD_DIR;
-					if (!file_exists($upload_dir) || !is_dir($upload_dir)) {
-						if (!mkdir($upload_dir)) {
-							$this->redirect(500, null, $upload_dir . ' did not exist and coud not be created');
+				$allowed_types = array();
+				$upload_dir = USER_UPLOAD_DIR;
+				$upload_type = $_POST['upload_type'];
+				switch ($upload_type) {
+					case "editorimage":
+						$allowed_types = $this->admin_model->get_allowed_image_file_types();
+						break;
+					case "plugin":
+						$allowed_types = $this->admin_model->get_allowed_plugin_file_types();
+						$upload_dir = "plugins";
+						break;
+				}
+				if (in_array($_FILES['file']['type'], $allowed_types)) {
+					$upload_path = $_SERVER['DOCUMENT_ROOT'] . "/" . $upload_dir;
+					if (!file_exists($upload_path) || !is_dir($upload_path)) {
+						if (!mkdir($upload_path)) {
+							$this->redirect(500, null, $upload_path . ' did not exist and could not be created');
 						}
-					} elseif (!is_writable($upload_dir)) {
-						$this->redirect(500, null, "Can not write to dir " . $upload_dir);
+					} elseif (!is_writable($upload_path)) {
+						$this->redirect(500, null, "Can not write to dir " . $upload_path);
 					} else {
-						$filename = $this->generate_filename($_FILES['file']["name"]);
 						$location = $_FILES["file"]["tmp_name"];
-						move_uploaded_file($location, $upload_dir . "/" . $filename);
-						echo "/" . USER_UPLOAD_DIR . "/" . $filename;
+						if ($upload_type == "plugin") {
+							$filename = $this->generate_filename(explode('.', $_FILES['file']["name"])[0]);
+							$zip = new ZipArchive;
+							$res = $zip->open($location);
+							if ($res === TRUE) {
+								$zip->extractTo($upload_path . '/' . $filename);
+								$zip->close();
+								if (!$this->plugin_model->verify_plugin($filename)) {
+									$this->delete_dir($upload_path . '/' . $filename);
+									$this->redirect(400, null, "Uploaded file [" . $_FILES['file']["name"] . "] is not a valid plugin");
+								}
+							} else {
+								$this->redirect(500, null, "Could not extract zip file: " . $upload_path . "/" . $filename);
+							}
+						} else {
+							$filename = $this->generate_filename($_FILES['file']["name"], true);
+							move_uploaded_file($location, $upload_path . "/" . $filename);
+						}
+						echo "/" . $upload_dir . "/" . $filename;
+
 					}
 				} else {
 					$allowed = "";
-					foreach ($this->admin_model->get_allowed_filetypes() as $key => $value) {
+					foreach ($allowed_types as $key => $value) {
 						$allowed .= $key . ", ";
 					}
 					$allowed = substr($allowed, 0, -2);
 					$this->redirect(400, null, "File types allowed are: " . $allowed);
 				}
-
 			} else {
 				$this->redirect(500, null, $this->get_file_upload_errormessage($_FILES['file']['error']));
 			}
@@ -406,14 +436,19 @@ class Admin extends Controller implements IController {
 		}
 	}
 
-	private function generate_filename($filename) {
+	private function generate_filename($filename, $include_time = false) {
 		$new_name = trim($filename);
 		$new_name = strtolower($new_name);
 		$ext = explode('.', $new_name);
 		$search = array(' ', 'å', 'ä', 'ö', '=');
 		$replace = array('_', 'a', 'a', 'o', '');
 		$new_name = str_replace($search, $replace, $ext[0]);
-		$new_name .= "_" . time() . "." . $ext[1];
+		if ($include_time) {
+			$new_name .= "_" . time();
+		}
+		if (count($ext) == 2) {
+			$new_name .= "." . $ext[1];
+		}
 		return $new_name;
 	}
 }

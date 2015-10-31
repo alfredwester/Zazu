@@ -67,7 +67,8 @@ class Adminmodel {
 			array('menu_title' => 'Site settings', 'menu_text' => 'Site settings', 'menu_url' => '/admin/settings/'),
 			array('menu_title' => 'Log out', 'menu_text' => 'Log out', 'menu_url' => '/admin/logout/')
 		);
-		$this->allowed_filetypes = array('jpg' => 'image/jpeg', 'png' => 'image/png', 'gif' => 'image/gif');
+		$this->allowed_image_file_types = array('jpg' => 'image/jpeg', 'png' => 'image/png', 'gif' => 'image/gif');
+		$this->allowed_plugin_file_types = array('zip' => 'application/zip');
 	}
 	private function get_md5_pass($password) {
 		$password = md5(md5($this->password_salt) . $password . $this->password_salt);
@@ -389,7 +390,10 @@ class Adminmodel {
 	public function get_types() {
 		return $this->types;
 	}
-	public function get_allowed_filetypes() {
-		return $this->allowed_filetypes;
+	public function get_allowed_image_file_types() {
+		return $this->allowed_image_file_types;
+	}
+	public function get_allowed_plugin_file_types() {
+		return $this->allowed_plugin_file_types;
 	}
 }

@@ -3,13 +3,16 @@
 		<header class="page-header">
 				<h1>Plugins</h1>
 		</header>
-		<!-- <nav> -->
-			<?php
-			/*if($this->permission_handler->has_permission('upload', 'plugin', null)) {
-				echo "<a class=\"btn btn-primary disabled\" href=\"#\" title=\"Upload plugin\">Upload plugin</a>";
-			}*/
+		<?php
+		if($this->permission_handler->has_permission('upload', 'plugin', null)) {
 			?>
-		<!-- </nav> -->
+			<input type="file" id="plugin-file-input" multiple accept="application/zip" style="display:none" onchange="handleFiles(this.files)">
+			<nav id="plugin-dropzone" class="dropzone">
+				<p class="dropzone-text lead muted">Drag files here or click to select and upload a new plugin</p>
+			</nav>
+			<?php
+		}
+		?>
 		<section>
 			<?php
 			if(isset($plugins)) {
@@ -37,10 +40,10 @@
 					}
 					echo "<tr class=\"".$tr_class."\" ".$on_click." ><td>";
 					// Delete not yet implemented in controller ( remove plugin files and folders)
-					/*if($this->permission_handler->has_permission('delete', 'plugin', $plugin_name)) {
-						echo " <a href=\"".BASE_PATH."/plugin/delete/".$plugin_name."\" onclick=\"return confirm('Do you really want to delete this plugin?')\" title=\"Delete this plugin\"><i class=\"fa fa-trash-o\"></i></a>";
+					if(!$plugin_installed && $this->permission_handler->has_permission('delete', 'plugin', $plugin_name)) {
+						echo " <a href=\"".BASE_PATH."/plugin/delete/".$plugin_dir_name."\" onclick=\"return confirm('Do you really want to delete this plugin?')\" title=\"Delete this plugin\"><i class=\"fa fa-trash\"></i></a>";
 						$auth = true;
-					}*/
+					}
 					if($plugin_installed && $this->permission_handler->has_permission('uninstall', 'plugin', $plugin_id)) {
 						echo " <a href=\"".BASE_PATH."/plugin/uninstall/".$plugin_name."\" onclick=\"return confirm('Do you really want to unistall this plugin?')\" title=\"Unistall this plugin\"><i class=\"fa fa-minus-square\"></i></a>";
 						$auth = true;

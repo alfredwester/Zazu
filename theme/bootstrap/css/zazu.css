@@ -22,3 +22,26 @@
 	border-top: 1px solid #EEEEEE;
 	height: 1px;
 }
+.dropzone {
+	margin-bottom: 10px;
+	padding: 10px;
+    text-align: center;
+    border: 2px dashed #EEEEEE;
+}
+.dropzone * {pointer-events: none;}
+.dropzone:hover {
+	border: 2px dashed #AAAAAA;
+	cursor: pointer;
+}
+.dropzone.dragenter {
+	border: 2px dashed #AAAAAA;
+	height: 100px;
+	color: #999999;
+}
+.dropzone .dropzone-text {
+	margin: 0;
+}
+
+.dropzone.dragenter .dropzone-text {
+	color: #cccccc;
+}

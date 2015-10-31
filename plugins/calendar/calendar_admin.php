@@ -14,7 +14,7 @@ class Calendar_admin extends Calendar implements IPluginAdminController {
 	public function get_css_array() {
 		return array("include/bootstrap-timepicker-0.2.6/css/bootstrap-timepicker.css",
 			"include/datepicker/css/datepicker.css",
-			"include/summernote-0.5.9/summernote.css",
+			"include/summernote-0.6.4/summernote.css",
 			"plugins/calendar/css/calendar.css",
 			"plugins/calendar/css/calendar-admin.css");
 	}
@@ -24,7 +24,9 @@ class Calendar_admin extends Calendar implements IPluginAdminController {
 	public function get_js_array() {
 		return array("include/bootstrap-timepicker-0.2.6/js/bootstrap-timepicker.js",
 			"include/datepicker/js/bootstrap-datepicker.js",
-			"include/summernote-0.5.9/summernote.min.js",
+			"include/summernote-0.6.4/summernote.min.js",
+			"include/summernote-0.6.4/plugin/summernote-ext-fontstyle.js",
+			"include/summernote-0.6.4/plugin/summernote-ext-video.js",
 			"theme/bootstrap/js/textarea.js",
 			"plugins/calendar/js/calendar_admin.js");
 	}

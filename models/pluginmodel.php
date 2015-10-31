@@ -61,9 +61,10 @@ class PluginModel {
 								}
 							}
 						}
-						if (!$in_array) {
+						if (!$in_array && $this->verify_plugin($file, false)) {
 							$plugin_ini = $this->read_plugin_config($file);
 							$plugins['plugins'][$count]['plugin_name'] = $plugin_ini['name'];
+							$plugins['plugins'][$count]['plugin_dir_name'] = $file;
 							$plugins['plugins'][$count]['plugin_description'] = $plugin_ini['description'];
 							$plugins['plugins'][$count]['plugin_installed'] = false;
 							$count++;
@@ -77,14 +78,28 @@ class PluginModel {
 		return $plugins;
 	}
 
-	private function read_plugin_config($plugin_name) {
+	public function verify_plugin($plugin_name,  $silent = true) {
+		$plugin_config = $this->read_plugin_config($plugin_name, $silent);
+		if(empty($plugin_config)) {
+			return false;
+		} else {
+			$exists = true;
+			$exists = $exists && array_key_exists('description', $plugin_config) ? true : false;
+			$exists = $exists && array_key_exists('admin_controller', $plugin_config) ? true : false;
+			$exists = $exists && array_key_exists('admin_view', $plugin_config) ? true : false;
+			$exists = $exists && array_key_exists('setup_file', $plugin_config) ? true : false;
+			return $exists;
+		}
+	}
+
+	private function read_plugin_config($plugin_name, $silent = false) {
 		$path = self::PLUGIN_DIR . "/" . $plugin_name;
 		$ini_file = $path . "/plugin.ini";
 		$plugin_ini = array();
 		if (is_dir($path) && is_readable($ini_file)) {
 			$plugin_ini = parse_ini_file($ini_file);
-		} else {
-			$_SESSION['errors'][] = "could not read config: " . $ini_file;
+		} elseif(!$silent) {
+			$_SESSION['errors'][] = "Could not read config: " . $ini_file;
 		}
 		return $plugin_ini;
 	}

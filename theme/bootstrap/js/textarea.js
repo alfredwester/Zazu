@@ -20,6 +20,7 @@ $(document).ready(function() {
 	function sendFile(file, editor, welEditable) {
 		data = new FormData();
 		data.append("file", file);
+		data.append("upload_type", "editorimage");
 		$.ajax({
 			data: data,
 			type: "POST",

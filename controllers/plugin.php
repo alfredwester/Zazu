@@ -25,9 +25,9 @@ class Plugin extends Controller implements IController {
 		$plugin_config = $this->plugin_model->get_plugin($plugin_name);
 		$this->load_plugin($plugin_name);
 		$plugin_controller = new $plugin_name();
-		if(method_exists($plugin_controller, $function_name)) {
+		if (method_exists($plugin_controller, $function_name)) {
 			$get_data = array($get_data);
-			call_user_func_array(array($plugin_controller,  $function_name), $get_data);
+			call_user_func_array(array($plugin_controller, $function_name), $get_data);
 		} else {
 			$this->redirect(404);
 		}
@@ -53,6 +53,20 @@ class Plugin extends Controller implements IController {
 				$_SESSION['success'] = "Plugin uninstalled";
 			} else {
 				$_SESSION['errors'][] = "Plugin could not be uninstalled";
+			}
+			$this->redirect(0, '/admin/plugins/');
+		}
+	}
+
+	public function delete($plugin_name) {
+		if ($this->permission_handler->get_role() !== 1) {
+			$this->redirect_to_login();
+		} else {
+			try {
+				$this->delete_dir(PluginModel::PLUGIN_DIR . '/' . $plugin_name);
+			} catch (Exception $e) {
+				$_SESSION['errors'][] = "Could not delete plugin";
+				$_SESSION['errors'][] = $e->getMessage();
 			}
 			$this->redirect(0, '/admin/plugins/');
 		}
