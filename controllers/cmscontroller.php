@@ -6,7 +6,9 @@ class CmsController extends Controller implements IController {
 
 	public function __construct($config) {
 		$this->load_model('cmsmodel');
+		$this->load_model('pluginmodel');
 		$this->model = new CmsModel();
+		$this->plugin_model = new PluginModel();
 		$this->config = $config;
 	}
 	private function get_header() {
@@ -66,7 +68,7 @@ class CmsController extends Controller implements IController {
 		$data['request_url'] = $this->config['request_url'];
 		$regions = $this->model->get_regions();
 		foreach ($regions['regions'] as $name => $reg_array) {
-			$pluginified_array = $this->replace_and_insert_plugin($reg_array['region_text'], $this->sessions);
+			$pluginified_array = $this->replace_and_insert_plugin($reg_array['region_text'], $this->sessions, $this->plugin_model);
 			$regions['regions'][$name]['region_text'] = $pluginified_array['text'];
 			if (isset($pluginified_array['css'])) {
 				$data['head'] = array_merge($data['head'], $pluginified_array['css']);
@@ -90,7 +92,7 @@ class CmsController extends Controller implements IController {
 
 	// call by reference
 	private function insert_plugin_in_post_and_update_header_and_footer(&$post, &$head, &$footer_js) {
-		$pluginified_post_array = $this->replace_and_insert_plugin($post['post_content'], $this->sessions);
+		$pluginified_post_array = $this->replace_and_insert_plugin($post['post_content'], $this->sessions, $this->plugin_model);
 		$post['post_content'] = $pluginified_post_array['text'];
 		if (isset($pluginified_post_array['css'])) {
 			$head = array_merge($head, $pluginified_post_array['css']);

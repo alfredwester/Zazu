@@ -400,15 +400,27 @@ class Admin extends Controller implements IController {
 					} else {
 						$location = $_FILES["file"]["tmp_name"];
 						if ($upload_type == "plugin") {
+							$original_plugin_name = explode('.', $_FILES['file']["name"])[0];
 							$filename = $this->generate_filename(explode('.', $_FILES['file']["name"])[0]);
 							$zip = new ZipArchive;
 							$res = $zip->open($location);
 							if ($res === TRUE) {
-								$zip->extractTo($upload_path . '/' . $filename);
+								$zip->extractTo($upload_path . '/' . $filename . '_temp');
 								$zip->close();
-								if (!$this->plugin_model->verify_plugin($filename)) {
-									$this->delete_dir($upload_path . '/' . $filename);
+								$plugin_name_to_verify = $filename . '_temp';
+								if(is_dir($upload_path . '/' . $plugin_name_to_verify . '/' . $original_plugin_name)) {
+									$plugin_name_to_verify = $filename . '_temp' . '/' . $original_plugin_name;
+								}
+								if (!$this->plugin_model->verify_plugin($plugin_name_to_verify)) {
+									$this->delete_dir($upload_path . '/' . $plugin_name_to_verify);
 									$this->redirect(400, null, "Uploaded file [" . $_FILES['file']["name"] . "] is not a valid plugin");
+								} else {
+									$plugin_name = $this->plugin_model->get_plugin_name_from_file($plugin_name_to_verify);
+									$new_plugin_dir = $upload_path . '/'. strtolower($plugin_name);
+									rename($upload_path . '/' . $plugin_name_to_verify, $new_plugin_dir);
+									if(is_dir($upload_path . '/' . $filename . '_temp')) {
+										$this->delete_dir($upload_path . '/' . $filename . '_temp');
+									}
 								}
 							} else {
 								$this->redirect(500, null, "Could not extract zip file: " . $upload_path . "/" . $filename);
@@ -418,7 +430,6 @@ class Admin extends Controller implements IController {
 							move_uploaded_file($location, $upload_path . "/" . $filename);
 						}
 						echo "/" . $upload_dir . "/" . $filename;
-
 					}
 				} else {
 					$allowed = "";

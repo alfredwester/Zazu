@@ -34,14 +34,14 @@ $(document).ready(function() {
 });
 
 function handleFiles(files) {
-	var zipType = /\/zip/;
+	var zipType = /\/(x-)?zip/;
 	var error = "";
 	var file;
 	if(files.length > 0) {
 		for(var i = 0; i<files.length; i++) {
 			file = files.item(i);
 			if (!zipType.test(file.type)) {
-				error = error + file.name + " is not a zip file<br>";
+				error = error + file.name + " is not a zip file ("+file.type+")<br>";
 			} else {
 				sendFile(file);
 			}

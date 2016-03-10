@@ -96,12 +96,20 @@ class PluginModel {
 		$path = self::PLUGIN_DIR . "/" . $plugin_name;
 		$ini_file = $path . "/plugin.ini";
 		$plugin_ini = array();
-		if (is_dir($path) && is_readable($ini_file)) {
-			$plugin_ini = parse_ini_file($ini_file);
-		} elseif(!$silent) {
-			$_SESSION['errors'][] = "Could not read config: " . $ini_file;
+		if (is_dir($path)) {
+			if(is_readable($ini_file)) {
+				$plugin_ini = parse_ini_file($ini_file);
+			}  
+			elseif(!$silent) {
+				$_SESSION['errors'][] = "Could not read config: " . $ini_file;
+			}
 		}
 		return $plugin_ini;
+	}
+
+	public function get_plugin_name_from_file($plugin_tmp_name) {
+		$plugin_ini = $this->read_plugin_config($plugin_tmp_name, true);
+		return $plugin_ini['name'];
 	}
 
 	public function install($plugin_name) {

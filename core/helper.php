@@ -95,31 +95,35 @@ class Helper {
 		return $valid;
 	}
 
-	public function replace_and_insert_plugin($text, $sessions) {
+	public function replace_and_insert_plugin($text, $sessions, $plugin_model) {
 		$replaced['text'] = $text;
 		preg_match('/\$\{([a-z0-9_]*)#?([a-z0-9_]*)#?([a-z0-9_]*)\}/i',  $text, $output_array);
 		if (!empty($output_array)) {
 			Logger::log(DEBUG, "output_array ! empty");
 			$plugin_name = $output_array[1];
-			$this->load_plugin($plugin_name);
-			$plugin = new $plugin_name();
-			if(!empty($output_array[2])) {
-				$params = [];
-				for($i = 3; $i<count($output_array); $i++) {
-					$params[] = $output_array[$i];
-				}
-				if(method_exists($plugin,  $output_array[2])) {
-					$content = call_user_func_array(array($plugin, $output_array[2]), $params);
+			try{
+				$this->load_plugin_private($plugin_name, $plugin_model);
+				$plugin = new $plugin_name();
+				if(!empty($output_array[2])) {
+					$params = [];
+					for($i = 3; $i<count($output_array); $i++) {
+						$params[] = $output_array[$i];
+					}
+					if(method_exists($plugin,  $output_array[2])) {
+						$content = call_user_func_array(array($plugin, $output_array[2]), $params);
+					} else {
+						$content = $output_array[0];
+						Logger::log(ERROR, "Function ".$output_array[2]." does not exist in ".ucfirst($plugin_name));
+					}
 				} else {
-					$content = $output_array[0];
-					Logger::log(ERROR, "Function ".$output_array[2]." does not exist in ".ucfirst($plugin_name));
+					$content = $plugin->index($sessions);
 				}
-			} else {
-				$content = $plugin->index($sessions);
+				$replaced['css'] = $plugin->get_css_array();
+				$replaced['js'] = $plugin->get_js_array();
+				$replaced['text'] = preg_replace("/" . $this->ecsape_dollar($output_array[0]) . "/", $content, $text);
+			} catch(Exception $e) {
+				// Do nothing
 			}
-			$replaced['css'] = $plugin->get_css_array();
-			$replaced['js'] = $plugin->get_js_array();
-			$replaced['text'] = preg_replace("/" . $this->ecsape_dollar($output_array[0]) . "/", $content, $text);
 		}
 		return $replaced;
 	}
@@ -128,10 +132,20 @@ class Helper {
 		return str_replace('$', '\$', $text);
 	}
 
+	private function load_plugin_private($plugin_name, $plugin_model) {
+		$installed_plugin = $plugin_model->get_plugin($plugin_name);
+		if(!empty($installed_plugin)) {
+			$this->load_plugin($plugin_name);
+		} else {
+			Logger::log(ERROR, 'Requested plugin \'' . $plugin_name . '\' is not installed');
+			throw new Exception('Requested plugin \'' . $plugin_name . '\' is not installed');
+		}
+	} 
+
 	public function load_plugin($plugin, $plugin_controller = null) {
 		$plugin_controller = $plugin_controller == null ? $plugin : $plugin_controller;
 		$path = 'plugins/' . $plugin . '/' . $plugin_controller . '.php';
-		if (file_exists($path)) {
+		if(file_exists($path)) {
 			require_once $path;
 		} else {
 			Logger::log(ERROR, 'Plugin \'' . $plugin . '\' not found in ' . dirname($path));

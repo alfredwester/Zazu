@@ -68,7 +68,7 @@ class Adminmodel {
 			array('menu_title' => 'Log out', 'menu_text' => 'Log out', 'menu_url' => '/admin/logout/')
 		);
 		$this->allowed_image_file_types = array('jpg' => 'image/jpeg', 'png' => 'image/png', 'gif' => 'image/gif');
-		$this->allowed_plugin_file_types = array('zip' => 'application/zip');
+		$this->allowed_plugin_file_types = array('zip' => 'application/zip', 'zip' => 'application/x-zip');
 	}
 	private function get_md5_pass($password) {
 		$password = md5(md5($this->password_salt) . $password . $this->password_salt);
