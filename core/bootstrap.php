@@ -32,6 +32,7 @@ interface IController {
 interface IPluginInstaller {
 	public function install();
 	public function uninstall();
+	public function update();
 }
 
 interface IPluginController {

@@ -417,7 +417,14 @@ class Admin extends Controller implements IController {
 								} else {
 									$plugin_name = $this->plugin_model->get_plugin_name_from_file($plugin_name_to_verify);
 									$new_plugin_dir = $upload_path . '/'. strtolower($plugin_name);
-									rename($upload_path . '/' . $plugin_name_to_verify, $new_plugin_dir);
+									if(is_dir($new_plugin_dir)) {
+										$this->delete_dir($new_plugin_dir);
+									}
+									$rename_status = rename($upload_path . '/' . $plugin_name_to_verify, $new_plugin_dir);
+									if(!$rename_status) {
+										Logger::log(ERROR, "Could not rename plugin directory");
+										Logger::log(ERROR, implode(" | ",error_get_last()));
+									}
 									if(is_dir($upload_path . '/' . $filename . '_temp')) {
 										$this->delete_dir($upload_path . '/' . $filename . '_temp');
 									}

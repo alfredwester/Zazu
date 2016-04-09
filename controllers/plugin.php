@@ -71,4 +71,17 @@ class Plugin extends Controller implements IController {
 			$this->redirect(0, '/admin/plugins/');
 		}
 	}
+
+	public function update($plugin_name) {
+		if ($this->permission_handler->get_role() !== 1) {
+			$this->redirect_to_login();
+		} else {
+			if ($this->plugin_model->update(urldecode($plugin_name))) {
+				$_SESSION['success'] = "Plugin '" . $plugin_name . "' sucessfully updated";
+			} else {
+				$_SESSION['errors'][] = "Plugin '" . $plugin_name . "' could not be updated";
+			}
+			$this->redirect(0, '/admin/plugins/');
+		}
+	}
 }
