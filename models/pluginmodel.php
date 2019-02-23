@@ -134,7 +134,7 @@ class PluginModel {
 		if (array_key_exists('setup_file', $plugin_ini)) {
 			$plugin_setupfile = $plugin_ini['setup_file'];
 			$this->load_install_file($plugin_name, $plugin_setupfile);
-			$installer = $plugin_name . "installer";
+			$installer = $plugin_setupfile;
 			$plugin_installer = new $installer();
 			$plugin_installer->install();
 		}
@@ -159,7 +159,7 @@ class PluginModel {
 		if (array_key_exists('setup_file', $plugin_ini)) {
 			$plugin_setupfile = $plugin_ini['setup_file'];
 			$this->load_install_file($plugin_name, $plugin_setupfile);
-			$installer = $plugin_name . "installer";
+			$installer = $plugin_setupfile;
 			$plugin_installer = new $installer();
 			$plugin_installer->update();
 		}
@@ -181,7 +181,7 @@ class PluginModel {
 		if (array_key_exists('setup_file', $plugin_ini)) {
 			$plugin_setupfile = $plugin_ini['setup_file'];
 			$this->load_install_file($plugin_name, $plugin_setupfile);
-			$installer = $plugin_name . "installer";
+			$installer = $plugin_setupfile;
 			$plugin_installer = new $installer();
 			$plugin_installer->uninstall();
 		}

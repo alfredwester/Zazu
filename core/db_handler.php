@@ -30,6 +30,10 @@ class Db_handler {
 		$result[] = $this->mysqli->multi_query($query);
 		while ($this->mysqli->more_results()) {
 			$result[] = $this->mysqli->next_result();
+			if(!empty($this->mysqli->error)) {
+				$_SESSION['errors'][] = $this->mysqli->error;
+				Logger::log(ERROR, $this->mysqli->error);
+			}
 		}
 		return $result;
 	}
@@ -45,7 +49,7 @@ class Db_handler {
 		return $result;
 	}
 	public function query($query) {
-		Logger::log(INFO, $query);
+		Logger::log(TRACE, $query);
 		$result = $this->mysqli->query($query);
 		if(!empty($this->mysqli->error)) {
 			$_SESSION['errors'][] = $this->mysqli->error;
